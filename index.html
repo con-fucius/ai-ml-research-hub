@@ -2,624 +2,406 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Tool and Framework Comparison</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Agent Frameworks Comparison</title>
-  
-  <!-- Enhanced font selection -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Lexend:wght@400;700&family=Urbanist:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Add Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --cloudflare-blue: #0051c3;
-      --openai-green: #10a37f;
-      --neutral-bg: #f8f9fa;
-      --text-primary: #2d3748;
-      --intersection-color: #6366f1;
-    }
-
     body {
       font-family: 'Outfit', Arial, sans-serif;
-      background: linear-gradient(135deg, var(--neutral-bg), #ffffff);
+      background: #f9f9fb;
+      color: #222;
       margin: 0;
-      padding: 20px;
-      color: var(--text-primary);
+      padding: 0;
     }
-
-    /* Header styles */
-    .header {
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 2.5rem 2rem 2rem 2rem;
+    }
+    h1, h2, h3 {
+      color: #0051c3;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 2.2rem;
       text-align: center;
-      padding: 2rem 0;
-      background: linear-gradient(135deg, #ffffff, var(--neutral-bg));
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       margin-bottom: 2rem;
     }
-
-    h1 {
-      font-size: 2.5em;
-      background: linear-gradient(45deg, var(--cloudflare-blue), var(--openai-green));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 1rem;
-    }
-
-    /* Enhanced Venn diagram styles */
-    .venn-diagram-container {
-      width: 100%;
-      max-width: 1800px;
-      height: 1000px;
-      margin: 4rem auto;
-      padding: 2rem;
-      background: linear-gradient(180deg, #0a1930 0%, #1a202c 100%);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    }
-
-    .venn-diagram {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-    }
-
-    .venn-circle {
-      transition: all 0.4s ease;
-      cursor: pointer;
-      stroke-width: 2;
-      filter: url(#glow);
-    }
-
-    .venn-text {
-      font-family: 'Roboto', sans-serif;
-      font-size: 18px;
-      fill: #ffffff;
-      font-weight: 500;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .venn-title {
-      font-family: 'Roboto', sans-serif;
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      filter: url(#titleGlow);
-    }
-
-    .venn-list-item {
-      font-size: 16px;
-      fill: #ffffff;
-      opacity: 0.9;
-      transition: opacity 0.3s ease;
-    }
-
-    /* First collapsible section open by default */
-    #firstCollapsible + .content {
-      max-height: 1000px;
-      padding: 15px;
-    }
-
-    #firstCollapsible.active:after {
-      transform: rotate(-180deg);
-    }
-
-    /* Infographic section styles */
-    .infographic-section {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      padding: 2rem;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .info-card {
-      padding: 1.5rem;
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .info-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .info-card h3 {
-      color: var(--cloudflare-blue);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .info-card i {
-      font-size: 1.5rem;
-    }
-
-    /* Rest of your existing styles... */
-    .tabs {
-      display: flex;
-      border-bottom: 2px solid #007acc;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    .tab {
-      padding: 10px 20px;
-      cursor: pointer;
-      border: 1px solid #007acc;
-      border-bottom: none;
-      background-color: #e0f0ff;
-      margin: 0 5px;
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-      transition: background-color 0.3s;
-      font-weight: bold;
-      color: #007acc;
-    }
-    .tab.active {
-      background-color: #fff;
-      color: #005f99;
-    }
-    .tab-content {
-      display: none;
-      background: #fff;
-      border: 1px solid #007acc;
-      padding: 20px;
-      border-radius: 0 4px 4px 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-    .tab-content.active {
-      display: block;
-    }
-    .collapsible {
-      background-color: #007acc;
-      color: white;
-      cursor: pointer;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      text-align: left;
-      outline: none;
-      font-size: 16px;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-    }
-    .collapsible:hover {
-      background-color: #005f99;
-    }
-    .collapsible:after {
-      content: "▼";
-      float: right;
-      transition: transform 0.3s;
-    }
-    .collapsible.active:after {
-      transform: rotate(-180deg);
-    }
-    .content {
-      padding: 0 15px;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      background-color: #f1f1f1;
-      border-radius: 0 0 4px 4px;
-    }
-    #infographic {
-      background: linear-gradient(135deg, #e0f7fa, #ffffff);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    #infographic h2 {
-      text-align: center;
-      color: #007acc;
-    }
-    .venn-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .venn-diagram {
-      width: 400px;
-      height: 300px;
-    }
-    .venn-diagram text {
-      font-family: 'Lexend', sans-serif;
-      font-size: 16px;
-      fill: #333;
-    }
-    .dashboard-table {
+    table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin: 2rem 0;
+      font-size: 1em;
+      background: #f7fafd;
+      border-radius: 8px;
+      overflow: hidden;
     }
-    .dashboard-table th,
-    .dashboard-table td {
-      padding: 8px 12px;
-      border: 1px solid #ddd;
+    th, td {
+      border: 1px solid #e3e8ee;
+      padding: 0.75rem 0.5rem;
       text-align: left;
+      vertical-align: top;
     }
-    .dashboard-table th {
-      background-color: #007acc;
-      color: white;
+    th {
+      background: #eaf2fb;
+      color: #0051c3;
+      font-weight: 700;
     }
-    .filter-input {
-      padding: 8px;
-      width: 100%;
-      max-width: 300px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    tr:nth-child(even) {
+      background: #f4f8fc;
+    }
+    .note, .limitation, .files {
+      background: #eaf6ff;
+      border-left: 4px solid #0051c3;
+      padding: 1rem 1.5rem;
+      margin: 2rem 0;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.95em;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 1rem; }
+      table, th, td { font-size: 0.95em; }
+      h1 { font-size: 1.3rem; }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>AI Agent Frameworks Comparison</h1>
-    <p>Cloudflare Agent Framework vs OpenAI Agent SDK</p>
-  </div>
+  <div class="container">
+    <h1>Tool and Framework Comparison</h1>
+    <p style="text-align:center; color:#555; margin-bottom:2.5rem;">
+      <strong>Cloudflare Agents Framework</strong> &nbsp;|&nbsp; <strong>OpenAI Agents SDK</strong> &nbsp;|&nbsp; <strong>Amazon Nova</strong> &nbsp;|&nbsp; <strong>Google ADK</strong>
+    </p>
 
-  <!-- Tab Navigation -->
-  <div class="tabs">
-    <div class="tab active" data-tab="comparison">Detailed Comparison</div>
-    <div class="tab" data-tab="infographic">Infographic & Venn Diagram</div>
-    <div class="tab" data-tab="dashboard">Dashboard</div>
-  </div>
-
-  <!-- Tab 1: Detailed Comparison with Collapsible Sections -->
-  <div id="comparison" class="tab-content active">
-    <h2>Cloudflare vs. OpenAI Agent Frameworks</h2>
-    <button id="firstCollapsible" class="collapsible active">Core Concepts & Architecture</button>
-    <div class="content">
-      <p><strong>Cloudflare:</strong> Built for edge deployment leveraging Cloudflare's global network across 275+ cities. The framework implements Anthropic Patterns for ethical AI behavior and includes a robust Human-in-the-Loop system for oversight. The dedicated Playground enables rapid prototyping and testing of agents. Core features include state management, real-time WebSocket communication, and HTTP endpoints with React integration hooks.</p>
-      <p><strong>OpenAI:</strong> Centers on advanced autonomous agents powered by state-of-the-art language models. The framework features the new Responses API for sophisticated web searching, file analysis, and computer automation. The open-source Agents SDK provides comprehensive tools for building, testing, and deploying AI agents with extensive customization options.</p>
-    </div>
-
-    <button class="collapsible">Technical Implementation</button>
-    <div class="content">
-      <p><strong>Cloudflare:</strong> Primary development in TypeScript (84.1% of codebase) with supplementary CSS (15.4%) and HTML (0.5%). Leverages Cloudflare's edge computing infrastructure for optimal performance. Features include:</p>
-      <ul>
-        <li>Built-in security and caching mechanisms</li>
-        <li>Real-time WebSocket communication</li>
-        <li>Durable Objects for state management</li>
-        <li>Integration with Cloudflare Workers</li>
-      </ul>
-      <p><strong>OpenAI:</strong> Developed primarily in Python with RESTful API architecture. The SDK includes:</p>
-      <ul>
-        <li>Direct integration with GPT models</li>
-        <li>Comprehensive Python SDK with REST API support</li>
-        <li>Built-in tools for web searching and file analysis</li>
-        <li>Extensible plugin architecture</li>
-      </ul>
-    </div>
-
-    <button class="collapsible">Development & Deployment</button>
-    <div class="content">
-      <p><strong>Cloudflare:</strong> Offers streamlined deployment through Cloudflare's global network with:</p>
-      <ul>
-        <li>Quick start templates and comprehensive documentation</li>
-        <li>Interactive Playground for rapid prototyping</li>
-        <li>Built-in monitoring and debugging tools</li>
-        <li>Seamless integration with existing Workers projects</li>
-      </ul>
-      <p><strong>OpenAI:</strong> Provides flexible deployment options with:</p>
-      <ul>
-        <li>Cloud and on-premises deployment support</li>
-        <li>Extensive SDK documentation and examples</li>
-        <li>Integration with popular development tools</li>
-        <li>Robust testing and validation frameworks</li>
-      </ul>
-    </div>
-
-    <button class="collapsible">Advanced Features & Capabilities</button>
-    <div class="content">
-      <p><strong>Cloudflare:</strong> Current and planned features include:</p>
-      <ul>
-        <li>Advanced memory systems for context retention</li>
-        <li>WebRTC integration for real-time communication</li>
-        <li>Email integration capabilities</li>
-        <li>Enhanced observability and monitoring</li>
-        <li>Self-hosting options</li>
-      </ul>
-      <p><strong>OpenAI:</strong> Offers sophisticated capabilities including:</p>
-      <ul>
-        <li>Advanced language model integration</li>
-        <li>Autonomous decision-making capabilities</li>
-        <li>Complex task handling and automation</li>
-        <li>Extensive customization options</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Tab 2: Infographic & Venn Diagram -->
-  <div id="infographic" class="tab-content">
-    <h2>Infographic & Venn Diagram</h2>
-    
-    <!-- Infographic Section -->
-    <div class="infographic-section">
-      <div class="info-card">
-        <h3><i class="fas fa-brain"></i> Core Concepts</h3>
-        <p><strong>Cloudflare:</strong> Edge deployment, Anthropic Patterns, Human in the Loop, and a prototyping Playground.</p>
-        <p><strong>OpenAI:</strong> Autonomous agent creation, advanced language models, Responses API, and a robust open-source Agents SDK.</p>
-      </div>
-      <div class="info-card">
-        <h3><i class="fas fa-code"></i> Technologies</h3>
-        <p><strong>Cloudflare:</strong> JavaScript/TypeScript, Edge computing, Integrated security & caching.</p>
-        <p><strong>OpenAI:</strong> Python, REST API, GPT models, Robust SDK.</p>
-      </div>
-      <div class="info-card">
-        <h3><i class="fas fa-bullseye"></i> Objectives & Use Cases</h3>
-        <p><strong>Cloudflare:</strong> Low latency, secure deployment, human oversight.</p>
-        <p><strong>OpenAI:</strong> Enable autonomous agents, scalable automation, complex task handling.</p>
-      </div>
-      <div class="info-card">
-        <h3><i class="fas fa-cogs"></i> Integration & Customization</h3>
-        <p><strong>Cloudflare:</strong> Seamless integration with Cloudflare services, ethical guidelines, interactive Playground.</p>
-        <p><strong>OpenAI:</strong> Easy SDK integration, extensive customization, monitoring & debugging tools.</p>
-      </div>
-    </div>
-    
-    <!-- New Venn Diagram -->
-    <div style="width: 900px; margin: 0 auto; background: #fff; text-align: center; position: relative;">
-      <svg
-        width="900"
-        height="600"
-        viewBox="0 0 900 600"
-        xmlns="http://www.w3.org/2000/svg"
-        style="background-color: #ffffff;"
-      >
-        <defs>
-          <!-- Reflection gradient for fade-out effect -->
-          <linearGradient id="reflectionGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2" />
-            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
-          </linearGradient>
-        </defs>
-
-        <!-- Left Circle (Cloudflare Agent Framework) -->
-        <circle
-          cx="340"
-          cy="320"
-          r="140"
-          fill="#007acc"
-          fill-opacity="0.7"
-          stroke="#005f99"
-          stroke-width="3"
-          filter="drop-shadow(0 4px 4px rgba(0,0,0,0.2))"
-        ></circle>
-        <!-- Reflection for Left Circle -->
-        <circle
-          cx="340"
-          cy="320"
-          r="140"
-          fill="url(#reflectionGrad)"
-          transform="translate(0, 640) scale(1, -1)"
-          opacity="0.4"
-        ></circle>
-
-        <!-- Right Circle (OpenAI Agent SDK) -->
-        <circle
-          cx="460"
-          cy="320"
-          r="140"
-          fill="#ff4500"
-          fill-opacity="0.7"
-          stroke="#cc3700"
-          stroke-width="3"
-          filter="drop-shadow(0 4px 4px rgba(0,0,0,0.2))"
-        ></circle>
-        <!-- Reflection for Right Circle -->
-        <circle
-          cx="460"
-          cy="320"
-          r="140"
-          fill="url(#reflectionGrad)"
-          transform="translate(0, 640) scale(1, -1)"
-          opacity="0.4"
-        ></circle>
-
-        <!-- Cloudflare Agent Framework Text (left circle, away from overlap) -->
-        <text
-          x="310"
-          y="270"
-          fill="#ffffff"
-          font-family="'Urbanist', sans-serif"
-          font-size="16"
-          text-anchor="middle"
-        >
-          <tspan x="310" dy="1.2em" font-weight="bold">Cloudflare Agent</tspan>
-          <tspan x="310" dy="1.2em" font-weight="bold">Framework</tspan>
-          <tspan x="310" dy="1.2em">Edge-based Deployment</tspan>
-          <tspan x="310" dy="1.2em">Anthropic Patterns</tspan>
-          <tspan x="310" dy="1.2em">Human in the Loop</tspan>
-          <tspan x="310" dy="1.2em">Playground</tspan>
-        </text>
-
-        <!-- OpenAI Agent SDK Text (right circle, away from overlap) -->
-        <text
-          x="490"
-          y="270"
-          fill="#ffffff"
-          font-family="'Urbanist', sans-serif"
-          font-size="16"
-          text-anchor="middle"
-        >
-          <tspan x="490" dy="1.2em" font-weight="bold">OpenAI Agent</tspan>
-          <tspan x="490" dy="1.2em" font-weight="bold">SDK</tspan>
-          <tspan x="490" dy="1.2em">Advanced LMs</tspan>
-          <tspan x="490" dy="1.2em">Responses API</tspan>
-          <tspan x="490" dy="1.2em">Agent SDK</tspan>
-          <tspan x="490" dy="1.2em">Scalable Tasks</tspan>
-        </text>
-
-        <!-- Shared Features Text (centered in overlap, aligned similarly) -->
-        <text
-          x="400"
-          y="310"
-          fill="#333333"
-          font-family="'Urbanist', sans-serif"
-          font-size="16"
-          text-anchor="middle"
-        >
-          <tspan x="400" dy="1.2em" font-weight="bold">Shared Features</tspan>
-          <tspan x="400" dy="1.2em">Ethical AI</tspan>
-          <tspan x="400" dy="1.2em">Customization</tspan>
-          <tspan x="400" dy="1.2em">Extensive Docs</tspan>
-        </text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- Updated Dashboard Content -->
-  <div id="dashboard" class="tab-content">
-    <h2>Framework Analytics Dashboard</h2>
-    <input type="text" id="filterInput" class="filter-input" placeholder="Filter metrics...">
-    <table class="dashboard-table" id="dashboardTable">
-        <thead>
-            <tr>
-                <th>Metric Category</th>
-                <th>Cloudflare Agent Framework</th>
-                <th>OpenAI Agent SDK</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Performance Metrics</td>
-                <td>
-                    - Global edge network with < 50ms latency
-                    - 275+ cities worldwide deployment
-                    - Built-in caching and performance optimization
-                </td>
-                <td>
-                    - Optimized for large language model operations
-                    - Async processing capabilities
-                    - Distributed computing support
-                </td>
-            </tr>
-            <tr>
-                <td>Community & Adoption</td>
-                <td>
-                    - 1k+ GitHub stars
-                    - 57 forks
-                    - 7 active contributors
-                    - 40 releases
-                </td>
-                <td>
-                    - Extensive developer community
-                    - Regular SDK updates
-                    - Active GitHub repository
-                </td>
-            </tr>
-            <tr>
-                <td>Deployment Options</td>
-                <td>
-                    - Edge deployment
-                    - WebSocket support
-                    - HTTP endpoints
-                    - React integration
-                </td>
-                <td>
-                    - Cloud deployment
-                    - On-premises options
-                    - API integration
-                    - Multiple environment support
-                </td>
-            </tr>
-            <tr>
-                <td>Licensing & Cost</td>
-                <td>
-                    - MIT License
-                    - CPU consumption-based pricing
-                    - Integrated with Cloudflare services
-                </td>
-                <td>
-                    - Open-source SDK
-                    - Usage-based API pricing
-                    - Enterprise licensing available
-                </td>
-            </tr>
-            <tr>
-                <td>Future Roadmap</td>
-                <td>
-                    - Advanced memory systems
-                    - WebRTC integration
-                    - Email integration
-                    - Enhanced observability
-                </td>
-                <td>
-                    - Expanded tool integration
-                    - New agent capabilities
-                    - Enhanced autonomous features
-                </td>
-            </tr>
-        </tbody>
+    <h2>1. Agent Architecture & Types</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Agent Types Supported</b></td>
+        <td>Single, multi-agent, hierarchical, event-driven, stateful/stateless</td>
+        <td>Single, multi-agent, hierarchical, recursive, event-driven, stateful/stateless</td>
+        <td>Single, multi-agent (via Bedrock Agents), event-driven, stateful/stateless</td>
+        <td>Single, multi-agent, hierarchical, recursive, event-driven, stateful/stateless</td>
+      </tr>
+      <tr>
+        <td><b>Agent Composition</b></td>
+        <td>LLM-based, rule-based, hybrid, agent-as-tool (via MCP)</td>
+        <td>LLM-based, agent-as-tool, handoffs, hybrid</td>
+        <td>LLM-based, agent-as-tool (via API), hybrid</td>
+        <td>LLM-based, rule-based, hybrid, agent-as-tool, workflow agents</td>
+      </tr>
+      <tr>
+        <td><b>Lifecycle Management</b></td>
+        <td>Creation, execution, monitoring, termination, persistence, recovery (Durable Objects)</td>
+        <td>Creation, execution, monitoring, termination, persistence (via context), recovery</td>
+        <td>Creation, execution, monitoring, termination, persistence (via Bedrock), recovery</td>
+        <td>Creation, execution, monitoring, termination, persistence, recovery (session/memory)</td>
+      </tr>
+      <tr>
+        <td><b>Agent Communication</b></td>
+        <td>Inter-agent messaging (WebSockets, HTTP), handoff, broadcasting, MCP, state sync</td>
+        <td>Inter-agent messaging, handoff, broadcasting, MCP, HTTP</td>
+        <td>API-based, Bedrock Agents, tool invocation, context passing</td>
+        <td>Inter-agent messaging, handoff, broadcasting, explicit invocation, shared state</td>
+      </tr>
     </table>
+
+    <h2>2. Tooling & Integration</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Tool Types</b></td>
+        <td>Built-in, custom, third-party API, DB, cloud, MCP tools</td>
+        <td>Built-in, custom, third-party API, DB, cloud, MCP tools</td>
+        <td>Custom (via API), third-party API, DB, cloud</td>
+        <td>Built-in, custom, third-party API, DB, cloud, agent-as-tool</td>
+      </tr>
+      <tr>
+        <td><b>Tool Invocation</b></td>
+        <td>Sync/async, batch, error handling, retries, timeouts</td>
+        <td>Sync/async, batch, error handling, retries, timeouts</td>
+        <td>Sync/async (API), error handling, retries, timeouts</td>
+        <td>Sync/async, batch, error handling, retries, timeouts</td>
+      </tr>
+      <tr>
+        <td><b>Tool Management</b></td>
+        <td>Registration, discovery, versioning, access control, dependency management (MCP)</td>
+        <td>Registration, discovery, versioning, access control, dependency management (MCP)</td>
+        <td>Registration (API), access control, dependency management</td>
+        <td>Registration, discovery, versioning, access control, dependency management</td>
+      </tr>
+    </table>
+
+    <h2>3. Workflow Orchestration</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Workflow Definition</b></td>
+        <td>Declarative/imperative, DAGs, branching, looping</td>
+        <td>Declarative/imperative, DAGs, branching, looping</td>
+        <td>Declarative (Bedrock), branching, looping (API)</td>
+        <td>Declarative/imperative, DAGs, branching, looping, workflow agents</td>
+      </tr>
+      <tr>
+        <td><b>Execution Control</b></td>
+        <td>Sequential/parallel, concurrency, scheduling, manual/auto</td>
+        <td>Sequential/parallel, concurrency, scheduling, manual/auto</td>
+        <td>Sequential/parallel (API), scheduling (Bedrock)</td>
+        <td>Sequential/parallel, concurrency, scheduling, manual/auto</td>
+      </tr>
+      <tr>
+        <td><b>State Management</b></td>
+        <td>Persistent/ephemeral, checkpoint, rollback, sync, conflict resolution</td>
+        <td>Persistent/ephemeral, checkpoint, rollback, sync, conflict resolution</td>
+        <td>Persistent/ephemeral (API), checkpoint, rollback</td>
+        <td>Persistent/ephemeral, checkpoint, rollback, sync, conflict resolution</td>
+      </tr>
+    </table>
+
+    <h2>4. Safety, Guardrails & Validation</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Input Validation</b></td>
+        <td>Schema, sanitization, type checking, constraints (MCP)</td>
+        <td>Schema, sanitization, type checking, constraints (MCP)</td>
+        <td>Schema, type checking (API), constraints</td>
+        <td>Schema, sanitization, type checking, constraints</td>
+      </tr>
+      <tr>
+        <td><b>Output Validation</b></td>
+        <td>Result verification, anomaly detection, hooks, feedback</td>
+        <td>Result verification, anomaly detection, hooks, feedback</td>
+        <td>Result verification, hooks</td>
+        <td>Result verification, anomaly detection, hooks, feedback</td>
+      </tr>
+      <tr>
+        <td><b>Security Measures</b></td>
+        <td>Auth, encryption, audit logging, GDPR</td>
+        <td>Auth, encryption, audit logging, GDPR</td>
+        <td>Auth, encryption, audit logging, GDPR</td>
+        <td>Auth, encryption, audit logging, GDPR</td>
+      </tr>
+    </table>
+
+    <h2>5. Modularity & Extensibility</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Plugin Architecture</b></td>
+        <td>Plugins/extensions, hot-swap, isolation, DI</td>
+        <td>Plugins/extensions, hot-swap, isolation, DI</td>
+        <td>Extensions (API), limited plugin</td>
+        <td>Plugins/extensions, hot-swap, isolation, DI</td>
+      </tr>
+      <tr>
+        <td><b>Customization</b></td>
+        <td>Custom agents, tools, workflows, UI</td>
+        <td>Custom agents, tools, workflows, UI</td>
+        <td>Custom agents, tools, workflows</td>
+        <td>Custom agents, tools, workflows, UI</td>
+      </tr>
+      <tr>
+        <td><b>External Integration</b></td>
+        <td>CRM, ERP, PM tools, comms (Slack, Teams), DB</td>
+        <td>CRM, ERP, PM tools, comms, DB</td>
+        <td>CRM, ERP, PM tools, comms, DB</td>
+        <td>CRM, ERP, PM tools, comms, DB</td>
+      </tr>
+    </table>
+
+    <h2>6. Observability & Tracing</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Logging</b></td>
+        <td>Structured/unstructured, levels, aggregation, streaming</td>
+        <td>Structured/unstructured, levels, aggregation, streaming</td>
+        <td>Structured, levels, aggregation</td>
+        <td>Structured/unstructured, levels, aggregation, streaming</td>
+      </tr>
+      <tr>
+        <td><b>Tracing</b></td>
+        <td>Distributed tracing, visualization, spans, correlation IDs</td>
+        <td>Distributed tracing, visualization, spans, correlation IDs</td>
+        <td>Tracing (Bedrock), limited</td>
+        <td>Distributed tracing, visualization, spans, correlation IDs</td>
+      </tr>
+      <tr>
+        <td><b>Metrics & Monitoring</b></td>
+        <td>Perf/resource/error metrics, alerting, Prometheus/Grafana</td>
+        <td>Perf/resource/error metrics, alerting, Prometheus/Grafana</td>
+        <td>Perf/resource/error metrics, alerting</td>
+        <td>Perf/resource/error metrics, alerting, Prometheus/Grafana</td>
+      </tr>
+    </table>
+
+    <h2>7. Deployment & Scalability</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Deployment Models</b></td>
+        <td>On-prem, cloud, hybrid, edge (Cloudflare)</td>
+        <td>On-prem, cloud, hybrid</td>
+        <td>Cloud (Bedrock), hybrid (API)</td>
+        <td>On-prem, cloud (GCP), hybrid</td>
+      </tr>
+      <tr>
+        <td><b>Scalability</b></td>
+        <td>Horizontal/vertical/auto-scaling, load balancing</td>
+        <td>Horizontal/vertical/auto-scaling, load balancing</td>
+        <td>Horizontal/vertical/auto-scaling (Bedrock)</td>
+        <td>Horizontal/vertical/auto-scaling, load balancing</td>
+      </tr>
+      <tr>
+        <td><b>Resilience & Fault Tolerance</b></td>
+        <td>Retry, circuit breaker, failover, DR</td>
+        <td>Retry, circuit breaker, failover, DR</td>
+        <td>Retry, failover, DR (Bedrock)</td>
+        <td>Retry, circuit breaker, failover, DR</td>
+      </tr>
+    </table>
+
+    <h2>8. Testing & Validation</h2>
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Testing Frameworks</b></td>
+        <td>Unit/integration (Vitest, wrangler dev)</td>
+        <td>Unit/integration (Python, examples)</td>
+        <td>Unit/integration (API, Bedrock)</td>
+        <td>Unit/integration (CLI, FastAPI, Comet Opik)</td>
+      </tr>
+    </table>
+
+    <h2>Summary Table: Agentic Orchestration & Workflow Automation</h2>
+    <table>
+      <tr>
+        <th>Capability</th>
+        <th>Cloudflare Agents Framework</th>
+        <th>OpenAI Agents SDK</th>
+        <th>Amazon Nova</th>
+        <th>Google ADK</th>
+      </tr>
+      <tr>
+        <td><b>Multi-agent orchestration</b></td>
+        <td>Yes (hierarchical, parallel, event-driven, MCP)</td>
+        <td>Yes (handoffs, agent-as-tool, MCP)</td>
+        <td>Yes (via Bedrock Agents, API)</td>
+        <td>Yes (hierarchical, workflow agents, agent-as-tool)</td>
+      </tr>
+      <tr>
+        <td><b>Sub-agents & delegation</b></td>
+        <td>Yes (sub-agents, handoff, MCP)</td>
+        <td>Yes (handoffs, agent-as-tool)</td>
+        <td>Yes (Bedrock sub-agents, API)</td>
+        <td>Yes (sub-agents, LLM transfer, agent-as-tool)</td>
+      </tr>
+      <tr>
+        <td><b>Tool/function calling</b></td>
+        <td>Yes (MCP, custom, third-party)</td>
+        <td>Yes (function tools, MCP, custom)</td>
+        <td>Yes (API, custom)</td>
+        <td>Yes (function tools, agent-as-tool, custom)</td>
+      </tr>
+      <tr>
+        <td><b>Workflow automation</b></td>
+        <td>Yes (Workflows, scheduling, async, stateful)</td>
+        <td>Yes (pipelines, async, stateful)</td>
+        <td>Yes (Bedrock workflows, async)</td>
+        <td>Yes (workflow agents, sequential/parallel/loop, async)</td>
+      </tr>
+      <tr>
+        <td><b>Business/HR/PM/Eng/Research</b></td>
+        <td>Yes (customizable, extensible, stateful, scalable)</td>
+        <td>Yes (customizable, extensible, stateful, scalable)</td>
+        <td>Yes (customizable, extensible, scalable)</td>
+        <td>Yes (customizable, extensible, stateful, scalable)</td>
+      </tr>
+    </table>
+
+    <div class="limitation">
+      <b>Notable Limitations</b>
+      <ul>
+        <li><b>Amazon Nova:</b> Agentic features are primarily exposed via Amazon Bedrock Agents and APIs. Custom orchestration requires more manual implementation compared to the others.</li>
+        <li><b>OpenAI Agent SDK:</b> Some advanced orchestration patterns (e.g., recursive, complex multi-agent) may require additional code or are less opinionated than ADK/Cloudflare.</li>
+        <li><b>Cloudflare Agents Framework:</b> Deep integration with Cloudflare platform; best suited for edge/serverless and stateful microservices.</li>
+        <li><b>Google ADK:</b> Most comprehensive for multi-agent, workflow, and agent-as-tool patterns. Native support for hierarchical, parallel, loop, and human-in-the-loop workflows.</li>
+      </ul>
+    </div>
+
+    <div class="files">
+      <b>Files Not Processed</b>
+      <ul>
+        <li>OpenAI Agent SDK: <code>Testing.md</code>, <code>Testing your Agents.md</code>, <code>README.md</code> (files not found or inaccessible)</li>
+      </ul>
+      All other files in the provided folders were processed for this report.
+    </div>
+
+    <div class="note">
+      <b>Report generated on 2025-04-23.</b> All information is strictly factual and based on the latest official documentation provided in the workspace.
+    </div>
   </div>
-
-  <!-- JavaScript for Tabs, Collapsible Sections, and Dashboard Filtering -->
-  <script>
-    // Tab functionality
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
-      });
-    });
-
-    // Collapsible sections functionality
-    var collapsibles = document.getElementsByClassName("collapsible");
-    for (let i = 0; i < collapsibles.length; i++) {
-      collapsibles[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var content = this.nextElementSibling;
-        content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
-      });
-    }
-
-    // Dashboard filtering functionality
-    document.getElementById('filterInput').addEventListener('keyup', function() {
-      var filter = this.value.toLowerCase();
-      var rows = document.querySelectorAll('#dashboardTable tbody tr');
-      rows.forEach(row => {
-        var category = row.cells[0].textContent.toLowerCase();
-        var cloudflare = row.cells[1].textContent.toLowerCase();
-        var openai = row.cells[2].textContent.toLowerCase();
-        row.style.display = (category.indexOf(filter) > -1 || cloudflare.indexOf(filter) > -1 || openai.indexOf(filter) > -1) ? "" : "none";
-      });
-    });
-
-    // Enhanced interactivity for Venn diagram
-    document.querySelectorAll('.venn-circle').forEach(circle => {
-      circle.addEventListener('mouseenter', (e) => {
-        const type = e.target.classList.contains('cloudflare') ? 'cloudflare' : 'openai';
-        document.querySelector(`.${type}-content`).style.opacity = '1';
-        e.target.style.strokeWidth = '4';
-        e.target.style.filter = 'url(#glow) brightness(1.2)';
-        
-        // Highlight related text
-        document.querySelectorAll(`.${type}-content .venn-list-item`).forEach(text => {
-          text.style.opacity = '1';
-          text.style.filter = 'url(#titleGlow)';
-        });
-      });
-
-      circle.addEventListener('mouseleave', (e) => {
-        const type = e.target.classList.contains('cloudflare') ? 'cloudflare' : 'openai';
-        e.target.style.strokeWidth = '2';
-        e.target.style.filter = 'url(#glow)';
-        
-        // Reset text effects
-        document.querySelectorAll(`.${type}-content .venn-list-item`).forEach(text => {
-          text.style.opacity = '0.9';
-          text.style.filter = 'none';
-        });
-      });
-    });
-  </script>
+  <div class="footer">
+    &copy; 2025 | Agentic Frameworks Comparison | <a href="https://github.com/con-fucius/Cloudflare-vs-OpenAI-Agent-Frameworks" style="color:#0051c3;">GitHub</a>
+  </div>
 </body>
 </html>
