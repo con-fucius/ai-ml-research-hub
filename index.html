@@ -419,6 +419,56 @@
           <td>Unit/integration (CLI, FastAPI, Comet Opik)</td>
         </tr>
       </table>
+    </div>
+    <!-- Tab 2: Frameworks Overview -->
+    <div id="venn" class="tab-content">
+      <div class="frameworks-flex">
+        <div class="framework-card">
+          <h3>Cloudflare Agents Framework</h3>
+          <ul>
+            <li>Edge-native, serverless agent orchestration on Cloudflare Workers</li>
+            <li>Durable Objects for stateful, distributed agent instances</li>
+            <li>Built-in support for WebSockets, HTTP, and SQL</li>
+            <li>Model Context Protocol (MCP) for tool/function integration</li>
+            <li>Real-time state sync, scheduling, and event-driven workflows</li>
+            <li>TypeScript SDK, React hooks, and seamless deployment</li>
+            <li>Human-in-the-loop, observability, and guardrails</li>
+          </ul>
+        </div>
+        <div class="framework-card openai">
+          <h3>OpenAI Agents SDK</h3>
+          <ul>
+            <li>Python SDK for building LLM-powered agents and workflows</li>
+            <li>Supports agent-as-tool, handoffs, and recursive/hierarchical agents</li>
+            <li>Function tools, pipelines, and flexible orchestration</li>
+            <li>Integrated tracing, guardrails, and observability</li>
+            <li>Model Context Protocol (MCP) and OpenAI hosted tools</li>
+            <li>Extensible, with support for custom models and tools</li>
+          </ul>
+        </div>
+        <div class="framework-card nova">
+          <h3>Amazon Nova</h3>
+          <ul>
+            <li>Foundation models (Pro, Lite, Micro, Canvas, Reel, Sonic) on Amazon Bedrock</li>
+            <li>Bedrock Agents for managed agent orchestration</li>
+            <li>API-based tool/function calling and knowledge base integration</li>
+            <li>Prompt engineering, code interpreter, and memory/context</li>
+            <li>Streaming, batch inference, and fine-tuning support</li>
+            <li>Security, compliance, and cross-region deployment</li>
+          </ul>
+        </div>
+        <div class="framework-card adk">
+          <h3>Google ADK</h3>
+          <ul>
+            <li>Multi-agent, hierarchical, and workflow agents (sequential/parallel/loop)</li>
+            <li>Agent-as-tool, LLM/rule/hybrid agents, and explicit invocation</li>
+            <li>Session/memory, artifact management, and extensibility</li>
+            <li>Integrated evaluation, streaming, and developer UI/CLI</li>
+            <li>Broad LLM support (Gemini, Vertex AI, open-source)</li>
+            <li>Native support for human-in-the-loop and advanced orchestration</li>
+          </ul>
+        </div>
+      </div>
       <h2>Summary Table: Agentic Orchestration &amp; Workflow Automation</h2>
       <table>
         <tr>
@@ -472,131 +522,6 @@
           <li><b>Cloudflare Agents Framework:</b> Deep integration with Cloudflare platform; best suited for edge/serverless and stateful microservices.</li>
           <li><b>Google ADK:</b> Most comprehensive for multi-agent, workflow, and agent-as-tool patterns. Native support for hierarchical, parallel, loop, and human-in-the-loop workflows.</li>
         </ul>
-      </div>
-    </div>
-    <!-- Tab 2: Venn Diagram & Frameworks -->
-    <div id="venn" class="tab-content">
-      <div class="frameworks-flex">
-        <div class="framework-card">
-          <h3>Cloudflare Agents Framework</h3>
-          <ul>
-            <li>Edge-native, serverless agent orchestration on Cloudflare Workers</li>
-            <li>Durable Objects for stateful, distributed agent instances</li>
-            <li>Built-in support for WebSockets, HTTP, and SQL</li>
-            <li>Model Context Protocol (MCP) for tool/function integration</li>
-            <li>Real-time state sync, scheduling, and event-driven workflows</li>
-            <li>TypeScript SDK, React hooks, and seamless deployment</li>
-            <li>Human-in-the-loop, observability, and guardrails</li>
-          </ul>
-        </div>
-        <div class="framework-card openai">
-          <h3>OpenAI Agents SDK</h3>
-          <ul>
-            <li>Python SDK for building LLM-powered agents and workflows</li>
-            <li>Supports agent-as-tool, handoffs, and recursive/hierarchical agents</li>
-            <li>Function tools, pipelines, and flexible orchestration</li>
-            <li>Integrated tracing, guardrails, and observability</li>
-            <li>Model Context Protocol (MCP) and OpenAI hosted tools</li>
-            <li>Extensible, with support for custom models and tools</li>
-          </ul>
-        </div>
-        <div class="framework-card nova">
-          <h3>Amazon Nova</h3>
-          <ul>
-            <li>Foundation models (Pro, Lite, Micro, Canvas, Reel, Sonic) on Amazon Bedrock</li>
-            <li>Bedrock Agents for managed agent orchestration</li>
-            <li>API-based tool/function calling and knowledge base integration</li>
-            <li>Prompt engineering, code interpreter, and memory/context</li>
-            <li>Streaming, batch inference, and fine-tuning support</li>
-            <li>Security, compliance, and cross-region deployment</li>
-          </ul>
-        </div>
-        <div class="framework-card adk">
-          <h3>Google ADK</h3>
-          <ul>
-            <li>Multi-agent, hierarchical, and workflow agents (sequential/parallel/loop)</li>
-            <li>Agent-as-tool, LLM/rule/hybrid agents, and explicit invocation</li>
-            <li>Session/memory, artifact management, and extensibility</li>
-            <li>Integrated evaluation, streaming, and developer UI/CLI</li>
-            <li>Broad LLM support (Gemini, Vertex AI, open-source)</li>
-            <li>Native support for human-in-the-loop and advanced orchestration</li>
-          </ul>
-        </div>
-      </div>
-      <div class="venn-section">
-        <div class="venn-caption">
-          <b>Venn Diagram:</b> Core features and shared capabilities of the four leading agentic frameworks.
-        </div>
-        <div style="width: 100%; overflow-x: auto;">
-          <!-- SVG Venn Diagram as previously generated -->
-          <svg width="1100" height="900" viewBox="0 0 1100 900" xmlns="http://www.w3.org/2000/svg" style="background:#fff;">
-            <defs>
-              <linearGradient id="cf-oa" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#0051c3"/>
-                <stop offset="100%" stop-color="#10a37f"/>
-              </linearGradient>
-              <linearGradient id="adk-nova" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#f44336"/>
-                <stop offset="100%" stop-color="#ff9800"/>
-              </linearGradient>
-              <linearGradient id="cf-adk" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#0051c3"/>
-                <stop offset="100%" stop-color="#f44336"/>
-              </linearGradient>
-              <linearGradient id="all-four" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#0051c3"/>
-                <stop offset="33%" stop-color="#10a37f"/>
-                <stop offset="66%" stop-color="#ff9800"/>
-                <stop offset="100%" stop-color="#f44336"/>
-              </linearGradient>
-            </defs>
-            <ellipse cx="350" cy="400" rx="220" ry="180" fill="#0051c3" fill-opacity="0.13" stroke="#0051c3" stroke-width="3"/>
-            <ellipse cx="750" cy="400" rx="220" ry="180" fill="#10a37f" fill-opacity="0.13" stroke="#10a37f" stroke-width="3"/>
-            <ellipse cx="550" cy="650" rx="220" ry="180" fill="#ff9800" fill-opacity="0.13" stroke="#ff9800" stroke-width="3"/>
-            <ellipse cx="550" cy="200" rx="220" ry="180" fill="#f44336" fill-opacity="0.10" stroke="#f44336" stroke-width="3"/>
-            <text x="340" y="180" font-size="28" font-weight="bold" fill="#0051c3" text-anchor="middle">Cloudflare</text>
-            <text x="900" y="180" font-size="28" font-weight="bold" fill="#10a37f" text-anchor="middle">OpenAI</text>
-            <text x="760" y="880" font-size="28" font-weight="bold" fill="#ff9800" text-anchor="middle">Amazon Nova</text>
-            <text x="500" y="60" font-size="28" font-weight="bold" fill="#f44336" text-anchor="middle">Google ADK</text>
-            <rect x="800" y="600" width="240" height="70" fill="url(#adk-nova)" stroke="#888" stroke-width="2" rx="14"/>
-            <text x="920" y="625" font-size="15" font-weight="bold" fill="#222" text-anchor="middle">Amazon Nova + Google ADK</text>
-            <text x="920" y="645" font-size="13" fill="#222" text-anchor="middle">API-based • Knowledge Base</text>
-            <rect x="40" y="180" width="220" height="70" fill="url(#cf-adk)" stroke="#888" stroke-width="2" rx="14"/>
-            <text x="150" y="205" font-size="15" font-weight="bold" fill="#222" text-anchor="middle">Cloudflare + Google ADK</text>
-            <text x="150" y="225" font-size="13" fill="#222" text-anchor="middle">Real-time • Scheduling • State Sync</text>
-            <rect x="470" y="440" width="260" height="170" fill="#fff" stroke="url(#all-four)" stroke-width="3" rx="18"/>
-            <text x="600" y="470" font-size="18" font-weight="bold" fill="#222" text-anchor="middle">All Four</text>
-            <text x="600" y="495" font-size="15" fill="#222" text-anchor="middle">LLM-based Agents</text>
-            <text x="600" y="520" font-size="15" fill="#222" text-anchor="middle">Tool/Function Calling</text>
-            <text x="600" y="545" font-size="15" fill="#222" text-anchor="middle">Workflow Orchestration</text>
-            <text x="600" y="570" font-size="15" fill="#222" text-anchor="middle">State Management</text>
-            <text x="600" y="595" font-size="15" fill="#222" text-anchor="middle">Security</text>
-            <text x="600" y="620" font-size="15" fill="#222" text-anchor="middle">Extensibility</text>
-            <rect x="210" y="350" width="180" height="120" fill="#fff" stroke="#0051c3" stroke-width="2" rx="12"/>
-            <text x="300" y="375" font-size="16" font-weight="bold" fill="#0051c3" text-anchor="middle">Cloudflare</text>
-            <text x="300" y="395" font-size="13" fill="#0051c3" text-anchor="middle">Edge/Serverless</text>
-            <text x="300" y="415" font-size="13" fill="#0051c3" text-anchor="middle">Durable Objects</text>
-            <text x="300" y="435" font-size="13" fill="#0051c3" text-anchor="middle">Cloudflare Workers</text>
-            <text x="300" y="455" font-size="13" fill="#0051c3" text-anchor="middle">TypeScript • SQL • Real-time Sync</text>
-            <rect x="810" y="350" width="180" height="120" fill="#fff" stroke="#10a37f" stroke-width="2" rx="12"/>
-            <text x="900" y="375" font-size="16" font-weight="bold" fill="#10a37f" text-anchor="middle">OpenAI</text>
-            <text x="900" y="395" font-size="13" fill="#10a37f" text-anchor="middle">Python SDK</text>
-            <text x="900" y="415" font-size="13" fill="#10a37f" text-anchor="middle">Handoffs • Function Tools</text>
-            <text x="900" y="435" font-size="13" fill="#10a37f" text-anchor="middle">Flexible Pipelines • Tracing</text>
-            <rect x="670" y="730" width="180" height="120" fill="#fff" stroke="#ff9800" stroke-width="2" rx="12"/>
-            <text x="760" y="755" font-size="16" font-weight="bold" fill="#ff9800" text-anchor="middle">Amazon Nova</text>
-            <text x="760" y="775" font-size="13" fill="#ff9800" text-anchor="middle">Bedrock Agents</text>
-            <text x="760" y="795" font-size="13" fill="#ff9800" text-anchor="middle">Foundation Models</text>
-            <text x="760" y="815" font-size="13" fill="#ff9800" text-anchor="middle">Prompt Engineering</text>
-            <text x="760" y="835" font-size="13" fill="#ff9800" text-anchor="middle">API Tool Use</text>
-            <rect x="410" y="100" width="180" height="120" fill="#fff" stroke="#f44336" stroke-width="2" rx="12"/>
-            <text x="500" y="125" font-size="16" font-weight="bold" fill="#f44336" text-anchor="middle">Google ADK</text>
-            <text x="500" y="145" font-size="13" fill="#f44336" text-anchor="middle">Workflow Agents</text>
-            <text x="500" y="165" font-size="13" fill="#f44336" text-anchor="middle">Artifact Mgmt • Session/Memory</text>
-            <text x="500" y="185" font-size="13" fill="#f44336" text-anchor="middle">Streaming • CLI/Dev UI</text>
-            <text x="500" y="205" font-size="13" fill="#f44336" text-anchor="middle">Extensibility</text>
-          </svg>
-        </div>
       </div>
     </div>
     <div class="footer">
