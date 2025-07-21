@@ -1,24 +1,19 @@
 {
-  "name": "preliminary",
+  "name": "ai-ml-research-hub",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
-    "dev": "astro dev"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@11ty/eleventy": "^2.0.1",
-    "@rollup/plugin-yaml": "^4.1.2"
+    "preview": "astro preview"
   },
   "dependencies": {
     "astro": "^4.11.5",
-    "glob": "^10.4.2",
     "js-yaml": "^4.1.0",
     "prismjs": "^1.30.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-yaml": "^4.1.2"
   }
 }
