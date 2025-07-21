@@ -1,0 +1,134 @@
+# The unique identifier for the framework
+id: microsoft-autogen
+
+# --- Basic Information ---
+name: "Microsoft AutoGen"
+githubUrl: "https://github.com/microsoft/autogen"
+websiteUrl: "https://microsoft.github.io/autogen/stable/index.html"
+microsoftResearchUrl: "https://www.microsoft.com/en-us/research/project/autogen/"
+ag2ForkUrl: "https://github.com/ag2ai/ag2"
+studioPaperUrl: "https://arxiv.org/abs/2408.15247"
+researchPaperUrl: "https://www.microsoft.com/en-us/research/publication/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-framework/"
+docsV02Url: "https://microsoft.github.io/autogen/0.2/docs"
+semanticKernelBlogUrl: "https://devblogs.microsoft.com/semantic-kernel/microsofts-agentic-ai-frameworks-autogen-and-semantic-kernel/"
+v04ReleaseBlogUrl: "https://www.microsoft.com/en-us/research/blog/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/"
+roadmapUrl: "https://github.com/microsoft/autogen/discussions/2900"
+summary: "A layered, modular framework for building AI agents and multi-agent systems with async/event-driven messaging, distributed runtime, and enterprise-grade observability. Features pluggable agents, tools, memory, cross-language support, and AutoGen Studio for drag-and-drop prototyping."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "Core - Event-Driven Actor Model"
+    description: "Async message passing with distributed runtime for scalable multi-agent systems."
+  - title: "AgentChat - High-Level APIs"
+    description: "AssistantAgent, UserProxyAgent, RoundRobinGroupChat, and other pre-built agent types."
+  - title: "Extensions - Plug-in Ecosystem"
+    description: "LLM clients, code executors, web-surfers, MCP servers, and custom extensions."
+  - title: "Studio - Drag-and-Drop UI"
+    description: "No-code interface for prototyping, profiling, and exporting workflows."
+  - title: "Asynchronous Messaging"
+    description: "Event-driven messaging system for responsive multi-agent coordination."
+  - title: "Cross-Language Support"
+    description: "Python ≥ 3.10, .NET, with future Java/Go support for distributed agent teams."
+  - title: "Enterprise Observability"
+    description: "OpenTelemetry tracing, metrics, cost tracking, and stateful workflows with save/load."
+
+# --- Use Cases ---
+useCases:
+  - "Rich modular design - Swap LLMs, tools, memory without touching orchestration"
+  - "Enterprise-grade observability - Built-in metrics, OpenTelemetry, cost tracking"
+  - "Distributed & multi-language - Agents can live in separate processes, languages"
+  - "Studio accelerates prototyping - From drag-and-drop to containerized deploy"
+
+# --- Pros & Cons ---
+advantages:
+  - "Rich modular design - Swap LLMs, tools, memory without touching orchestration"
+  - "Enterprise-grade observability - Built-in metrics, OpenTelemetry, cost tracking"
+  - "Distributed & multi-language - Agents in separate processes, languages"
+  - "Backed by Microsoft Research - Active roadmap, Semantic Kernel convergence"
+  - "Studio accelerates prototyping - Drag-and-drop to containerized deploy"
+
+disadvantages:
+  - "API surface still stabilizing - Breaking changes between 0.2 → 0.4"
+  - "Documentation gaps - Advanced patterns need more guides"
+  - "Studio UX rough edges - Export/import semantics still beta"
+  - "Streaming & structured output - Community reports intermittent issues"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "Semantic Kernel Unification"
+    description: "AutoGen's multi-agent runtime (autogen-core) will merge into SK's Process Framework early 2025"
+    status: "Early 2025"
+  - title: "Copilot Studio Integration"
+    description: "AutoGen workflows will be importable as custom agents inside Copilot Studio"
+    status: "In Development"
+  - title: "Language Expansion"
+    description: ".NET GA, Java SDK preview, Go SDK on roadmap"
+    status: "Ongoing"
+  - title: "Community Extensions"
+    description: "MCP servers, vector-store memories, Azure Container Apps executors shipping monthly"
+    status: "Active"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2023-03-01"
+    type: "Release"
+    title: "Concept & Initial Release"
+    description: "Concept & initial release, ICLR'24 recognition"
+    url: "https://www.microsoft.com/en-us/research/publication/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-framework/"
+  - date: "2023-10-01"
+    type: "Release"
+    title: "Open Source Release"
+    description: "Spun off to own repo; foundational agentic framework open-sourced"
+    url: "https://github.com/microsoft/autogen/releases/tag/v0.1.0"
+  - date: "2024-01-01"
+    type: "Release"
+    title: "v0.2 GA Release"
+    description: "AgentChat & Core APIs stable; human-in-the-loop, code execution, tool use"
+    url: "https://microsoft.github.io/autogen/0.2/docs"
+  - date: "2024-11-01"
+    type: "Update"
+    title: "Semantic Kernel Collaboration"
+    description: "Announced deep collaboration with Semantic Kernel"
+    url: "https://devblogs.microsoft.com/semantic-kernel/microsofts-agentic-ai-frameworks-autogen-and-semantic-kernel/"
+  - date: "2025-01-01"
+    type: "Release"
+    title: "v0.4 GA Release"
+    description: "Complete async/event-driven rewrite"
+    url: "https://www.microsoft.com/en-us/research/blog/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/"
+  - date: "2025-01-01"
+    type: "Update"
+    title: "Ongoing Development"
+    description: ".NET SDK stabilization, Copilot Studio integration, community extensions"
+    url: "https://github.com/microsoft/autogen/discussions/2900"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Installation"
+    language: "bash"
+    code: |
+      pip install -U "autogen-agentchat" "autogen-ext[openai]"
+  - title: "Basic Agent Setup (v0.4)"
+    language: "python"
+    code: |
+      import asyncio
+      from autogen_agentchat.agents import AssistantAgent
+      from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+      async def main() -> None:
+          model = OpenAIChatCompletionClient(model="gpt-4o")
+          agent = AssistantAgent("coder", model_client=model)
+          result = await agent.run(task="Write a Python one-liner to list even numbers 0–10")
+          print(result.messages[-1].content)
+          await model.close()
+
+      asyncio.run(main())
+  - title: "AutoGen Studio Setup"
+    language: "bash"
+    code: |
+      # Run AutoGen Studio (no-code GUI)
+      pip install -U autogenstudio
+      autogenstudio ui --port 8080
+      # Visit http://localhost:8080 to drag-and-drop agents, trace runs, and export workflows as JSON

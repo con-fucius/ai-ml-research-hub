@@ -1,0 +1,151 @@
+# The unique identifier for the framework
+id: openai-agents-sdk
+
+# --- Basic Information ---
+name: "OpenAI Agents SDK"
+pythonDocsUrl: "https://openai.github.io/openai-agents-python"
+pythonSourceUrl: "https://github.com/openai/openai-agents-python"
+jsSourceUrl: "https://github.com/openai/openai-agents-js"
+customerServiceDemoUrl: "https://github.com/openai/openai-cs-agents-demo"
+voiceSampleUrl: "https://github.com/openai/openai-voice-agent-sdk-sample"
+swarmDeprecationUrl: "https://github.com/openai/swarm/blob/main/README.md"
+pypiHistoryUrl: "https://pypi.org/project/openai-agents/#history"
+npmUrl: "https://www.npmjs.com/package/@openai/agents"
+datacampCourseUrl: "https://www.datacamp.com/courses/build-multi-agent-apps-with-openai-agents-sdk"
+summary: "A flexible framework for building LLM-based agents with structured output, streaming, voice support, and production features. Supports OpenAI's Responses API and legacy Chat Completions API models, with integration for non-OpenAI models via LiteLLM."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "Core Primitives"
+    description: "Agent, Runner, Session, Guardrail, and function_tool primitives for workflow orchestration and execution."
+  - title: "Structured Output"
+    description: "Auto-schema generation via Pydantic (Python) and Zod (JavaScript/TypeScript) for type-safe agent responses."
+  - title: "Streaming Support"
+    description: "Token-level streaming with stream=True (Python) or stream: true (JavaScript) for real-time interactions."
+  - title: "Voice & WebRTC"
+    description: "FastAPI sample (Python) and RealtimeAgent (JS/TS) for browser and Node.js voice applications."
+  - title: "Hosted Tools"
+    description: "WebSearch, FileSearch, CodeInterpreter tools available without OAuth setup."
+  - title: "Tracing & Observability"
+    description: "Built-in tracing exporters for Logfire, AgentOps, Braintrust, Keywords AI with plug-in architecture."
+  - title: "Session Management"
+    description: "SQLite, Redis, and custom session backends for conversation memory and state persistence."
+
+# --- Use Cases ---
+useCases:
+  - "Multi-agent workflows with tool support and memory"
+  - "Customer service agents with handoff capabilities"
+  - "Voice-enabled applications with WebRTC integration"
+  - "Production agents with tracing and observability"
+  - "Structured output applications with type safety"
+
+# --- Pros & Cons ---
+advantages:
+  - "Flexible model integration - OpenAI Responses API, Chat Completions, LiteLLM support"
+  - "Rich tool & memory support - Built-in and custom tools with conversational memory"
+  - "Production-ready features - Streaming, voice, tracing, guardrails"
+  - "Multi-language support - Python and JavaScript/TypeScript SDKs"
+  - "Active ecosystem - Coinbase AgentKit, AgentOps, DataCamp integrations"
+
+disadvantages:
+  - "API volatility - Breaking changes possible in 0.1.x versions"
+  - "JavaScript/TypeScript maturity - TypeScript definitions still in preview"
+  - "No visual designer - CLI-only, no drag-and-drop interface"
+  - "Long-context limitations - Manual management via custom context required"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "API Stabilization"
+    description: "v0.2.0 release targeting stable APIs with breaking change protection"
+    status: "Q3 2025"
+  - title: "TypeScript Maturity"
+    description: "Full TypeScript definitions and improved JavaScript/TypeScript experience"
+    status: "Q3 2025"
+  - title: "Visual Designer"
+    description: "Drag-and-drop interface for agent workflow design"
+    status: "Not Public"
+  - title: "Long-Context Extensions"
+    description: "Enhanced context management and memory handling capabilities"
+    status: "Future Extension"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2025-01-01"
+    type: "Update"
+    title: "Internal Builds & Swarm Deprecation"
+    description: "Internal builds begin; Swarm formally deprecated"
+    url: "https://github.com/openai/swarm/blob/main/README.md"
+  - date: "2025-04-02"
+    type: "Release"
+    title: "PyPI v0.1.0 Published"
+    description: "First public release on PyPI"
+    url: "https://pypi.org/project/openai-agents/#history"
+  - date: "2025-04-02"
+    type: "Release"
+    title: "NPM v0.1.0 Published"
+    description: "First public release on NPM"
+    url: "https://www.npmjs.com/package/@openai/agents"
+  - date: "2025-04-03"
+    type: "Update"
+    title: "Patch v0.1.1 Released"
+    description: "Fixes zod@3.25.68 incompatibility"
+    url: "https://github.com/openai/openai-agents-js/commit/a8d7b12"
+  - date: "2025-07-10"
+    type: "Tool"
+    title: "DataCamp Course Released"
+    description: "Build Multi-Agent Apps with OpenAI Agents SDK course launched"
+    url: "https://www.datacamp.com/courses/build-multi-agent-apps-with-openai-agents-sdk"
+  - date: "2025-07-18"
+    type: "Release"
+    title: "Latest v0.1.4 Released"
+    description: "Latest v0.1.4 available on PyPI & NPM"
+    url: "https://pypi.org/project/openai-agents/#history"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Python Installation"
+    language: "bash"
+    code: |
+      pip install openai-agents==0.1.4
+      # Requires: openai>=1.35, pydantic>=2.7, typing_extensions>=4.10
+  - title: "JavaScript Installation"
+    language: "bash"
+    code: |
+      npm install @openai/agents@0.1.4 'zod@<=3.25.67'
+      # Requires: Node 22+, Deno 1.42+, Bun 1.1+
+  - title: "Simple Agent with Tracing (Python)"
+    language: "python"
+    code: |
+      import os, asyncio
+      from agents import Agent, Runner, SQLiteSession, trace
+
+      os.environ["OPENAI_API_KEY"] = "sk-..."
+
+      @trace
+      async def main():
+          agent = Agent(
+              name="Coder",
+              instructions="Return concise Python.",
+              tools=[lambda n: list(range(0, n, 2))]
+          )
+          session = SQLiteSession("demo")
+          result = await Runner.run(agent, "Even numbers 0-10", session=session)
+          print(result.final_output)  # [0, 2, 4, 6, 8, 10]
+
+      asyncio.run(main())
+  - title: "Agent Architecture (Python)"
+    language: "python"
+    code: |
+      # Core Primitives
+      Agent(name: str, instructions: str, tools: list[Tool]=[], 
+            handoffs: list[Agent]=[], guardrails: list[Guardrail]=[], 
+            output_type: Type=None)
+      
+      Runner.run(agent, input, session=None, max_turns=10, stream=False)
+      SQLiteSession(session_id: str, db_path: str=":memory:")
+      
+      @function_tool  # Auto-schema via Pydantic
+      @input_guardrail(func) / @output_guardrail(func)

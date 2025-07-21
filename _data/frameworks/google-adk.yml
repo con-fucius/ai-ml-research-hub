@@ -1,0 +1,170 @@
+# The unique identifier for the framework
+id: google-adk
+
+# --- Basic Information ---
+name: "Google Agent Development Kit"
+# githubUrl removed - no single main repo, multiple specialized repos listed below
+websiteUrl: "https://google.github.io/adk-docs/"
+docsRepositoryUrl: "https://github.com/google/adk-docs"
+pythonSdkUrl: "https://github.com/google/adk-python"
+javaSdkUrl: "https://github.com/google/adk-java"
+sampleAgentsUrl: "https://github.com/google/adk-samples"
+developerUiUrl: "https://github.com/google/adk-web"
+launchBlogUrl: "https://developers.googleblog.com/en/agent-development-kit-easy-to-build-multi-agent-applications/"
+vertexIntegrationUrl: "https://www.googlecloudcommunity.com/gc/Cloud-Product-Articles/Using-Google-s-Agent-Development-Kit-ADK-with-MCP-Toolbox-and/ta-p/898512"
+githubTutorialUrl: "https://medium.com/google-cloud/build-a-github-agent-using-google-adk-and-openapi-integration-82abc326b288"
+summary: "A flexible, modular, code-first framework for building AI agents and multi-agent systems. Model-agnostic and deployment-agnostic, supporting OpenAI, Anthropic, Mistral, and Vertex AI models with multi-agent orchestration, rich tool ecosystem, streaming support, and built-in evaluation."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "Multi-agent Orchestration"
+    description: "Hierarchical, sequential, parallel, or loop workflows for complex agent coordination."
+  - title: "Rich Tool Ecosystem"
+    description: "Pre-built tools (Search, Code Exec), custom Python functions, OpenAPI endpoints, MCP servers, or other agents as tools."
+  - title: "Streaming Support"
+    description: "Bidirectional SSE, WebSocket, audio, and video streaming for interactive agents."
+  - title: "Built-in Evaluation"
+    description: "End-to-end response and step-level evaluation tooling for agent performance."
+  - title: "Deploy Anywhere"
+    description: "Container-ready with native integration for Vertex AI Agent Engine and Cloud Run."
+  - title: "Developer UI (adk-web)"
+    description: "Angular-based UI for real-time debugging, tracing, and workflow visualization."
+  - title: "Open Protocols"
+    description: "Supports Agent2Agent (A2A) and Model Context Protocol (MCP) for interoperability."
+
+# --- Use Cases ---
+useCases:
+  - "Conversational assistants with search and code execution"
+  - "Data pipelines orchestrating multi-step agents"
+  - "B2B enterprise tools integrated with internal APIs"
+  - "Interactive streaming UIs like voice or video assistants"
+  - "Multi-agent mashups combining GitHub, chat, and data agents"
+
+# --- Pros & Cons ---
+advantages:
+  - "Code-first orchestration - Full developer control"
+  - "Multi-language support - Python (mature) and Java (early v0.1.0)"
+  - "Rich debugging and evaluation built in"
+  - "Model-agnostic - Swap Gemini, OpenAI, Anthropic, etc."
+  - "Scalable deployment on Vertex AI or any container runtime"
+  - "Open protocols (A2A, MCP) for cross-framework compatibility"
+
+disadvantages:
+  - "Early development - Expect occasional rough edges"
+  - "Cloud familiarity required - Most value unlocked with Vertex AI, Cloud Run, IAM"
+  - "Java ecosystem lags behind Python in maturity"
+  - "Developer UI adds Angular/Node toolchain complexity"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "TypeScript & Go SDKs"
+    description: "First public releases with parity to Python 1.0 API"
+    status: "Q4 2025"
+  - title: "C# & Rust SDKs"
+    description: "Road-mapped after TypeScript/Go stabilize"
+    status: "H1 2026"
+  - title: "Agent Engine Autoscaling 2.0"
+    description: "GPU-aware scale-to-zero, global edge endpoints"
+    status: "Aug 2025"
+  - title: "MCP Marketplace"
+    description: "Curated registry of vetted MCP servers with one-line installation"
+    status: "Sep 2025"
+  - title: "Vertex AI Fine-tune API"
+    description: "In-console fine-tuning of Gemini models directly from ADK traces"
+    status: "Oct 2025"
+  - title: "A2A v1.0 Protocol"
+    description: "Final spec with multi-org federated agent discovery & billing"
+    status: "Oct 2025"
+  - title: "Snowflake & Databricks MCP"
+    description: "Native connectors exposing SQL, warehouse, and feature-store tools"
+    status: "Nov 2025"
+  - title: "Slack / Teams Bot Templates"
+    description: "Ready-to-deploy agents with OAuth, mention handling, file threads"
+    status: "Dec 2025"
+  - title: "LangGraph → ADK Bridge"
+    description: "Drop-in wrapper allowing LangGraph graphs to run as ADK sub-agents"
+    status: "Jan 2026"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2025-04-01"
+    type: "Release"
+    title: "GA Announcement at Google Cloud NEXT"
+    description: "GA announcement at Google Cloud NEXT 2025; open-source release"
+    url: "https://developers.googleblog.com/en/agent-development-kit-easy-to-build-multi-agent-applications/"
+  - date: "2025-04-01"
+    type: "Update"
+    title: "Vertex AI Integration"
+    description: "Vertex AI integrates ADK into the Vertex AI Agent Builder suite"
+    url: "https://www.googlecloudcommunity.com/gc/Cloud-Product-Articles/Using-Google-s-Agent-Development-Kit-ADK-with-MCP-Toolbox-and/ta-p/898512"
+  - date: "2025-05-07"
+    type: "Tool"
+    title: "GitHub Agent Demo"
+    description: "GitHub-based agent demo released using ADK + OpenAPI spec"
+    url: "https://medium.com/google-cloud/build-a-github-agent-using-google-adk-and-openapi-integration-82abc326b288"
+  - date: "2025-06-06"
+    type: "Update"
+    title: "Developer Guide Update"
+    description: "Developer guide covers NLU, webhooks, and streaming"
+    url: "https://google.github.io/adk-docs/"
+  - date: "2025-07-01"
+    type: "Update"
+    title: "Advanced Tutorials Released"
+    description: "Tutorials released on MCP Toolbox, Neo4j integration, and multi-agent flows"
+    url: "https://github.com/google/adk-samples"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Installation"
+    language: "bash"
+    code: |
+      pip install google-adk
+  - title: "Single Agent Setup"
+    language: "python"
+    code: |
+      from google.adk.agents import Agent
+      from google.adk.tools import google_search
+
+      root_agent = Agent(
+          name="search_assistant",
+          model="gemini-2.0-flash",
+          instruction="You are a helpful assistant. Answer questions using Google Search when needed.",
+          tools=[google_search]
+      )
+  - title: "Multi-Agent Coordination"
+    language: "python"
+    code: |
+      from google.adk.agents import LlmAgent
+
+      greeting_agent = LlmAgent(
+          name="greeter",
+          model="gemini-2.0-flash",
+          instruction="Provide a friendly greeting only.",
+          description="Handles greetings"
+      )
+
+      weather_agent = LlmAgent(
+          name="weather",
+          model="gemini-2.0-flash",
+          instruction="Use the get_weather tool to answer weather questions.",
+          description="Returns weather data",
+          tools=[get_weather]
+      )
+
+      root_agent = LlmAgent(
+          name="coordinator",
+          model="gemini-2.0-flash",
+          instruction="Delegate to sub-agents based on user intent.",
+          sub_agents=[greeting_agent, weather_agent]
+      )
+  - title: "Development UI"
+    language: "bash"
+    code: |
+      # Run the built-in development UI
+      adk web
+      # or start the API server only
+      adk api_server
+      # Visit http://localhost:4200 to chat, trace, and debug

@@ -1,0 +1,132 @@
+# The unique identifier for the framework
+id: cloudflare-agents-sdk
+
+# --- Basic Information ---
+name: "Cloudflare Agents SDK"
+githubUrl: "https://github.com/cloudflare/agents"
+starterRepoUrl: "https://github.com/cloudflare/agents-starter"
+websiteUrl: "https://developers.cloudflare.com/agents/"
+summary: "Extends Cloudflare Workers with agent semantics, providing persistent state, identity, and concurrency control via Durable Objects."
+
+# --- Categorization & Tags ---
+# Tags removed as requested
+
+# --- Key Features ---
+features:
+  - title: "Durable Object Execution Layer"
+    description: "Each agent runs as one Durable Object instance, providing stateful micro-servers with global addressability and millisecond-scale cold-start."
+  - title: "Built-in Persistence"
+    description: "D1 SQL dialect via this.sql and key/value state via this.setState() with automatic WebSocket client synchronization."
+  - title: "Real-time WebSocket Support"
+    description: "Native WebSocket handlers (onConnect, onMessage, onClose) for real-time agent interactions."
+  - title: "Cloudflare Workflows Scheduling"
+    description: "Built-in scheduling via this.schedule() backed by durable cron and delayed tasks."
+  - title: "Multi-LLM Integration"
+    description: "Plug-in any provider (OpenAI, Workers AI, Anthropic) via ai-sdk with included React hooks."
+  - title: "Model Context Protocol Support"
+    description: "McpAgent & McpServer classes expose agents as MCP endpoints for integration with Claude Desktop and other MCP clients."
+  - title: "Multi-Agent Composability"
+    description: "Agents can fetch() each other via Durable Object ID, enabling complex multi-agent workflows."
+
+# --- Use Cases ---
+useCases:
+  - "Real-time chatbots with persistent memory & sub-100 ms latency"
+  - "Cron-based background workers (e.g., nightly ETL)"
+  - "Multi-agent systems (triage → specialist agents)"
+  - "Human-in-the-loop approvals via Knock or custom UI"
+  - "Serve MCP tool servers to Claude Desktop or other MCP clients"
+
+# --- Pros & Cons ---
+advantages:
+  - "Persistent state out-of-the-box (Durable Objects)"
+  - "Global edge deployment (< 50 ms for 95% users)"
+  - "Built-in scheduler & WebSockets – zero infra glue"
+  - "Starter template + React hooks reduce boilerplate"
+
+disadvantages:
+  - "Tied to Cloudflare platform (vendor lock-in)"
+  - "Cold-start cost for DOs (≈ 5–15 ms)"
+  - "SQL dialect differences vs. Postgres"
+  - "Pricing scales with DO requests & storage"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "WebRTC Audio/Video"
+    description: "Branch webrtc-media targeting August 2025"
+    status: "In Development"
+  - title: "Email Integration"
+    description: "Inbound/outbound via Workers Mailchannels binding"
+    status: "Available"
+  - title: "Deeper OpenAI Synergy"
+    description: "Roadmap issue #78 'OpenAI Agents SDK native adapter'"
+    status: "Planned"
+  - title: "Vectorize DB Integration"
+    description: "Already usable today; upcoming helper for embedding pipelines"
+    status: "Available"
+  - title: "Jetstream Scheduler"
+    description: "Private alpha for long-running (> 24 h) tasks"
+    status: "Private Alpha"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2025-02-25"
+    type: "Release"
+    title: "Public Launch of SDK"
+    description: "Public launch of SDK + starter template"
+    url: "https://developers.cloudflare.com/changelog/2025-02-25-agents-sdk/"
+  - date: "2025-03-18"
+    type: "Update"
+    title: "Full API Reference Documentation"
+    description: "Docs updated with full API reference"
+    url: "https://developers.cloudflare.com/agents/"
+  - date: "2025-04-07"
+    type: "Tool"
+    title: "MCP Server/Client Support"
+    description: "MCP server/client support via McpAgent"
+    url: "https://github.com/cloudflare/agents/pull/42"
+  - date: "2025-06-03"
+    type: "Tool"
+    title: "Human-in-the-Loop Demo"
+    description: "Human-in-the-loop demo with Knock integration"
+    url: "https://knock.app/blog/2025/06/03/"
+  - date: "2025-06-25"
+    type: "Update"
+    title: "OpenAI Agents SDK Integration"
+    description: "OpenAI Agents SDK integration patterns published"
+    url: "https://blog.cloudflare.com/building-agents-with-openai-and-cloudflares-agents-sdk"
+  - date: "2025-07-11"
+    type: "Release"
+    title: "Version 0.0.103 Released"
+    description: "agents@0.0.103 released on npm & GitHub"
+    url: "https://github.com/cloudflare/agents/releases/tag/v0.0.103"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Quick Start Setup"
+    language: "bash"
+    code: |
+      npm create cloudflare@latest my-agent --template=cloudflare/agents-starter
+      cd my-agent
+      npm install
+      cp .dev.vars.example .dev.vars   # add OPENAI_API_KEY
+      npm run dev                     # local dev on http://localhost:8787
+      npx wrangler deploy            # global deploy
+  - title: "Minimal Agent Skeleton"
+    language: "typescript"
+    code: |
+      import { Agent } from "agents";
+
+      export class MyAgent extends Agent<Env> {
+        async onStart() {
+          await this.schedule("0 9 * * *", this.morningReport);
+        }
+
+        async onConnect(conn) {
+          conn.send(`Hello! Memory: ${await this.sql`SELECT count(*) FROM notes`}`);
+        }
+
+        private async morningReport() {
+          const notes = await this.sql`SELECT * FROM notes WHERE created > now() - interval '1 day'`;
+          // send digest …
+        }
+      }

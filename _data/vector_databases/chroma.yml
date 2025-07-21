@@ -1,0 +1,152 @@
+# The unique identifier for the vector database
+id: chroma
+
+# --- Basic Information ---
+name: "ChromaDB"
+githubUrl: "https://github.com/chroma-core/chroma"
+websiteUrl: "https://www.trychroma.com"
+docsUrl: "https://docs.trychroma.com"
+cookbookUrl: "https://cookbook.chromadb.dev"
+issueUrl: "https://github.com/chroma-core/chroma/issues/2922"
+harmonyRfcUrl: "https://github.com/chroma-core/chroma/issues/3000"
+honeybeePaperUrl: "https://doi.org/10.48550/arXiv.2505.01538"
+summary: "An AI-native vector database built in Rust with Python, JavaScript, Go, and C# clients. Starts in-memory and can be persisted to disk via DuckDB + Parquet or SQLite, featuring HNSW ANN indexing and multimodal storage."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "HNSW ANN Index"
+    description: "Cosine/SSE distance with tunable efConstruction and efSearch parameters for optimized similarity search."
+  - title: "Multimodal Storage"
+    description: "Store text, images, audio bytes plus JSON metadata in a unified database."
+  - title: "Metadata Filtering"
+    description: "Advanced filtering with $eq, $ne, $in, $contains, $and, $or operators for precise queries."
+  - title: "Full-Text Search"
+    description: "BM25 full-text search via ft_query for hybrid search capabilities."
+  - title: "Flexible Embeddings"
+    description: "Defaults to all-MiniLM-L6-v2; plug in custom embedding functions via embedding_function parameter."
+  - title: "Persistence Options"
+    description: "PersistentClient(path='./db') for disk storage or ephemeral Client() for in-memory operations."
+  - title: "Multi-Language Support"
+    description: "Native clients for Python, JavaScript, Go, and C# with consistent APIs."
+
+# --- Use Cases ---
+useCases:
+  - "RAG prototypes - Zero-config setup in notebooks"
+  - "Semantic search - Text + images + metadata queries"
+  - "Local dev/test - No infrastructure, SQLite/DuckDB persistence"
+  - "LangChain pipelines - QA, summarization, retrieval workflows"
+  - "Production deployments - Single-node up to ~100M vectors / 250GB RAM"
+
+# --- Pros & Cons ---
+advantages:
+  - "Zero-config setup - Starts in-memory, persists to disk seamlessly"
+  - "Multimodal support - Text, images, audio with unified API"
+  - "Production-ready - Docker, Kubernetes, Helm chart deployment options"
+  - "LangChain integration - Native langchain-chroma bridge available"
+  - "Flexible persistence - SQLite, DuckDB + Parquet backends"
+
+disadvantages:
+  - "Single-node only - Horizontal scaling via external orchestration"
+  - "Metadata size limit - 16KB per record, large blobs need external storage"
+  - "No built-in RBAC - Community uses proxy solutions"
+  - "Memory constraints - ~100M vectors / 250GB RAM single-node limit"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "Chroma Cloud Beta"
+    description: "Managed service with autoscaling & RBAC capabilities"
+    status: "H2 2025"
+  - title: "Distributed HNSW"
+    description: "Harmony prototype for horizontal scaling under RFC"
+    status: "Under Development"
+  - title: "Enhanced RBAC"
+    description: "Built-in role-based access control for enterprise deployments"
+    status: "Planned"
+  - title: "Multi-node Clustering"
+    description: "Native horizontal scaling without external orchestration"
+    status: "Future"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2022-10-22"
+    type: "Release"
+    title: "First OSS Release"
+    description: "First open-source release (v0.3.0)"
+    url: "https://github.com/chroma-core/chroma"
+  - date: "2025-02-21"
+    type: "Update"
+    title: "HNSW Optimizations"
+    description: "Added HNSW updates & batch-indexing optimizations"
+    url: "https://github.com/chroma-core/chroma"
+  - date: "2025-05-30"
+    type: "Release"
+    title: "v1.0.12 Stable"
+    description: "v1.0.12 tagged as latest stable release"
+    url: "https://github.com/chroma-core/chroma"
+  - date: "2025-07-15"
+    type: "Update"
+    title: "Critical Bug Fix"
+    description: "Critical fix in 0.5.13 resolves data-loss bug"
+    url: "https://github.com/chroma-core/chroma/issues/2922"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Python Installation & Setup"
+    language: "bash"
+    code: |
+      pip install chromadb==1.0.12
+  - title: "Python Basic Usage"
+    language: "python"
+    code: |
+      import chromadb
+      client = chromadb.PersistentClient("./chroma_db")
+      col = client.get_or_create_collection("docs")
+      col.add(ids=["doc1"], documents=["Cats are great"])
+      hits = col.query(query_texts=["felines"], n_results=1)
+      print(hits["documents"][0][0])  # Cats are great
+  - title: "JavaScript/TypeScript Setup"
+    language: "bash"
+    code: |
+      npm install chromadb@latest
+  - title: "JavaScript/TypeScript Usage"
+    language: "typescript"
+    code: |
+      import { ChromaClient } from 'chromadb';
+      const client = new ChromaClient({ path: 'http://localhost:8000' });
+      const col = await client.createCollection({ name: 'docs' });
+      await col.add({ ids: ['doc1'], documents: ['Cats are great'] });
+      const res = await col.query({ queryTexts: ['felines'], nResults: 1 });
+      console.log(res.documents[0][0]);  // Cats are great
+  - title: "LangChain Integration"
+    language: "python"
+    code: |
+      # Install the bridge
+      # pip install langchain-chroma
+      
+      from langchain_chroma import Chroma
+      from langchain_openai import OpenAIEmbeddings
+
+      vector_store = Chroma(
+          collection_name="my_collection",
+          persist_directory="./db",
+          embedding_function=OpenAIEmbeddings()
+      )
+      vector_store.add_texts(["Cats are great"])
+      docs = vector_store.similarity_search("felines", k=1)
+  - title: "Docker Deployment"
+    language: "bash"
+    code: |
+      # Docker
+      docker run -p 8000:8000 chromadb/chroma:latest
+      
+      # Docker Compose
+      docker-compose up
+      
+      # Kubernetes
+      helm install chroma chromadb/chroma
+      
+      # CLI
+      chroma run --path ./db

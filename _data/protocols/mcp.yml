@@ -1,0 +1,201 @@
+# The unique identifier for the protocol
+id: mcp
+
+# --- Basic Information ---
+name: "Model Context Protocol (MCP)"
+officialUrl: "https://modelcontextprotocol.io"
+specificationUrl: "https://modelcontextprotocol.io/specification/2025-06-18"
+githubUrl: "https://github.com/modelcontextprotocol"
+summary: "Anthropic's open-source protocol for connecting LLM applications to external tools and data sources via JSON-RPC 2.0, featuring typed schemas, secure per-tool consent, and vendor-neutral architecture adopted by OpenAI, Google, and AWS."
+
+# --- Key Features ---
+features:
+  - title: "3-Layer Architecture"
+    description: "Host (LLM app) → Client (MCP connector) → Server (tools/resources/prompts) via JSON-RPC 2.0 communication."
+  - title: "Core Primitives"
+    description: "Tools (callable functions), Resources (read-only data blobs), and Prompts (reusable templates) with typed schemas."
+  - title: "Secure Invocation Flow"
+    description: "Per-tool user consent, JSON schema validation, host-controlled tokens with no server callback capability."
+  - title: "Cross-Model Compatibility"
+    description: "USB-C analogy - one connector works with Claude, GPT-4, Gemini, Bedrock, and other LLM applications."
+  - title: "Typed Schema System"
+    description: "JSON schema discovery via mcp.listTools() prevents prompt injection with compile-time validation."
+  - title: "Vendor-Neutral Design"
+    description: "Apache 2.0 open-source protocol adopted across OpenAI, Google, AWS, and Anthropic ecosystems."
+
+# --- Use Cases ---
+useCases:
+  - "Cross-model tool reuse - Same Postgres MCP server serves Claude, GPT-4, and Bedrock applications"
+  - "IDE AI workflows - Cursor invokes GitHub MCP for PR reviews directly inside the editor"
+  - "Local OS integration - Windows AI Foundry exposes file-system and registry tools to LLMs"
+  - "Enterprise data access - Secure connection to databases, APIs, and internal systems"
+  - "Development automation - Git, Docker, AWS, and cloud service integrations"
+
+# --- Pros & Cons ---
+advantages:
+  - "USB-C analogy: one connector works with any tool across all LLM providers"
+  - "Typed schemas eliminate prompt injection vulnerabilities"
+  - "Vendor-neutral protocol adopted by OpenAI, Google, AWS, and Anthropic"
+  - "Rich ecosystem of ready-to-run reference servers"
+  - "Secure per-tool consent model with host-controlled authentication"
+
+disadvantages:
+  - "Prompt bloat when 100+ tools available (mitigated by RAG-MCP)"
+  - "Tool-poisoning risk requires signed manifests and registry validation"
+  - "Spec still evolving with potential breaking changes <1% per minor version"
+  - "Server setup complexity for custom tool development"
+
+# --- Architecture & Core Concepts ---
+architecture:
+  - title: "Host Layer"
+    description: "LLM applications like Claude Desktop, Cursor, ChatGPT Desktop that consume MCP services"
+  - title: "Client Layer"
+    description: "MCP connector inside the host application handling JSON-RPC 2.0 communication"
+  - title: "Server Layer"
+    description: "Exposes Tools, Resources, and Prompts via standardized JSON-RPC 2.0 interface"
+  - title: "Discovery Mechanism"
+    description: "Host calls mcp.listTools() to receive typed schema definitions for available functions"
+  - title: "Security Model"
+    description: "Per-tool user consent, JSON schema validation, signed tokens, no server callback capability"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2024-11-25"
+    type: "Release"
+    title: "MCP Open Source Launch"
+    description: "Anthropic open-sources Model Context Protocol under Apache 2.0 license"
+  - date: "2024-12-01"
+    type: "Integration"
+    title: "Google & Neo4j Servers"
+    description: "Google and Neo4j release MCP servers for BigQuery and Cypher database access"
+  - date: "2025-03-12"
+    type: "Integration"
+    title: "OpenAI MCP Support"
+    description: "OpenAI ships MCP integration in ChatGPT Desktop and Agents SDK"
+  - date: "2025-04-18"
+    type: "Integration"
+    title: "Google DeepMind Integration"
+    description: "Google DeepMind adds MCP support to Gemini SDK for tool connectivity"
+  - date: "2025-06-03"
+    type: "Enterprise"
+    title: "AWS Production Guide"
+    description: "AWS publishes production deployment guide with CDK constructs for enterprise MCP"
+  - date: "2025-06-18"
+    type: "Specification"
+    title: "Auth & Scopes Update"
+    description: "Specification revision 2025-06-18 adds authentication and per-tool scopes"
+
+# --- SDK & Ecosystem Status ---
+sdks:
+  - name: "Python SDK"
+    version: "1.0-stable"
+    status: "GA"
+  - name: "TypeScript SDK"
+    version: "1.0-stable"
+    status: "GA"
+  - name: "Java SDK"
+    version: "1.0-stable"
+    status: "GA"
+  - name: "Kotlin SDK"
+    version: "1.0-stable"
+    status: "GA"
+  - name: "C# SDK"
+    version: "1.0-stable"
+    status: "GA"
+
+referenceServers:
+  - "GitHub - Repository and issue management"
+  - "Postgres - Database query and management"
+  - "Puppeteer - Web scraping and automation"
+  - "Slack - Team communication integration"
+  - "Stripe - Payment processing tools"
+  - "AWS S3 - Cloud storage operations"
+  - "Neo4j - Graph database queries"
+
+# --- Future Outlook ---
+roadmap:
+  - title: "ETDI (Enhanced Tool Discovery & Integrity)"
+    description: "OAuth2 + policy engine for advanced authentication and authorization"
+    status: "Draft 2025-06"
+  - title: "RAG-MCP"
+    description: "Vector index to surface only relevant tools, reducing prompt bloat"
+    status: "Anthropic Prototype"
+  - title: "MCPSafetyScanner"
+    description: "OSS linter that flags dangerous server code for security validation"
+    status: "Available (mcp-security-scanner repo)"
+  - title: "Enterprise Registry"
+    description: "Signed manifests and centralized tool registry for enterprise deployment"
+    status: "Roadmap"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Quick Server Setup"
+    language: "bash"
+    code: |
+      pip install mcp
+      git clone https://github.com/modelcontextprotocol/servers
+      cd servers/src/filesystem
+      python server.py /tmp
+  - title: "Tool Discovery"
+    language: "json"
+    code: |
+      // Host calls mcp.listTools()
+      {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "tools/list",
+        "params": {}
+      }
+      
+      // Server responds with typed schemas
+      {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "tools": [
+            {
+              "name": "get_weather",
+              "description": "Get current weather for location",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "lat": {"type": "number"},
+                  "lon": {"type": "number"}
+                }
+              }
+            }
+          ]
+        }
+      }
+  - title: "Resource Access"
+    language: "json"
+    code: |
+      // List available resources
+      {
+        "jsonrpc": "2.0",
+        "method": "resources/list",
+        "params": {}
+      }
+      
+      // Read specific resource
+      {
+        "jsonrpc": "2.0",
+        "method": "resources/read",
+        "params": {
+          "uri": "file:///repo/README.md"
+        }
+      }
+  - title: "Security Model"
+    language: "text"
+    code: |
+      # MCP Security Flow:
+      # 1. User grants per-tool consent (UI toggle/OAuth)
+      # 2. Host validates JSON schema before execution
+      # 3. Host-controlled token signs all requests
+      # 4. Servers cannot call back to host
+      # 5. Results injected into LLM context safely
+      
+      # Enterprise Extensions:
+      # - ETDI: OAuth2 + policy engine
+      # - RAG-MCP: Vector-based tool selection
+      # - Safety Scanner: Code vulnerability detection

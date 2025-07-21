@@ -1,0 +1,163 @@
+# The unique identifier for the vector database
+id: mongodb
+
+# --- Basic Information ---
+name: "MongoDB Atlas Vector Search"
+githubUrl: "https://github.com/mongodb/docs-notebooks"
+websiteUrl: "https://www.mongodb.com/products/platform/atlas-vector-search"
+docsUrl: "https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/"
+changelogUrl: "https://www.mongodb.com/docs/atlas/atlas-vector-search/changelog/"
+gaAnnouncementUrl: "https://www.mongodb.com/company/blog/product-release-announcements/introducing-atlas-vector-search-build-intelligent-applications-semantic-search-ai"
+bedrockIntegrationUrl: "https://www.mongodb.com/company/newsroom/press-releases/mongodb-announces-general-availability-of-mongodb-atlas-vector-search-integration-with-amazon-bedrock"
+ennBlogUrl: "https://www.mongodb.com/company/blog/product-release-announcements/exact-nearest-neighbor-vector-search-for-precise-retrieval"
+quantizationBlogUrl: "https://www.mongodb.com/company/blog/product-release-announcements/vector-quantization-scale-search-generative-ai-applications"
+springDataBlogUrl: "https://www.mongodb.com/company/blog/product-release-announcements/spring-data-mongodb-now-with-vector-search-queryable-encryption"
+summary: "MongoDB Atlas Vector Search enables semantic search on vector embeddings stored alongside operational data. Features ANN via HNSW, ENN for exact search, vector quantization, Search Nodes for workload isolation, and supports up to 8192 dimensions with field-level encryption compatibility."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "Embedding Storage & Dimensions"
+    description: "Dense float32, int8, int1, and quantized vectors stored as regular document fields. Max 8192 dimensions as of June 2025."
+  - title: "Dual Index Types"
+    description: "ANN via tunable HNSW (efConstruction, efSearch, M) and ENN (exact) for ≤10k vectors or highly-filtered subsets."
+  - title: "Advanced Query API"
+    description: "$vectorSearch aggregation stage (MongoDB ≥6.0.11 for ANN, ≥7.0.10 for ENN) with pre-filter using standard MQL."
+  - title: "Vector Quantization"
+    description: "Scalar (int8) cuts RAM ~75%; Binary (int1) up to ~97% with automatic rescoring for binary vectors."
+  - title: "Search Nodes & Scalability"
+    description: "Search Nodes (GA) isolate vector workload, improve latency up to 60%. Horizontal scaling via sharding."
+  - title: "Security & Encryption"
+    description: "Field-Level Encryption & Queryable Encryption compatible with vector indexes for regulated environments."
+  - title: "Multi-Provider Support"
+    description: "Any provider ≤8192 dims (OpenAI, Cohere, Bedrock, Voyage, Jina, Nomic, etc.) supported."
+
+# --- Use Cases ---
+useCases:
+  - "RAG systems - Hybrid retrieval ($vectorSearch + $search + filters)"
+  - "Semantic recommendations - Movies, e-commerce products with vector similarity"
+  - "Multi-tenant SaaS - ENN ensures exact retrieval per tenant after metadata filters"
+  - "Real-time AI agents - Kafka → Atlas → Bedrock/LangGraph pipelines"
+  - "Regulated search - Encrypted vectors + redaction filters for compliance"
+
+# --- Pros & Cons ---
+advantages:
+  - "Single datastore - Operational & vector data without sync tax"
+  - "ANN + ENN + hybrid - All in one query language"
+  - "Search Nodes - Workload isolation & cost control"
+  - "Quantization + encryption - Secure, cost-efficient scale"
+  - "Unified platform - Store, process, and search all data types"
+
+disadvantages:
+  - "Not in Community Edition - Vector features planned late 2025"
+  - "No native distributed HNSW - Single cluster per region clustering"
+  - "ENN latency scaling - Grows linearly, careful sizing needed"
+  - "Maturing ecosystem - Tooling vs. dedicated vector DBs still developing"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "Community Edition Support"
+    description: "Vector support for Community Edition targeted for late 2025"
+    status: "Late 2025"
+  - title: "Voyage AI Integration"
+    description: "Next-gen embeddings & retrieval metrics integration"
+    status: "H2 2025"
+  - title: "Agentic RAG Blueprints"
+    description: "LangGraph & CrewAI blueprints for agentic RAG workflows"
+    status: "H2 2025"
+  - title: "Quantization Improvements"
+    description: "Continuous improvements with auto-tuning and 4-bit quantization"
+    status: "Ongoing"
+  - title: "Multi-Region Active-Active"
+    description: "Multi-region active-active vectors under exploration"
+    status: "Under Exploration"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2023-06-01"
+    type: "Release"
+    title: "Preview to GA"
+    description: "Atlas Vector Search moves from Preview to General Availability"
+    url: "https://www.mongodb.com/company/blog/product-release-announcements/introducing-atlas-vector-search-build-intelligent-applications-semantic-search-ai"
+  - date: "2023-09-26"
+    type: "Update"
+    title: "GA + Confluent Integration"
+    description: "GA release with Kafka-Connect sink connector for streaming updates"
+    url: "https://www.mongodb.com/docs/atlas/atlas-vector-search/changelog/"
+  - date: "2024-05-02"
+    type: "Update"
+    title: "Amazon Bedrock Integration GA"
+    description: "General availability of MongoDB Atlas Vector Search integration with Amazon Bedrock"
+    url: "https://www.mongodb.com/company/newsroom/press-releases/mongodb-announces-general-availability-of-mongodb-atlas-vector-search-integration-with-amazon-bedrock"
+  - date: "2024-06-20"
+    type: "Release"
+    title: "Exact Nearest Neighbor (ENN)"
+    description: "Introduction of Exact Nearest Neighbor search for precise retrieval"
+    url: "https://www.mongodb.com/company/blog/product-release-announcements/exact-nearest-neighbor-vector-search-for-precise-retrieval"
+  - date: "2024-10-07"
+    type: "Update"
+    title: "Vector Quantization Preview"
+    description: "Vector quantization preview launched, GA reached April 29, 2025"
+    url: "https://www.mongodb.com/company/blog/product-release-announcements/vector-quantization-scale-search-generative-ai-applications"
+  - date: "2025-06-23"
+    type: "Release"
+    title: "Spring Data MongoDB 4.5.0"
+    description: "Adds VectorIndex, @VectorSearch, Queryable Encryption helpers"
+    url: "https://www.mongodb.com/company/blog/product-release-announcements/spring-data-mongodb-now-with-vector-search-queryable-encryption"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Vector Search Index Creation"
+    language: "json"
+    code: |
+      {
+        "fields": [
+          {
+            "type": "vector",
+            "path": "embedding",
+            "numDimensions": 1536,
+            "similarity": "cosine"
+          },
+          {
+            "type": "filter",
+            "path": "tenantId"
+          }
+        ]
+      }
+  - title: "ANN with Pre-Filter Query"
+    language: "javascript"
+    code: |
+      db.movies.aggregate([
+        {
+          $vectorSearch: {
+            index: "vector_index",
+            path: "embedding",
+            queryVector: [0.12, -0.34, ...], // 1536-dim
+            numCandidates: 150,
+            limit: 10,
+            filter: { tenantId: { $eq: "acme" } }
+          }
+        }
+      ])
+  - title: "Exact Nearest Neighbor (ENN)"
+    language: "javascript"
+    code: |
+      {
+        $vectorSearch: {
+          index: "vector_index",
+          path: "embedding",
+          queryVector: [...],
+          exact: true,          // ENN mode
+          limit: 50
+        }
+      }
+  - title: "Spring Data MongoDB 4.5.0"
+    language: "java"
+    code: |
+      VectorIndex index = new VectorIndex("idx")
+        .addVector("e", v -> v.dimensions(1536).similarity(COSINE))
+        .addFilter("tenantId");
+
+      mongoTemplate.searchIndexOps(Movie.class).createIndex(index);

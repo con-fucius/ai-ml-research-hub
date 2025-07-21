@@ -1,0 +1,129 @@
+# The unique identifier for the framework
+id: crewai
+
+# --- Basic Information ---
+name: "CrewAI"
+githubUrl: "https://github.com/crewAIInc/crewAI"
+websiteUrl: "https://docs.crewai.com"
+toolsExtensionUrl: "https://github.com/crewAIInc/crewAI-tools"
+exampleWorkflowsUrl: "https://github.com/crewAIInc/crewAI-examples"
+communityGuiUrl: "https://github.com/strnad/CrewAI-Studio"
+crewsConceptUrl: "https://docs.crewai.com/concepts/crews"
+flowsConceptUrl: "https://docs.crewai.com/concepts/flows"
+telemetryUrl: "https://docs.crewai.com/concepts/telemetry"
+installationGuideUrl: "https://docs.crewai.com/getting-started/installation"
+summary: "A Python framework introducing role-based teams of autonomous agents and event-driven pipelines. Features hybrid orchestration with Crews (autonomous exploration) and Flows (deterministic pipelines), built-in OpenTelemetry tracing, and zero LangChain dependency."
+
+# --- Categorization & Tags ---
+# Tags removed as requested
+
+# --- Key Features ---
+features:
+  - title: "Crews - Role-Based Teams"
+    description: "Role-based teams of autonomous agents. Each agent has a role, goal, backstory, and optional tools. Supports sequential, hierarchical, parallel, consensual processes."
+  - title: "Flows - Event-Driven Pipelines"
+    description: "Event-driven, single-LLM pipelines. Annotate Python methods with @start, @listen, @router to build deterministic graphs."
+  - title: "Hybrid Orchestration"
+    description: "Switch freely between autonomous exploration (Crews) and strict deterministic pipelines (Flows). Flows can embed Crews when autonomy is required."
+  - title: "Built-in Observability"
+    description: "Shared runtime with built-in OpenTelemetry tracing and memory management for both Crews and Flows."
+  - title: "Core Components"
+    description: "Agent (LLM-powered actor), Tool (callable modules), Task (unit of work), Process (collaboration pattern), Telemetry (metrics and traces)."
+
+# --- Use Cases ---
+useCases:
+  - "End-to-end research pipelines - Researcher → Analyst → Writer"
+  - "Code generation workflows - Architect → Coder → QA agent"
+  - "Content creation - Trip planners, stock analysis reports, meeting assistants"
+  - "Enterprise automation - Multi-level approvals, audit-trail required processes leveraging the Enterprise control plane"
+
+# --- Pros & Cons ---
+advantages:
+  - "Pure Python, zero LangChain dependency - Core wheel < 1 MB, 5-6× faster execution"
+  - "Role-based design - Lower hallucination, increased clarity"
+  - "Hybrid orchestration - Autonomous exploration (Crews) + deterministic pipelines (Flows)"
+  - "Built-in observability - OpenTelemetry traces, metrics, Grafana dashboards"
+  - "Rapid development - Project scaffolding in seconds"
+  - "Growing ecosystem - 50+ tools, MCP bridge, GUI, Enterprise control plane"
+
+disadvantages:
+  - "Python-only SDK - No JavaScript, Go, or Rust clients"
+  - "Smaller tool marketplace - <200 tools vs LangChain's 1k+"
+  - "Memory-based state - No persistent storage layer yet"
+  - "Experimental streaming - Token-level streaming not production-ready"
+  - "Single-language teams - Requires wrappers for non-Python services"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "Enterprise Suite"
+    description: "Crew Control-Plane SaaS (free tier available), On-prem Helm chart for Kubernetes, SSO, RBAC, and audit logs, SOC-2 audit scheduled August 2025"
+    status: "In Development"
+  - title: "Tooling & Marketplace"
+    description: "Built-in tools, MCP adapter, and Composio integration. Upcoming marketplace for community-contributed tools"
+    status: "Active"
+  - title: "GUI & Low-code"
+    description: "CrewAI-Studio (community, Streamlit-based, cross-platform), Enterprise web playground for non-technical users"
+    status: "Available"
+  - title: "Deployment Targets"
+    description: "Local, Docker, Kubernetes Operator (GA). Serverless workers (AWS Lambda, Cloud Run) on the roadmap"
+    status: "Planned"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2025-01-01"
+    type: "Release"
+    title: "Open Source Release"
+    description: "CrewAI open-sourced under MIT license"
+    url: "https://github.com/crewAIInc/crewAI/releases"
+  - date: "2025-05-08"
+    type: "Update"
+    title: "First CrewAI Tutorial"
+    description: "Tutorial 'Build Your First CrewAI Agents' published"
+    url: "https://docs.crewai.com/tutorials/quickstart"
+  - date: "2025-06-19"
+    type: "Update"
+    title: "Role-Based Architecture Article"
+    description: "Community article highlights role-based, team-agent architecture"
+    url: "https://docs.crewai.com/concepts/crews"
+  - date: "2025-07-01"
+    type: "Tool"
+    title: "GUI and Orchestration Tooling"
+    description: "CrewAI-Studio v0.6, Crew Control-Plane beta reach maturity"
+    url: "https://github.com/strnad/CrewAI-Studio"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Installation and Setup"
+    language: "bash"
+    code: |
+      # 1. Install
+      pip install 'crewai[tools]'
+
+      # 2. Scaffold project
+      crewai create crew market_intelligence
+      cd market_intelligence
+
+      # 3. Add keys to .env
+      echo "OPENAI_API_KEY=sk-..." >> .env
+      echo "SERPER_API_KEY=..." >> .env
+
+      # 4. Run
+      crewai run
+  - title: "Agent Configuration"
+    language: "yaml"
+    code: |
+      # Example agent configuration
+      researcher:
+        role: >
+          {topic} Senior Data Researcher
+        goal: >
+          Uncover cutting-edge developments in {topic}
+        backstory: >
+          You're a seasoned researcher with a knack for uncovering the latest
+          developments in {topic}.
+      writer:
+        role: "AI Report Writer"
+        goal: "Create a clear report on the research findings."
+        backstory: >
+          You are meticulous and excel at turning complex information into
+          concise summaries.

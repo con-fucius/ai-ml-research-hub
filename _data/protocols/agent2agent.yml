@@ -1,0 +1,166 @@
+# The unique identifier for the protocol
+id: agent2agent
+
+# --- Basic Information ---
+name: "A2A (Agent-to-Agent) Protocol"
+officialUrl: "https://agent2agent.info"
+docsUrl: "https://agent2agent.info/docs/"
+specificationUrl: "https://agent2agent.info/specification/"
+agentCardSchemaUrl: "https://agent2agent.info/specification/#agentcard-schema"
+taskManagementUrl: "https://agent2agent.info/docs/core-concepts/task-management"
+artifactSpecUrl: "https://agent2agent.info/specification/#artifact"
+securityOverviewUrl: "https://agent2agent.info/docs/security/overview"
+summary: "Google's open-source protocol for secure agent-to-agent communication using HTTP + JSON-RPC 2.0, supporting synchronous/asynchronous messaging, multi-modal artifacts, and enterprise-grade security with OAuth2/mTLS authentication."
+
+# --- Key Features ---
+features:
+  - title: "Agent Discovery"
+    description: "Static JSON document at /.well-known/agent.json exposing capabilities, authentication methods, and endpoints for seamless agent discovery."
+  - title: "Task Lifecycle Management"
+    description: "Complete state machine with input-required, working, completed, failed, and cancelled states via HTTP + JSON-RPC 2.0."
+  - title: "Multi-modal Messaging"
+    description: "TextPart, FilePart (base64/URI), and DataPart support for comprehensive artifact exchange between agents."
+  - title: "Dual Communication Modes"
+    description: "Synchronous HTTP responses and asynchronous SSE streams or webhook push notifications for long-running tasks."
+  - title: "Enterprise Security"
+    description: "TLS 1.2+ mandatory, OAuth2/mTLS/API key authentication, RBAC via JWT scopes, and audit trails with traceId propagation."
+  - title: "Web Standards Based"
+    description: "Built on familiar HTTP, SSE, and JSON-RPC standards without requiring shared runtime dependencies."
+
+# --- Use Cases ---
+useCases:
+  - "Secure cross-agent workflows - Data analysis agent sends CSV to graphing agent, receives PNG artifacts"
+  - "Enterprise automation - PagerDuty-style bots trigger monitoring agents with SSE log streaming"
+  - "Inter-company collaboration - Supply chain partners exchange purchase orders over mTLS without VPN"
+  - "Multi-modal agent pipelines - Text processing agents coordinating with image/video processing agents"
+  - "Distributed agent orchestration - Complex workflows spanning multiple specialized agents"
+
+# --- Pros & Cons ---
+advantages:
+  - "Works with any HTTP stack without shared runtime requirements"
+  - "Native support for long-running tasks and multi-modal data exchange"
+  - "Enterprise-ready security with TLS/OAuth/mTLS and RBAC out-of-box"
+  - "Leverages familiar web standards (HTTP, SSE, JSON-RPC)"
+  - "Open-source under Apache 2.0 with 50+ partner ecosystem"
+
+disadvantages:
+  - "Discovery and authentication setup requires boilerplate code"
+  - "No built-in tool invocation - must compose with MCP for tool calls"
+  - "Orchestration, retries, and sagas left to caller implementation"
+  - "Still early stage - observability and ops tooling still maturing"
+
+# --- Architecture & Core Concepts ---
+architecture:
+  - title: "Agent Discovery Schema"
+    description: "Static /.well-known/agent.json with capabilities, authentication, and endpoints configuration"
+  - title: "Task Endpoints"
+    description: "/tasks/send (POST), /tasks/sendSubscribe (POST SSE), /tasks/status/{id} (GET), /tasks/cancel/{id} (POST)"
+  - title: "Message Structure"
+    description: "JSON-RPC 2.0 wrapper with task.parts[] array containing TextPart, FilePart, or DataPart objects"
+  - title: "Artifact Handling"
+    description: "TaskStatus.artifacts[] with artifactId, mimeType, and inline bytes or signed URL references"
+  - title: "Security Layer"
+    description: "TLS 1.2+ transport, OAuth2/mTLS/API key auth, RBAC scopes, X-Trace-Id audit propagation"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2025-04-09"
+    type: "Release"
+    title: "A2A Open Source Launch"
+    description: "Google open-sourced A2A under Apache 2.0 with 50+ partners including LangChain, CrewAI, AutoGen, BeeAI, ServiceNow"
+  - date: "2025-05-01"
+    type: "Integration"
+    title: "LangGraph 0.2.15 A2A Support"
+    description: "LangGraph shipped A2A adapters for agent-to-agent communication workflows"
+  - date: "2025-06-01"
+    type: "Integration"
+    title: "CrewAI 0.30+ A2A Integration"
+    description: "CrewAI added native A2A protocol support for multi-agent coordination"
+  - date: "2025-07-01"
+    type: "Integration"
+    title: "AutoGen 0.4.0 & BeeAI 0.9.0"
+    description: "AutoGen and BeeAI shipped A2A adapters; Vertex AI Agent Engine added A2A egress toggle in GA"
+  - date: "2025-08-01"
+    type: "Roadmap"
+    title: "v0.2 Draft Target"
+    description: "Workflow orchestration extension, reputation scores, replay & history API planned"
+
+# --- Future Outlook ---
+roadmap:
+  - title: "Workflow Orchestration Extension"
+    description: "ACP alignment for structured workflow coordination between agents"
+    status: "Target v0.2 (Aug 2025)"
+  - title: "Reputation Scores"
+    description: "Task history-derived reputation system for agent reliability assessment"
+    status: "Target v0.2 (Aug 2025)"
+  - title: "Replay & History API"
+    description: "GET /tasks/{id}/timeline endpoint for task execution history and debugging"
+    status: "Target v0.2 (Aug 2025)"
+  - title: "BeeAI Platform Integration"
+    description: "A2A gateway with UI dashboard and OpenTelemetry traces for monitoring"
+    status: "Available Now"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Agent Discovery Document"
+    language: "json"
+    code: |
+      // https://agent-host/.well-known/agent.json
+      {
+        "capabilities": ["data-analysis", "report-generation"],
+        "authentication": "oauth2",
+        "endpoints": {
+          "baseUrl": "https://agent-host/api/v1",
+          "sendSubscribe": "/tasks/sendSubscribe",
+          "pushNotifications": "/webhooks/tasks"
+        }
+      }
+  - title: "Task Submission"
+    language: "json"
+    code: |
+      {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "tasks/send",
+        "params": {
+          "task": {
+            "id": "report-2025",
+            "parts": [
+              { "type": "TextPart", "text": "Generate Q3 sales report" },
+              { "type": "FilePart", "uri": "s3://bucket/raw.csv" }
+            ]
+          }
+        }
+      }
+  - title: "Task Status Response"
+    language: "json"
+    code: |
+      {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "taskId": "report-2025",
+          "state": "completed",
+          "artifacts": [
+            {
+              "artifactId": "sales-report-q3",
+              "mimeType": "application/pdf",
+              "uri": "https://signed-url/report.pdf"
+            }
+          ]
+        }
+      }
+  - title: "Ecosystem Pattern"
+    language: "text"
+    code: |
+      # Protocol Composition Pattern:
+      # - A2A: Agent-to-agent hand-off and coordination
+      # - MCP: Tool calls and function invocation
+      # - ACP: Structured workflow orchestration
+      # - ANP: Decentralized agent networks
+      
+      # Security Requirements:
+      # - TLS 1.2+ mandatory (no plain HTTP)
+      # - OAuth2 (RFC 6749) or mTLS (RFC 8705)
+      # - RBAC scopes in JWT claims
+      # - X-Trace-Id header for audit trails

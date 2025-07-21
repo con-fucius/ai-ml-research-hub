@@ -1,0 +1,143 @@
+# The unique identifier for the vector database
+id: qdrant
+
+# --- Basic Information ---
+name: "Qdrant"
+githubUrl: "https://github.com/qdrant/qdrant"
+websiteUrl: "https://qdrant.tech/documentation"
+openApiUrl: "https://api.qdrant.tech"
+helmChartUrl: "https://github.com/qdrant/qdrant-helm"
+cloudConsoleUrl: "https://cloud.qdrant.io"
+webUiUrl: "https://github.com/qdrant/qdrant-web-ui"
+benchmarkUrl: "https://github.com/qdrant/benchmark"
+releaseNotesUrl: "https://github.com/qdrant/qdrant/releases/tag/v1.13.0"
+cloudBlogUrl: "https://qdrant.tech/blog/cloud-enterprise-features"
+changelogUrl: "https://github.com/qdrant/qdrant/blob/master/CHANGELOG.md"
+roadmapUrl: "https://github.com/qdrant/qdrant/issues/3412"
+summary: "An open-source, AI-native vector database built in Rust with HNSW indexing, GPU acceleration, quantization support, and enterprise features. Supports single-node deployments up to ~2B vectors with hybrid dense+sparse search capabilities."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "Rust Core with HNSW"
+    description: "Built in Rust with HNSW graph indexing and payload-aware inverted index, RocksDB persistence for high performance."
+  - title: "GPU Acceleration"
+    description: "Optional GPU indexing with CUDA 12, ROCm 5.7, oneAPI 2024 support - 10× faster index builds with gpu_indexing=true flag."
+  - title: "Advanced Quantization"
+    description: "Scalar (int8), Product (PQ128), Binary quantization switchable at runtime - saves 75-97% RAM vs float32."
+  - title: "Hybrid Search"
+    description: "SPLADEv2 sparse vectors with hybrid dense+sparse scoring for comprehensive search capabilities."
+  - title: "Enterprise Security"
+    description: "TLS 1.3, disk AES-256 encryption, Cloud RBAC with scoped API keys (TTL ≤90 days), SSO (SAML 2.0, OIDC)."
+  - title: "Observability"
+    description: "Prometheus metrics (qdrant_collection_size_bytes, qdrant_gpu_index_time), Grafana dashboard JSON included."
+  - title: "Multi-Language SDKs"
+    description: "Python, Node.js, Go, Java, .NET, Rust clients all updated to v1.13.x with async and GPU support."
+
+# --- Use Cases ---
+useCases:
+  - "RAG systems - LangChain (Qdrant.from_documents), Vertex AI RAG Engine, Haystack QdrantDocumentStore"
+  - "Recommendation systems - Hybrid dense+sparse vectors with payload filtering by user_id, category"
+  - "Real-time applications - Hot/cold tiering via collection snapshots + S3 restore"
+  - "Enterprise search - Scoped API keys per tenant, SSO enforced via Cloud IAM"
+  - "High-performance search - 20k QPS single-node with Rust + HNSW optimization"
+
+# --- Pros & Cons ---
+advantages:
+  - "Rust + HNSW performance - 20k QPS single-node capability"
+  - "GPU indexing acceleration - Cuts ef_construct=256 from 45 min to 4 min"
+  - "Quantization efficiency - Saves 75-97% RAM vs float32"
+  - "Enterprise features - RBAC, SSO, audit logs in Cloud"
+  - "OpenAPI spec - Auto-generates clients for multiple languages"
+
+disadvantages:
+  - "Single-node limitation - No native sharding (app-level routing workaround)"
+  - "GPU complexity - Requires GPU drivers & memory tuning"
+  - "Metadata constraints - Soft-limit ~32kB per field"
+  - "Cloud free tier limits - 2k vectors, 1GB RAM only"
+  - "Hybrid query complexity - Needs payload schema discipline"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "Distributed Mode"
+    description: "Raft consensus and shard replication (branch dev-distributed)"
+    status: "Engineering Preview"
+  - title: "4-bit Quantization"
+    description: "int4 PQ for 2× memory improvement targeting v1.15"
+    status: "Target v1.15"
+  - title: "Hybrid-Cloud BYOC"
+    description: "Deploy managed control-plane inside customer VPC"
+    status: "Beta Q4"
+  - title: "Cross-Collection Joins"
+    description: "Unified sparse+dense scoring across namespaces"
+    status: "Next 6 Months"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2025-01-23"
+    type: "Release"
+    title: "v1.13.0 - GPU Acceleration"
+    description: "GPU-accelerated HNSW builds (CUDA, ROCm, oneAPI) – 10× faster index building"
+    url: "https://github.com/qdrant/qdrant/releases/tag/v1.13.0"
+  - date: "2025-03-04"
+    type: "Release"
+    title: "Cloud GA"
+    description: "RBAC, SSO (SAML 2.0, OIDC), Terraform provider general availability"
+    url: "https://qdrant.tech/blog/cloud-enterprise-features"
+  - date: "2025-07-11"
+    type: "Update"
+    title: "v1.13.1 - Multivector Support"
+    description: "Multivector query support and sparse index fixes"
+    url: "https://github.com/qdrant/qdrant/blob/master/CHANGELOG.md"
+  - date: "2025-07-01"
+    type: "Update"
+    title: "H2 2025 Roadmap"
+    description: "Distributed clustering (Raft) and 4-bit quantization development"
+    url: "https://github.com/qdrant/qdrant/issues/3412"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Local Docker with GPU"
+    language: "bash"
+    code: |
+      docker run -d --name qdrant \
+        -p 6333:6333 -p 6334:6334 \
+        -v $(pwd)/qdrant_storage:/qdrant/storage \
+        --gpus all \
+        qdrant/qdrant:v1.13.1
+  - title: "Kubernetes with GPU"
+    language: "bash"
+    code: |
+      helm repo add qdrant https://qdrant.github.io/qdrant-helm
+      helm install qdrant qdrant/qdrant \
+        --set gpuIndexing.enabled=true \
+        --set resources.limits.nvidia.com/gpu=1
+  - title: "Python GPU Index Build"
+    language: "python"
+    code: |
+      from qdrant_client import QdrantClient
+      client = QdrantClient("localhost", port=6333)
+
+      client.create_collection(
+          collection_name="arxiv",
+          vectors_config={"size": 768, "distance": "Cosine"},
+          optimizers_config={"indexing_threshold": 0},   # GPU index
+          hnsw_config={"m": 32, "ef_construct": 256, "gpu_indexing": True}
+      )
+  - title: "SDK Matrix Overview"
+    language: "text"
+    code: |
+      # Multi-language SDK support (all v1.13.x):
+      # Python: qdrant-client (async + GPU)
+      # Node.js: @qdrant/js-client-rest
+      # Go: github.com/qdrant/go-client
+      # Java: io.qdrant:client
+      # .NET: Qdrant.Client
+      # Rust: qdrant-client (crate)
+      
+      # Architecture limits:
+      # - Single-node: ~2B vectors / 8k dims / 1TB RAM per node
+      # - Security: TLS 1.3, disk AES-256, Cloud RBAC
+      # - Quantization: Scalar (int8), Product (PQ128), Binary

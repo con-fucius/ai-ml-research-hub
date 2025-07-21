@@ -1,0 +1,166 @@
+# The unique identifier for the vector database
+id: pinecone
+
+# --- Basic Information ---
+name: "Pinecone"
+websiteUrl: "https://www.pinecone.io"
+docsUrl: "https://docs.pinecone.io/guides/get-started/overview"
+releaseNotesUrl: "https://docs.pinecone.io/release-notes/2025"
+pythonClientUrl: "https://github.com/pinecone-io/pinecone-python-client"
+tsClientUrl: "https://github.com/pinecone-io/pinecone-ts-client"
+vercelStarterUrl: "https://github.com/pinecone-io/pinecone-vercel-starter"
+vertexRagUrl: "https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/use-pinecone"
+n8nDocsUrl: "https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.vectorstorepinecone/"
+summary: "A fully-managed, cloud-native vector database with serverless auto-scaling, BYOC support, integrated embeddings and rerankers, hybrid search capabilities, and enterprise-grade security compliance (SOC 2, ISO 27001, GDPR, HIPAA)."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "Serverless Architecture"
+    description: "Fully-managed, serverless auto-scaling pods with zero-infrastructure management and Bring Your Own Cloud (BYOC) on AWS & GCP."
+  - title: "Hybrid Index Types"
+    description: "Dense semantic vectors, sparse lexical vectors via SPLADEv2, and hybrid fusion for comprehensive RAG and metadata search."
+  - title: "Namespaces & Multi-Tenancy"
+    description: "Logical partitions inside indexes with cross-namespace backup and migration support for multi-tenant applications."
+  - title: "Backup & Restore"
+    description: "Full snapshot/export via API, console, or Terraform provider with point-in-time restore capabilities."
+  - title: "Integrated AI Services"
+    description: "Built-in embeddings (OpenAI, Cohere, Gecko, E5), rerankers (SPLADE, cross-encoder), and Pinecone Assistant marketplace plugin."
+  - title: "MCP Agent Integration"
+    description: "Open-source MCP server enabling agents to list_indexes, upsert, query, and manage indexes directly."
+  - title: "Enterprise Security"
+    description: "Encryption at rest & in transit, SOC 2/ISO 27001/GDPR/HIPAA compliance, private endpoints, and audit logs."
+  - title: "Multi-Language SDKs"
+    description: "Python, Node.js, Java, .NET, Go – all updated to API v2025-04 with async clients, sparse support, and integrated inference."
+
+# --- Use Cases ---
+useCases:
+  - "RAG pipelines - LangChain, Vertex AI RAG Engine, CrewAI, LangGraph integrations"
+  - "Recommendation engines - Hybrid dense + sparse + rerank for e-commerce & media"
+  - "Conversational agents - Pinecone Assistant plugin feeds context to LLMs"
+  - "Enterprise search - Secure namespaces, audit logs, private endpoints"
+  - "Workflow automation - n8n, Zapier, Temporal pipelines trigger vector operations"
+
+# --- Pros & Cons ---
+advantages:
+  - "Zero-infrastructure serverless scaling with auto-scaling pods"
+  - "Integrated embeddings, rerankers, and backup solutions"
+  - "Broad SDK & framework support across multiple languages"
+  - "SOC 2/HIPAA/GDPR compliant with enterprise security"
+  - "BYOC for data-residency & compliance requirements"
+
+disadvantages:
+  - "Metadata field size cap (~5k characters per field)"
+  - "Serverless cost can spike at very high QPS volumes"
+  - "Hybrid tuning adds complexity to search configuration"
+  - "Fully managed - Limited low-level performance tuning"
+  - "Single index throughput ceiling requires sharding for scale"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "Serverless GA Expansion"
+    description: "Serverless GA on AWS & GCP with price-optimized tiers"
+    status: "H2 2025"
+  - title: "MCP Ecosystem Growth"
+    description: "More plugins for CrewAI, LangGraph, Firebase Genkit integration"
+    status: "H2 2025"
+  - title: "BYOC Enhancements"
+    description: "Terraform modules, private-service-connect on GCP"
+    status: "H2 2025"
+  - title: "Multimodal Support"
+    description: "Image & audio vector support with CLIP-style embeddings"
+    status: "H2 2025"
+  - title: "Cost Observability"
+    description: "Usage dashboards and budget alerts for cost management"
+    status: "H2 2025"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2024-01-01"
+    type: "Release"
+    title: "Serverless Architecture"
+    description: "Public preview released – zero-pod, auto-scaling ingestion & queries"
+    url: "https://docs.pinecone.io/release-notes/2025"
+  - date: "2025-03-01"
+    type: "Update"
+    title: "Launch Week"
+    description: "New Admin API, audit logs & backups/restore GA, optimized serverless platform, BYOC (AWS) public preview"
+    url: "https://docs.pinecone.io/release-notes/2025"
+  - date: "2025-04-01"
+    type: "Update"
+    title: "BYOC Expansion"
+    description: "BYOC now available on GCP; MCP server for AI agents announced"
+    url: "https://docs.pinecone.io/release-notes/2025"
+  - date: "2025-05-19"
+    type: "Release"
+    title: "API & SDK Drop"
+    description: "API v2025-04 stable, Python v7.0.0, Node v6.0.0, Java v5.0.0, .NET v4.0 with integrated embeddings"
+    url: "https://docs.pinecone.io/release-notes/2025"
+  - date: "2025-06-01"
+    type: "Update"
+    title: "Minor SDKs & Docs"
+    description: "Python v7.2.0, Node v6.1.1, Go v4.0.1, Java v5.1, GCS import preview, data-modeling guide"
+    url: "https://docs.pinecone.io/release-notes/2025"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "BYOC + Backup Setup"
+    language: "python"
+    code: |
+      import pinecone
+
+      pinecone.init(api_key=os.getenv("PINECONE_API_KEY"))
+
+      # create index inside your own VPC
+      pinecone.create_index(
+          name="byoc-index",
+          dimension=768,
+          metric="cosine",
+          spec=pinecone.ServerlessSpec(
+              cloud="aws",
+              region="us-east-1",
+              project_id="my-gcp-project"     # required when BYOC
+          )
+      )
+
+      # snapshot & restore
+      pinecone.create_backup("byoc-index", id="backup-2025-07-19")
+      pinecone.restore_index("byoc-index", backup_id="backup-2025-07-19")
+  - title: "LangChain Integration"
+    language: "python"
+    code: |
+      from langchain.vectorstores import Pinecone
+      import pinecone, os
+
+      pinecone.init(api_key=os.getenv("PINECONE_KEY"))
+      vectorstore = Pinecone.from_existing_index(
+          "semantic-index",
+          embedding=OpenAIEmbeddings()
+      )
+      docs = vectorstore.similarity_search("What is Pinecone?", k=3)
+  - title: "Vertex AI RAG Engine Setup"
+    language: "text"
+    code: |
+      # Follow the official notebook to wire Pinecone as the vector store 
+      # inside Vertex AI RAG pipelines.
+      # Required parameters: 
+      # - index name
+      # - dimension (768 for Gecko)
+      # - distance metric (cosine)
+      # 
+      # Reference: https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/use-pinecone
+  - title: "n8n Low-Code Integration"
+    language: "text"
+    code: |
+      # Use the Pinecone Vector Store node in n8n to insert, update, 
+      # or retrieve vectors without writing code.
+      # 
+      # Available operations:
+      # - Insert vectors
+      # - Update vectors  
+      # - Retrieve similar vectors
+      # - Delete vectors
+      # 
+      # Reference: https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.vectorstorepinecone/

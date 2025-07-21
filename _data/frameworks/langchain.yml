@@ -1,0 +1,130 @@
+# The unique identifier for the framework (e.g., 'langchain')
+id: langchain
+
+# --- Basic Information ---
+name: "LangChain"
+githubUrl: "https://github.com/langchain-ai/langchain"
+websiteUrl: "https://www.langchain.com/"
+pythonDocsUrl: "https://python.langchain.com/docs/introduction"
+apiReferenceUrl: "https://python.langchain.com/api_reference"
+javascriptGithubUrl: "https://github.com/langchain-ai/langchainjs"
+awsExtensionsUrl: "https://github.com/langchain-ai/langchain-aws"
+langgraphUrl: "https://github.com/langchain-ai/langgraph"
+langgraphJsUrl: "https://github.com/langchain-ai/langgraphjs"
+langsmithUrl: "https://docs.smith.langchain.com"
+langgraphPlatformUrl: "https://langchain-ai.github.io/langgraph/concepts/langgraph_platform"
+postgresBackendUrl: "https://github.com/langchain-ai/langchain-postgres"
+chainsConceptUrl: "https://python.langchain.com/docs/concepts/#chains"
+agentsConceptUrl: "https://python.langchain.com/docs/concepts/#agents"
+vectorStoresUrl: "https://python.langchain.com/docs/integrations/vectorstores"
+documentsApiUrl: "https://python.langchain.com/api_reference/core/documents.html"
+toolsIntegrationsUrl: "https://python.langchain.com/docs/integrations/tools"
+langserveDocsUrl: "https://python.langchain.com/docs/langserve"
+releasePolicyUrl: "https://js.langchain.com/docs/versions/release_policy"
+quickStartTutorialUrl: "https://python.langchain.com/docs/tutorials/llm_chain"
+summary: "A modular framework for developing applications powered by language models. Provides composable chains, agents, retrieval systems, and production tooling with 500+ integrations across models, vector stores, and cloud services."
+
+# --- Categorization & Tags ---
+# Tags removed as per design requirements
+
+# --- Key Features ---
+features:
+  - title: "Chains"
+    description: "Composable sequences of prompts, models, retrievers, or other chains for complex applications."
+  - title: "Agents"
+    description: "LLM-driven decision makers that dynamically pick tools or sub-chains at runtime."
+  - title: "Retrieval & Vector Integration"
+    description: "Out-of-the-box RAG pipelines that plug into Weaviate, Milvus, Qdrant, Chroma, pgvector, and more."
+  - title: "Documents Module"
+    description: "Unified abstraction for loading, chunking, and enriching text, PDF, HTML, CSV, etc."
+  - title: "Tooling & Integrations"
+    description: "100+ pre-built tools (web search, code execution, APIs, browser automation, etc.) plus community contributions."
+  - title: "LangSmith"
+    description: "Observability, tracing, and evaluation suite to move from prototype to production."
+  - title: "LangServe"
+    description: "Turn any chain or agent into a REST or WebSocket endpoint with one decorator."
+
+# --- Use Cases ---
+useCases:
+  - "Chatbots - Tool-augmented conversational agents that search the web, query SQL, or call internal APIs"
+  - "Document processing - Ingest, transform, and query multi-format corpora for Q&A or summarization"
+  - "Code generation - Agents that scaffold repos, write unit tests, and open pull requests"
+  - "RAG applications - Retrieval-augmented generation deployed on top of vector databases"
+  - "Workflow automation - End-to-end pipelines exposed via LangServe or embedded in backend services"
+
+# --- Pros & Cons ---
+advantages:
+  - "Highly modular - Lightweight packages, import only what you need"
+  - "500+ integrations across models, vector stores, tools, and cloud services"
+  - "Multi-language support - Python and TypeScript/JavaScript SDKs"
+  - "Production tooling - LangSmith tracing, LangServe deployment, LangGraph execution"
+  - "Active community - Weekly releases, enterprise support"
+
+disadvantages:
+  - "Pre-1.0 API - Breaking changes in minor releases"
+  - "Steep learning curve - Complex abstractions"
+  - "Heavy third-party dependencies - Outages propagate quickly"
+
+# --- Future Outlook & Integrations ---
+roadmap:
+  - title: "1.0 Stabilization"
+    description: "Targeting a stable 1.0 release late 2025 with long-term support guarantees"
+    status: "Planned"
+  - title: "Expanded Integrations"
+    description: "AWS, Azure, GCP, Snowflake, plus niche vertical tools"
+    status: "In Development"
+  - title: "Enterprise Tier"
+    description: "Enhanced LangSmith seats, SOC-2, SSO, and on-prem deployment paths"
+    status: "Planned"
+  - title: "Community Packages"
+    description: "Continued investment in langchain-postgres, langchain-aws, langgraph extensions"
+    status: "Active"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2023-07-01"
+    type: "Update"
+    title: "LangChain Expression Language (LCEL) and LangServe"
+    description: "LangChain Expression Language (LCEL) and LangServe debut for production-grade APIs"
+    url: "https://python.langchain.com/docs/expression_language/"
+  - date: "2025-06-20"
+    type: "Release"
+    title: "LangChain 0.3.26 Released"
+    description: "langchain 0.3.26 released with patch fixes and new integrations"
+    url: "https://github.com/langchain-ai/langchain/releases"
+  - date: "2025-07-03"
+    type: "Update"
+    title: "JavaScript Ecosystem Update"
+    description: "JavaScript ecosystem updated to @langchain/core 0.3.62 plus provider-specific bumps"
+    url: "https://github.com/langchain-ai/langchainjs"
+  - date: "2025-07-11"
+    type: "Release"
+    title: "LangChain AWS 0.2.28"
+    description: "langchain-aws 0.2.28 ships with Bedrock Converse-API support"
+    url: "https://github.com/langchain-ai/langchain-aws"
+  - date: "2025-06-24"
+    type: "Release"
+    title: "LangChain Postgres 0.0.15"
+    description: "langchain-postgres 0.0.15 adds native Postgres check-pointer and vector store helpers"
+    url: "https://github.com/langchain-ai/langchain-postgres"
+  - date: "2025-07-09"
+    type: "Release"
+    title: "LangGraph 0.5.2"
+    description: "langgraph 0.5.2 lands with improved durable execution and human-in-the-loop endpoints"
+    url: "https://github.com/langchain-ai/langgraph"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "Installation"
+    language: "bash"
+    code: |
+      pip install -qU "langchain[openai]"
+  - title: "Quick Start Setup"
+    language: "python"
+    code: |
+      import os, getpass
+      os.environ["OPENAI_API_KEY"] = getpass.getpass()
+
+      from langchain.chat_models import init_chat_model
+      llm = init_chat_model("gpt-4o-mini", model_provider="openai")
+      print(llm.invoke("Hello LangChain!"))
