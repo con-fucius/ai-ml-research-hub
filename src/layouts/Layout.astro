@@ -1,0 +1,455 @@
+---
+const { title, showTitle = false } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} | Research Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  
+  <!-- Prism.js CSS for syntax highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)" />
+  <style>
+    :root {
+      /* Light theme - improved contrast */
+      --bg-color: #ffffff;
+      --surface-color: #f8f9fa;
+      --text-color: #1a1a1a; /* Darker for better contrast */
+      --heading-color: #0d1117; /* Even darker for headings */
+      --accent-color: #0969da; /* Blue accent for links */
+      --border-color: #d1d9e0;
+      --muted-color: #656d76; /* For secondary text */
+      --success-color: #1a7f37;
+      --success-bg: #dafbe1;
+      --warning-color: #9a6700;
+      --warning-bg: #fff8c5;
+      --code-bg: #f6f8fa;
+      --font-main: 'League Spartan', sans-serif;
+      --font-code: 'Ubuntu Mono', monospace;
+    }
+    
+    /* Dark theme - improved contrast and readability */
+    body.dark-theme {
+      --bg-color: #0d1117;
+      --surface-color: #161b22;
+      --text-color: #e6edf3; /* Better contrast */
+      --heading-color: #f0f6fc; /* High contrast for headings */
+      --accent-color: #58a6ff; /* Brighter blue for dark mode */
+      --border-color: #30363d;
+      --muted-color: #8b949e;
+      --success-color: #3fb950;
+      --success-bg: #0d2818;
+      --warning-color: #d29922;
+      --warning-bg: #1c1810;
+      --code-bg: #161b22;
+    }
+    
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 101;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--accent-color);
+      color: white;
+      transform: scale(1.05);
+    }
+    
+    body.dark-theme .theme-toggle:hover {
+      background: var(--accent-color);
+      color: var(--bg-color);
+    }
+    
+    /* Mobile adjustments for theme toggle */
+    @media (max-width: 480px) {
+      .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+      }
+    }
+    html {
+      font-size: 95%; /* Slightly reduce the overall size */
+    }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 20px;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 10px 15px;
+        line-height: 1.6;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 10px 12px;
+      }
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-main);
+      color: var(--heading-color);
+      line-height: 1.3;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    
+    h1 { 
+      font-size: 2.5rem; 
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    h2 { 
+      font-size: 2rem; 
+      margin-top: 2rem;
+    }
+    h3 { 
+      font-size: 1.5rem; 
+      margin-top: 1.75rem;
+    }
+    h4 { 
+      font-size: 1.25rem; 
+      margin-top: 1.5rem;
+    }
+    h5 { 
+      font-size: 1.1rem; 
+      margin-top: 1.25rem;
+    }
+    h6 { 
+      font-size: 1rem; 
+      margin-top: 1rem;
+    }
+    
+    /* Responsive typography */
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.75rem; }
+      h3 { font-size: 1.35rem; }
+      h4 { font-size: 1.15rem; }
+    }
+    
+    @media (max-width: 480px) {
+      h1 { font-size: 1.75rem; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.25rem; }
+      h4 { font-size: 1.1rem; }
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    a:hover {
+      color: var(--heading-color);
+      text-decoration: none;
+    }
+    code {
+      font-family: var(--font-code);
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre {
+      font-family: var(--font-code);
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      padding: 1.25em;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    header {
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      background: var(--bg-color);
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 1rem 0;
+      text-align: center;
+      margin-top: 3rem;
+    }
+    
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 99;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .back-to-top:hover {
+      background: var(--accent-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    body.dark-theme .back-to-top:hover {
+      background: var(--accent-color);
+      color: var(--bg-color);
+    }
+    
+    /* Mobile adjustments for back-to-top button */
+    @media (max-width: 480px) {
+      .back-to-top {
+        bottom: 15px;
+        right: 15px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+      }
+    }
+    .main-nav {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .nav-link {
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      color: var(--heading-color);
+    }
+    
+    .nav-link:hover {
+      background-color: var(--surface-color);
+      text-decoration: none;
+      color: var(--accent-color);
+    }
+    
+    .nav-separator {
+      color: var(--muted-color);
+      font-weight: normal;
+    }
+    
+    /* Mobile navigation improvements */
+    @media (max-width: 768px) {
+      .main-nav {
+        gap: 0.25rem;
+      }
+      
+      .nav-link {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      
+      .nav-separator {
+        font-size: 0.8rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .main-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .nav-separator {
+        display: none;
+      }
+      
+      .nav-link {
+        padding: 0.6rem 1.2rem;
+        min-width: 120px;
+        text-align: center;
+      }
+    }
+    
+    /* Fade-in animations */
+    main {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Typography enhancements */
+    body.dark-theme h1,
+    body.dark-theme h2,
+    body.dark-theme h3 {
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Enhanced link styling with underline animation */
+    a:not(.nav-link):hover::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--accent-color);
+      animation: underlineExpand 0.2s ease-out;
+    }
+    
+    @keyframes underlineExpand {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="theme-toggle">🌙</button>
+  <header>
+    {showTitle && <h1>Research Hub</h1>}
+    <nav class="main-nav">
+      <a href="/" class="nav-link">Home</a>
+      <span class="nav-separator">|</span>
+      <a href="/#frameworks" class="nav-link">Frameworks</a>
+      <span class="nav-separator">|</span>
+      <a href="/#vector_databases" class="nav-link">Vector Databases</a>
+      <span class="nav-separator">|</span>
+      <a href="/#protocols" class="nav-link">Protocols</a>
+    </nav>
+  </header>
+  <main>
+    <slot />
+  </main>
+  <button class="back-to-top" id="back-to-top">↑</button>
+  <footer>
+    <p>&copy; 2025 Samire</p>
+  </footer>
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-theme');
+      const isDark = body.classList.contains('dark-theme');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // Apply the saved theme on page load
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-theme');
+      themeToggle.textContent = '☀️';
+    } else {
+      themeToggle.textContent = '🌙';
+    }
+
+    // Back to top button functionality
+    const backToTop = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Dynamic theme switching for Prism.js
+    function updatePrismTheme() {
+      const isDark = body.classList.contains('dark-theme');
+      const lightTheme = document.querySelector('link[href*="prism.min.css"]');
+      const darkTheme = document.querySelector('link[href*="prism-dark.min.css"]');
+      
+      if (isDark) {
+        if (lightTheme) lightTheme.disabled = true;
+        if (darkTheme) darkTheme.disabled = false;
+      } else {
+        if (lightTheme) lightTheme.disabled = false;
+        if (darkTheme) darkTheme.disabled = true;
+      }
+    }
+
+    // Update Prism theme on page load
+    updatePrismTheme();
+
+    // Update Prism theme when theme toggle is clicked
+    const originalToggleHandler = themeToggle.onclick;
+    themeToggle.addEventListener('click', () => {
+      setTimeout(updatePrismTheme, 50); // Small delay to ensure theme class is applied
+    });
+  </script>
+  
+  <!-- Prism.js JavaScript for syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

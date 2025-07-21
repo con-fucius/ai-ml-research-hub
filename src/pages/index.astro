@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// With the YAML plugin installed, Astro can import YAML files directly.
+const frameworkFiles = await import.meta.glob('../../_data/frameworks/*.yml', { eager: true });
+const vectorDBFiles = await import.meta.glob('../../_data/vector_databases/*.yml', { eager: true });
+const protocolFiles = await import.meta.glob('../../_data/protocols/*.yml', { eager: true });
+
+const frameworks = Object.values(frameworkFiles).map(mod => mod.default);
+const vectorDBs = Object.values(vectorDBFiles).map(mod => mod.default);
+const protocols = Object.values(protocolFiles).map(mod => mod.default);
+---
+<Layout title="Home" showTitle={true}>
+  <div class="home-header">
+    <p>My developer-centric research notes of the rapidly evolving landscape of AI</p>
+  </div>
+
+  <h3 id="frameworks">Frameworks</h3>
+  <ul class="item-list">
+    {frameworks.map(item => (
+      <li class="item-card">
+        <a href={`/frameworks/${item.id}/`}>
+          <span>{item.name}</span>
+        </a>
+      </li>
+    ))}
+      <li class="item-card">
+        <a href="/comparison/">
+          <span>Comparison</span>
+        </a>
+      </li>
+  </ul>
+
+  <h3 id="vector_databases">Vector Databases</h3>
+  <ul class="item-list">
+    {vectorDBs.map(item => (
+      <li class="item-card">
+        <a href={`/vector_databases/${item.id}/`}>
+          <span>{item.name}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <h3 id="protocols">Protocols</h3>
+  <ul class="item-list">
+    {protocols.map(item => (
+      <li class="item-card">
+        <a href={`/protocols/${item.id}/`}>
+          <span>{item.name}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  .home-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .item-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    .item-list {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+  .item-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    height: 60px;
+  }
+  .item-card:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(44, 44, 44, 0.15);
+    border-color: var(--accent-color);
+  }
+  
+  /* Dark theme hover effects */
+  body.dark-theme .item-card:hover {
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+  }
+  .item-card a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    font-weight: bold;
+    height: 100%;
+    text-align: center;
+  }
+
+</style>

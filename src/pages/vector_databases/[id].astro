@@ -1,0 +1,453 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  // With the YAML plugin, Astro can import the data directly.
+  const ymlFiles = await import.meta.glob('../../../_data/vector_databases/*.yml');
+
+  const paths = await Promise.all(
+    Object.entries(ymlFiles).map(async ([_path, resolver]) => {
+      const { default: vectordb } = await resolver();
+      return {
+        params: { id: vectordb.id },
+        props: { vectordb },
+      };
+    })
+  );
+  return paths;
+}
+
+const { vectordb } = Astro.props;
+---
+<Layout title={vectordb.name}>
+  <nav class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">›</span>
+    <a href="/#vector_databases">Vector Databases</a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">{vectordb.name}</span>
+  </nav>
+  
+  <div class="vectordb-header">
+    <h1>{vectordb.name}</h1>
+    <div class="links">
+      <a href={vectordb.websiteUrl}>Website</a>
+      {vectordb.githubUrl && <> | <a href={vectordb.githubUrl}>GitHub</a></>}
+    </div>
+    <p class="summary">{vectordb.summary}</p>
+  </div>
+
+  <div class="vectordb-grid">
+    <main class="main-content">
+      {(vectordb.docsUrl || vectordb.cookbookUrl || vectordb.issueUrl || vectordb.harmonyRfcUrl || vectordb.changelogUrl || vectordb.releaseNotesUrl || vectordb.openApiUrl || vectordb.pythonClientUrl || vectordb.typescriptClientUrl) && (
+        <section>
+          <h2>Official Resources</h2>
+          <div class="resources-grid">
+            {vectordb.docsUrl && <a href={vectordb.docsUrl} class="resource-link">Documentation</a>}
+            {vectordb.cookbookUrl && <a href={vectordb.cookbookUrl} class="resource-link">Cookbook</a>}
+            {vectordb.issueUrl && <a href={vectordb.issueUrl} class="resource-link">Issue Tracker</a>}
+            {vectordb.harmonyRfcUrl && <a href={vectordb.harmonyRfcUrl} class="resource-link">Harmony RFC</a>}
+            {vectordb.honeybeePaperUrl && <a href={vectordb.honeybeePaperUrl} class="resource-link">HoneyBee Paper</a>}
+            {/* MongoDB Links */}
+            {vectordb.changelogUrl && <a href={vectordb.changelogUrl} class="resource-link">Changelog</a>}
+            {vectordb.gaAnnouncementUrl && <a href={vectordb.gaAnnouncementUrl} class="resource-link">GA Announcement</a>}
+            {vectordb.bedrockIntegrationUrl && <a href={vectordb.bedrockIntegrationUrl} class="resource-link">Bedrock Integration</a>}
+            {vectordb.ennBlogUrl && <a href={vectordb.ennBlogUrl} class="resource-link">ENN Blog</a>}
+            {vectordb.quantizationBlogUrl && <a href={vectordb.quantizationBlogUrl} class="resource-link">Quantization Blog</a>}
+            {vectordb.springDataBlogUrl && <a href={vectordb.springDataBlogUrl} class="resource-link">Spring Data Blog</a>}
+            {/* Pinecone Links */}
+            {vectordb.releaseNotesUrl && <a href={vectordb.releaseNotesUrl} class="resource-link">Release Notes</a>}
+            {vectordb.pythonClientUrl && <a href={vectordb.pythonClientUrl} class="resource-link">Python Client</a>}
+            {vectordb.tsClientUrl && <a href={vectordb.tsClientUrl} class="resource-link">TypeScript Client</a>}
+            {vectordb.vercelStarterUrl && <a href={vectordb.vercelStarterUrl} class="resource-link">Vercel Starter</a>}
+            {vectordb.vertexRagUrl && <a href={vectordb.vertexRagUrl} class="resource-link">Vertex RAG</a>}
+            {vectordb.n8nDocsUrl && <a href={vectordb.n8nDocsUrl} class="resource-link">n8n Integration</a>}
+            {/* Qdrant Links */}
+            {vectordb.openApiUrl && <a href={vectordb.openApiUrl} class="resource-link">OpenAPI Spec</a>}
+            {vectordb.helmChartUrl && <a href={vectordb.helmChartUrl} class="resource-link">Helm Chart</a>}
+            {vectordb.cloudConsoleUrl && <a href={vectordb.cloudConsoleUrl} class="resource-link">Cloud Console</a>}
+            {vectordb.webUiUrl && <a href={vectordb.webUiUrl} class="resource-link">Web UI</a>}
+            {vectordb.benchmarkUrl && <a href={vectordb.benchmarkUrl} class="resource-link">Benchmark</a>}
+            {vectordb.cloudBlogUrl && <a href={vectordb.cloudBlogUrl} class="resource-link">Cloud Blog</a>}
+            {vectordb.roadmapUrl && <a href={vectordb.roadmapUrl} class="resource-link">Roadmap</a>}
+            {/* Weaviate Links */}
+            {vectordb.typescriptClientUrl && <a href={vectordb.typescriptClientUrl} class="resource-link">TypeScript Client</a>}
+            {vectordb.javaClientUrl && <a href={vectordb.javaClientUrl} class="resource-link">Java Client</a>}
+            {vectordb.recipesUrl && <a href={vectordb.recipesUrl} class="resource-link">Recipes</a>}
+            {vectordb.blogUrl && <a href={vectordb.blogUrl} class="resource-link">Blog</a>}
+            {vectordb.v129ReleaseUrl && <a href={vectordb.v129ReleaseUrl} class="resource-link">v1.29 Release</a>}
+            {vectordb.v130ReleaseUrl && <a href={vectordb.v130ReleaseUrl} class="resource-link">v1.30 Release</a>}
+            {vectordb.v131ReleaseUrl && <a href={vectordb.v131ReleaseUrl} class="resource-link">v1.31 Release</a>}
+            {vectordb.nvidiaPartnershipUrl && <a href={vectordb.nvidiaPartnershipUrl} class="resource-link">NVIDIA Partnership</a>}
+          </div>
+        </section>
+      )}
+
+      <section>
+        <h2>Key Features</h2>
+        <ul class="features-list">
+          {vectordb.features && vectordb.features.map(feature => (
+            <li><strong>{feature.title}:</strong> {feature.description}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Code Examples</h2>
+        {vectordb.codeSnippets && vectordb.codeSnippets.map(snippet => (
+          <div class="code-example">
+            <h3>{snippet.title}</h3>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="language-label">{snippet.language}</span>
+                <button class="copy-btn" onclick={`copyCode(this)`}>Copy</button>
+              </div>
+              <pre class="code-block"><code class={`language-${snippet.language}`}>{snippet.code}</code></pre>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {vectordb.useCases && (
+        <section>
+          <h2>Use Cases</h2>
+          <ul class="use-cases-list">
+            {vectordb.useCases.map(useCase => <li>{useCase}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {(vectordb.advantages || vectordb.disadvantages) && (
+        <section>
+          <h2>Pros & Cons</h2>
+          <div class="pros-cons-grid">
+            {vectordb.advantages && (
+              <div class="pros">
+                <h3>Advantages</h3>
+                <ul>
+                  {vectordb.advantages.map(advantage => <li>{advantage}</li>)}
+                </ul>
+              </div>
+            )}
+            {vectordb.disadvantages && (
+              <div class="cons">
+                <h3>Disadvantages</h3>
+                <ul>
+                  {vectordb.disadvantages.map(disadvantage => <li>{disadvantage}</li>)}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {vectordb.roadmap && (
+        <section>
+          <h2>Future Outlook & Integrations</h2>
+          <ul class="roadmap-list">
+            {vectordb.roadmap.map(item => (
+              <li><strong>{item.title}</strong> [{item.status}]: {item.description}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </main>
+
+    <aside class="sidebar">
+      <h2>Timeline</h2>
+      <div class="timeline">
+        {vectordb.timeline && vectordb.timeline.map(event => (
+          <div class="timeline-item" data-type={event.type}>
+            <div class="timeline-date">{event.date}</div>
+            <div class="timeline-content">
+              <div class="timeline-title">{event.description}</div>
+              <a href={event.url} class="timeline-link">Source</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </aside>
+  </div>
+</Layout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--heading-color);
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 0.5rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb-current {
+    color: var(--heading-color);
+    font-weight: 500;
+  }
+
+  .vectordb-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .vectordb-header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+  }
+  .links {
+    margin-bottom: 1rem;
+  }
+  .summary {
+    max-width: 70ch;
+    margin: 0 auto;
+    font-style: italic;
+  }
+  
+  .vectordb-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 768px) {
+    .vectordb-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  
+  .main-content section {
+    margin-bottom: 1.5rem;
+  }
+  .main-content h2 {
+    margin-bottom: 0.75rem;
+  }
+  .main-content h3 {
+    margin-bottom: 0.4rem;
+  }
+  
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .resource-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  
+  .resource-link:hover {
+    background-color: var(--border-color);
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+  
+  .features-list, .use-cases-list {
+    padding-left: 1.5rem;
+  }
+  .features-list li, .use-cases-list li {
+    margin-bottom: 0.2rem;
+    line-height: 1.2;
+  }
+  
+  .pros-cons-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 600px) {
+    .pros-cons-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .pros ul, .cons ul {
+    padding-left: 1.5rem;
+  }
+  .pros li, .cons li {
+    margin-bottom: 0.4rem;
+  }
+  
+  .roadmap-list {
+    padding-left: 1.5rem;
+  }
+  .roadmap-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .code-example {
+    margin-bottom: 1.5rem;
+  }
+  .code-example h3 {
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+    font-size: 1.1rem;
+  }
+  
+  .code-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .code-header {
+    background-color: #2d2d2d;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+  }
+  
+  .language-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: capitalize;
+    font-weight: 500;
+  }
+  
+  .copy-btn {
+    background: none;
+    border: 1px solid #555;
+    color: #ccc;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .copy-btn:hover {
+    background-color: #444;
+    border-color: #777;
+  }
+  
+  .code-block {
+    background-color: #1e1e1e;
+    border: none;
+    border-radius: 0;
+    padding: 1rem;
+    margin: 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+    font-family: 'Ubuntu Mono', 'Consolas', 'Monaco', monospace;
+    line-height: 1.4;
+  }
+  .code-block code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #d4d4d4;
+    font-size: inherit;
+  }
+  
+  .sidebar h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+  }
+  
+  .timeline-item {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    margin-left: 1rem;
+  }
+  
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.75rem;
+    top: 0.25rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 2px solid var(--bg-color);
+    z-index: 1;
+  }
+  
+  /* Different colors for different event types */
+  .timeline-item[data-type="Release"]::before {
+    background: #4CAF50;
+  }
+  
+  .timeline-item[data-type="Update"]::before {
+    background: #2196F3;
+  }
+  
+  .timeline-item[data-type="Launch"]::before {
+    background: #FF9800;
+  }
+  
+  .timeline-date {
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+  .timeline-content {
+    flex: 1;
+  }
+  .timeline-title {
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+  }
+  .timeline-link {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+</style>
+
+<script>
+  function copyCode(button) {
+    const codeBlock = button.closest('.code-container').querySelector('code');
+    const text = codeBlock.textContent;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.style.background = '#4CAF50';
+      button.style.borderColor = '#4CAF50';
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.style.background = 'none';
+        button.style.borderColor = '#555';
+      }, 2000);
+    });
+  }
+</script>

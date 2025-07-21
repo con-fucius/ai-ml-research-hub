@@ -1,0 +1,572 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const ymlFiles = await import.meta.glob('../../../_data/protocols/*.yml');
+
+  const paths = await Promise.all(
+    Object.entries(ymlFiles).map(async ([_path, resolver]) => {
+      const { default: item } = await resolver();
+      return {
+        params: { id: item.id },
+        props: { item },
+      };
+    })
+  );
+  return paths;
+}
+
+const { item } = Astro.props;
+
+---
+<Layout title={item.name}>
+  <nav class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">›</span>
+    <a href="/#protocols">Protocols</a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">{item.name}</span>
+  </nav>
+  
+  <div class="item-header">
+    <h1>{item.name}</h1>
+    <div class="links">
+      {item.officialUrl && <a href={item.officialUrl}>Official Site</a>}
+      {item.docsUrl && <a href={item.docsUrl}>Documentation</a>}
+      {item.githubUrl && <a href={item.githubUrl}>GitHub</a>}
+      {item.specificationUrl && <a href={item.specificationUrl}>Specification</a>}
+    </div>
+    <p class="summary"><em>{item.summary}</em></p>
+  </div>
+
+  <div class="item-grid">
+    <main class="main-content">
+      <section>
+        <h2>Key Features</h2>
+        <ul class="features-list">
+          {item.features && item.features.map(feature => (
+            <li><strong>{feature.title}:</strong> {feature.description}</li>
+          ))}
+        </ul>
+      </section>
+
+      {item.useCases && (
+        <section>
+          <h2>Use Cases</h2>
+          <ul class="use-cases-list">
+            {item.useCases.map(useCase => (
+              <li>{useCase}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(item.advantages || item.disadvantages) && (
+        <section>
+          <h2>Pros & Cons</h2>
+          <div class="pros-cons-grid">
+            {item.advantages && (
+              <div class="pros">
+                <h3>Advantages</h3>
+                <ul>
+                  {item.advantages.map(pro => (
+                    <li>{pro}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {item.disadvantages && (
+              <div class="cons">
+                <h3>Disadvantages</h3>
+                <ul>
+                  {item.disadvantages.map(con => (
+                    <li>{con}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {item.architecture && (
+        <section>
+          <h2>Architecture & Core Concepts</h2>
+          <ul class="architecture-list">
+            {item.architecture.map(concept => (
+              <li><strong>{concept.title}:</strong> {concept.description}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {item.codeSnippets && (
+        <section>
+          <h2>Code Examples</h2>
+          {item.codeSnippets.map(snippet => (
+            <div class="code-example">
+              <h4>{snippet.title}</h4>
+              <pre><code class={`language-${snippet.language}`}>{snippet.code}</code></pre>
+            </div>
+          ))}
+        </section>
+      )}
+    </main>
+
+    <aside class="sidebar">
+      {item.timeline && (
+        <section>
+          <h2>Timeline</h2>
+          <ul class="timeline">
+            {item.timeline.map(event => (
+              <li>
+                <div class="timeline-date">{event.date}</div>
+                <div class="timeline-content">
+                  <strong>{event.title}</strong>
+                  <span class="timeline-type">({event.type})</span>
+                  <p>{event.description}</p>
+                  {event.url && <a href={event.url} target="_blank" rel="noopener">Learn More</a>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {item.roadmap && (
+        <section>
+          <h2>Future Roadmap</h2>
+          <ul class="roadmap-list">
+            {item.roadmap.map(item => (
+              <li>
+                <strong>{item.title}</strong>
+                <p>{item.description}</p>
+                <span class="status">{item.status}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(item.sdks || item.integrations) && (
+        <section>
+          <h2>SDKs & Integrations</h2>
+          {item.sdks && (
+            <div class="sdk-section">
+              <h4>SDKs</h4>
+              <ul class="sdk-list">
+                {item.sdks.map(sdk => (
+                  <li>
+                    <strong>{sdk.name}</strong>
+                    {sdk.version && <span class="version">v{sdk.version}</span>}
+                    <span class="status-badge">{sdk.status}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {item.integrations && (
+            <div class="integration-section">
+              <h4>Framework Integrations</h4>
+              <ul class="integration-list">
+                {item.integrations.map(integration => (
+                  <li>
+                    <strong>{integration.name}</strong>
+                    {integration.package && <code>{integration.package}</code>}
+                    {integration.version && <span class="version">{integration.version}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
+
+      {item.referenceServers && (
+        <section>
+          <h2>Reference Servers</h2>
+          <ul class="reference-servers">
+            {item.referenceServers.map(server => (
+              <li>{server}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section>
+        <h2>Resources</h2>
+        <ul class="resource-links">
+          {item.officialUrl && <li><a href={item.officialUrl} target="_blank" rel="noopener">Official Website</a></li>}
+          {item.docsUrl && <li><a href={item.docsUrl} target="_blank" rel="noopener">Documentation</a></li>}
+          {item.githubUrl && <li><a href={item.githubUrl} target="_blank" rel="noopener">GitHub Repository</a></li>}
+          {item.specificationUrl && <li><a href={item.specificationUrl} target="_blank" rel="noopener">Specification</a></li>}
+          {item.beeaiDocsUrl && <li><a href={item.beeaiDocsUrl} target="_blank" rel="noopener">BeeAI Documentation</a></li>}
+          {item.ibmResearchUrl && <li><a href={item.ibmResearchUrl} target="_blank" rel="noopener">IBM Research</a></li>}
+          {item.apiDocsUrl && <li><a href={item.apiDocsUrl} target="_blank" rel="noopener">API Documentation</a></li>}
+          {item.mcpBridgeUrl && <li><a href={item.mcpBridgeUrl} target="_blank" rel="noopener">MCP Bridge Guide</a></li>}
+          {item.agentCardSchemaUrl && <li><a href={item.agentCardSchemaUrl} target="_blank" rel="noopener">Agent Card Schema</a></li>}
+          {item.taskManagementUrl && <li><a href={item.taskManagementUrl} target="_blank" rel="noopener">Task Management</a></li>}
+          {item.securityOverviewUrl && <li><a href={item.securityOverviewUrl} target="_blank" rel="noopener">Security Overview</a></li>}
+        </ul>
+      </section>
+    </aside>
+  </div>
+</Layout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--heading-color);
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 0.5rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb-current {
+    color: var(--heading-color);
+    font-weight: 500;
+  }
+
+  .item-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .links {
+    margin: 1rem 0;
+  }
+  
+  .links a {
+    margin: 0 0.5rem;
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .links a:hover {
+    text-decoration: underline;
+  }
+  
+  .summary {
+    max-width: 60ch;
+    margin: 1rem auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .item-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  @media (min-width: 768px) {
+    .item-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  
+  .main-content section {
+    margin-bottom: 3rem;
+  }
+  
+  .main-content h2 {
+    color: var(--heading-color);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .features-list,
+  .use-cases-list,
+  .architecture-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .features-list li,
+  .use-cases-list li,
+  .architecture-list li {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--surface-color);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+  }
+  
+  .pros-cons-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .pros-cons-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .pros,
+  .cons {
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .pros {
+    background-color: var(--success-bg, #f0f9f0);
+    border-left: 4px solid var(--success-color, #28a745);
+  }
+  
+  .cons {
+    background-color: var(--warning-bg, #fff8f0);
+    border-left: 4px solid var(--warning-color, #ffc107);
+  }
+  
+  .pros h3,
+  .cons h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .pros ul,
+  .cons ul {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+  
+  .pros li,
+  .cons li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .code-example {
+    margin-bottom: 2rem;
+  }
+  
+  .code-example h4 {
+    margin-bottom: 0.5rem;
+    color: var(--heading-color);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .code-example pre {
+    background-color: var(--code-bg, #f8f9fa);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .code-example code {
+    background: none;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  .sidebar {
+    background-color: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    height: fit-content;
+  }
+  
+  .sidebar section {
+    margin-bottom: 2rem;
+  }
+  
+  .sidebar h2,
+  .sidebar h4 {
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .timeline {
+    list-style: none;
+    padding: 0;
+    border-left: 2px solid var(--border-color);
+    padding-left: 1rem;
+  }
+  
+  .timeline li {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0.5rem;
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+  }
+  
+  .timeline-date {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin-bottom: 0.25rem;
+  }
+  
+  .timeline-content strong {
+    color: var(--heading-color);
+  }
+  
+  .timeline-type {
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    margin-left: 0.5rem;
+  }
+  
+  .timeline-content p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .timeline-content a {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .timeline-content a:hover {
+    text-decoration: underline;
+  }
+  
+  .roadmap-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .roadmap-list li {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--background-color);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .roadmap-list strong {
+    color: var(--heading-color);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .roadmap-list p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .sdk-section,
+  .integration-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .sdk-list,
+  .integration-list,
+  .reference-servers,
+  .resource-links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sdk-list li,
+  .integration-list li,
+  .reference-servers li {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--background-color);
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+  }
+  
+  .version {
+    color: var(--muted-color);
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--success-color, #28a745);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+  }
+  
+  .integration-list code {
+    background-color: var(--code-bg, #f8f9fa);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+  }
+  
+  .resource-links li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .resource-links a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .resource-links a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 767px) {
+    .item-header {
+      margin-bottom: 2rem;
+    }
+    
+    .summary {
+      font-size: 1rem;
+    }
+    
+    .sidebar {
+      margin-top: 2rem;
+    }
+    
+    .pros-cons-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
