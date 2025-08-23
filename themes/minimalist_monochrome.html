@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Monochrome Theme</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 3rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin: 0 0 3rem 0;
+            border-bottom: 1px solid #000;
+            padding-bottom: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            padding: 2rem;
+            border: 1px solid #000;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .card:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .card h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Monochrome</h1>
+        <h2>AI Research Hub</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Frameworks</h3>
+                <p>The fundamental structures for building intelligent agents.</p>
+            </div>
+            <div class="card">
+                <h3>Vector Databases</h3>
+                <p>The core of memory and information retrieval in AI.</p>
+            </div>
+            <div class="card">
+                <h3>Protocols</h3>
+                <p>The standards for communication between AI agents.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

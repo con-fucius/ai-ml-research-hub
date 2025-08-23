@@ -21,9 +21,9 @@ const { vectordb } = Astro.props;
 ---
 <Layout title={vectordb.name}>
   <nav class="breadcrumb">
-    <a href="/">Home</a>
+    <a href={import.meta.env.BASE_URL}>Home</a>
     <span class="breadcrumb-separator">›</span>
-    <a href="/#vector_databases">Vector Databases</a>
+    <a href={`${import.meta.env.BASE_URL}/#vector_databases`}>Vector Databases</a>
     <span class="breadcrumb-separator">›</span>
     <span class="breadcrumb-current">{vectordb.name}</span>
   </nav>

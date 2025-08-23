@@ -21,9 +21,9 @@ const { item } = Astro.props;
 ---
 <Layout title={item.name}>
   <nav class="breadcrumb">
-    <a href="/">Home</a>
+    <a href={import.meta.env.BASE_URL}>Home</a>
     <span class="breadcrumb-separator">›</span>
-    <a href="/#protocols">Protocols</a>
+    <a href={`${import.meta.env.BASE_URL}/#protocols`}>Protocols</a>
     <span class="breadcrumb-separator">›</span>
     <span class="breadcrumb-current">{item.name}</span>
   </nav>

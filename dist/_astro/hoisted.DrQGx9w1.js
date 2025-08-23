@@ -1,0 +1,1 @@
+import"https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js";import"https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js";import"./Layout.astro_astro_type_script_index_2_lang.B047uAEu.js";

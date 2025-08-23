@@ -369,13 +369,13 @@ const { title, showTitle = false } = Astro.props;
   <header>
     {showTitle && <h1>Research Hub</h1>}
     <nav class="main-nav">
-      <a href="/" class="nav-link">Home</a>
+      <a href={import.meta.env.BASE_URL} class="nav-link">Home</a>
       <span class="nav-separator">|</span>
-      <a href="/#frameworks" class="nav-link">Frameworks</a>
+      <a href={`${import.meta.env.BASE_URL}/#frameworks`} class="nav-link">Frameworks</a>
       <span class="nav-separator">|</span>
-      <a href="/#vector_databases" class="nav-link">Vector Databases</a>
+      <a href={`${import.meta.env.BASE_URL}/#vector_databases`} class="nav-link">Vector Databases</a>
       <span class="nav-separator">|</span>
-      <a href="/#protocols" class="nav-link">Protocols</a>
+      <a href={`${import.meta.env.BASE_URL}/#protocols`} class="nav-link">Protocols</a>
     </nav>
   </header>
   <main>

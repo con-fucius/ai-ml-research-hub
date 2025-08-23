@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Agent Frameworks Comparison</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Outfit', Arial, sans-serif;
+      background: #f7fafd;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      font-size: 0.93em;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 2.5rem 2rem 2rem 2rem;
+      font-size: 0.95em;
+    }
+    h1, h2, h3 {
+      color: #0051c3;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 1.7rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #007acc;
+      margin-bottom: 20px;
+      justify-content: center;
+      font-size: 0.95em;
+    }
+    .tab {
+      padding: 7px 14px;
+      cursor: pointer;
+      border: 1px solid #007acc;
+      border-bottom: none;
+      background-color: #e0f0ff;
+      margin: 0 5px;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      transition: background-color 0.3s;
+      font-weight: bold;
+      color: #007acc;
+      font-size: 0.95em;
+    }
+    .tab.active {
+      background-color: #fff;
+      color: #005f99;
+    }
+    .tab-content {
+      display: none;
+      background: #fff;
+      border: 1px solid #007acc;
+      padding: 13px;
+      border-radius: 0 4px 4px 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      font-size: 0.95em;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.95em;
+      background: #f7fafd;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid #e3e8ee;
+      padding: 0.5rem 0.3rem;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95em;
+    }
+    th {
+      background: #eaf2fb;
+      color: #0051c3;
+      font-weight: 700;
+      font-size: 0.98em;
+    }
+    tr:nth-child(even) {
+      background: #f4f8fc;
+    }
+    .note, .limitation, .files {
+      background: #eaf6ff;
+      border-left: 4px solid #0051c3;
+      padding: 0.7rem 1rem;
+      margin: 2rem 0;
+      border-radius: 6px;
+      font-size: 0.94em;
+    }
+    .venn-section {
+      margin: 2rem 0 1.2rem 0;
+      text-align: center;
+      font-size: 0.93em;
+    }
+    .venn-caption {
+      color: #444;
+      font-size: 0.93em;
+      margin-bottom: 1.1rem;
+    }
+    .frameworks-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: space-between;
+      margin: 1.5rem 0 1rem 0;
+      font-size: 0.95em;
+    }
+    .framework-card {
+      flex: 1 1 220px;
+      min-width: 220px;
+      max-width: 350px;
+      background: #f4f8fc;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      padding: 0.9rem 0.8rem 0.8rem 0.8rem;
+      margin-bottom: 0.9rem;
+      border-left: 6px solid #0051c3;
+      transition: box-shadow 0.2s;
+      font-size: 0.95em;
+    }
+    .framework-card.openai { border-left-color: #10a37f; }
+    .framework-card.nova { border-left-color: #ff9800; }
+    .framework-card.adk { border-left-color: #f44336; }
+    .framework-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1em;
+      color: #0051c3;
+    }
+    .framework-card.openai h3 { color: #10a37f; }
+    .framework-card.nova h3 { color: #ff9800; }
+    .framework-card.adk h3 { color: #f44336; }
+    .framework-card ul {
+      margin: 0.2rem 0 0 1rem;
+      padding: 0;
+      color: #333;
+      font-size: 0.95em;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.91em;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 900px) {
+      .frameworks-flex { flex-direction: column; gap: 0; }
+      .framework-card { max-width: 100%; }
+    }
+    @media (max-width: 700px) {
+      .container { padding: 1rem; }
+      h1 { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Agent Frameworks Comparison</h1>
+    <div class="tabs">
+      <div class="tab active" data-tab="comparison">Tool and Framework Comparison</div>
+      <div class="tab" data-tab="venn">Comparison Diagram & Additional Info</div>
+    </div>
+    <!-- Tab 1: Tool and Framework Comparison -->
+    <div id="comparison" class="tab-content active">
+      <h2>1. Agent Architecture &amp; Types</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Agent Types Supported</b></td>
+          <td>Single, multi-agent, hierarchical, event-driven, stateful/stateless</td>
+          <td>Single, multi-agent, hierarchical, recursive, event-driven, stateful/stateless</td>
+          <td>Single, multi-agent (via Bedrock Agents), event-driven, stateful/stateless</td>
+          <td>Single, multi-agent, hierarchical, recursive, event-driven, stateful/stateless</td>
+        </tr>
+        <tr>
+          <td><b>Agent Composition</b></td>
+          <td>LLM-based, rule-based, hybrid, agent-as-tool (via MCP)</td>
+          <td>LLM-based, agent-as-tool, handoffs, hybrid</td>
+          <td>LLM-based, agent-as-tool (via API), hybrid</td>
+          <td>LLM-based, rule-based, hybrid, agent-as-tool, workflow agents</td>
+        </tr>
+        <tr>
+          <td><b>Lifecycle Management</b></td>
+          <td>Creation, execution, monitoring, termination, persistence, recovery (Durable Objects)</td>
+          <td>Creation, execution, monitoring, termination, persistence (via context), recovery</td>
+          <td>Creation, execution, monitoring, termination, persistence (via Bedrock), recovery</td>
+          <td>Creation, execution, monitoring, termination, persistence, recovery (session/memory)</td>
+        </tr>
+        <tr>
+          <td><b>Agent Communication</b></td>
+          <td>Inter-agent messaging (WebSockets, HTTP), handoff, broadcasting, MCP, state sync</td>
+          <td>Inter-agent messaging, handoff, broadcasting, MCP, HTTP</td>
+          <td>API-based, Bedrock Agents, tool invocation, context passing</td>
+          <td>Inter-agent messaging, handoff, broadcasting, explicit invocation, shared state</td>
+        </tr>
+      </table>
+      <h2>2. Tooling &amp; Integration</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Tool Types</b></td>
+          <td>Built-in, custom, third-party API, DB, cloud, MCP tools</td>
+          <td>Built-in, custom, third-party API, DB, cloud, MCP tools</td>
+          <td>Custom (via API), third-party API, DB, cloud</td>
+          <td>Built-in, custom, third-party API, DB, cloud, agent-as-tool</td>
+        </tr>
+        <tr>
+          <td><b>Tool Invocation</b></td>
+          <td>Sync/async, batch, error handling, retries, timeouts</td>
+          <td>Sync/async, batch, error handling, retries, timeouts</td>
+          <td>Sync/async (API), error handling, retries, timeouts</td>
+          <td>Sync/async, batch, error handling, retries, timeouts</td>
+        </tr>
+        <tr>
+          <td><b>Tool Management</b></td>
+          <td>Registration, discovery, versioning, access control, dependency management (MCP)</td>
+          <td>Registration, discovery, versioning, access control, dependency management (MCP)</td>
+          <td>Registration (API), access control, dependency management</td>
+          <td>Registration, discovery, versioning, access control, dependency management</td>
+        </tr>
+      </table>
+      <h2>3. Workflow Orchestration</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Workflow Definition</b></td>
+          <td>Declarative/imperative, DAGs, branching, looping</td>
+          <td>Declarative/imperative, DAGs, branching, looping</td>
+          <td>Declarative (Bedrock), branching, looping (API)</td>
+          <td>Declarative/imperative, DAGs, branching, looping, workflow agents</td>
+        </tr>
+        <tr>
+          <td><b>Execution Control</b></td>
+          <td>Sequential/parallel, concurrency, scheduling, manual/auto</td>
+          <td>Sequential/parallel, concurrency, scheduling, manual/auto</td>
+          <td>Sequential/parallel (API), scheduling (Bedrock)</td>
+          <td>Sequential/parallel, concurrency, scheduling, manual/auto</td>
+        </tr>
+        <tr>
+          <td><b>State Management</b></td>
+          <td>Persistent/ephemeral, checkpoint, rollback, sync, conflict resolution</td>
+          <td>Persistent/ephemeral, checkpoint, rollback, sync, conflict resolution</td>
+          <td>Persistent/ephemeral (API), checkpoint, rollback</td>
+          <td>Persistent/ephemeral, checkpoint, rollback, sync, conflict resolution</td>
+        </tr>
+      </table>
+      <h2>4. Safety, Guardrails &amp; Validation</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Input Validation</b></td>
+          <td>Schema, sanitization, type checking, constraints (MCP)</td>
+          <td>Schema, sanitization, type checking, constraints (MCP)</td>
+          <td>Schema, type checking (API), constraints</td>
+          <td>Schema, sanitization, type checking, constraints</td>
+        </tr>
+        <tr>
+          <td><b>Output Validation</b></td>
+          <td>Result verification, anomaly detection, hooks, feedback</td>
+          <td>Result verification, anomaly detection, hooks, feedback</td>
+          <td>Result verification, hooks</td>
+          <td>Result verification, anomaly detection, hooks, feedback</td>
+        </tr>
+        <tr>
+          <td><b>Security Measures</b></td>
+          <td>Auth, encryption, audit logging, GDPR</td>
+          <td>Auth, encryption, audit logging, GDPR</td>
+          <td>Auth, encryption, audit logging, GDPR</td>
+          <td>Auth, encryption, audit logging, GDPR</td>
+        </tr>
+      </table>
+      <h2>5. Modularity &amp; Extensibility</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Plugin Architecture</b></td>
+          <td>Plugins/extensions, hot-swap, isolation, DI</td>
+          <td>Plugins/extensions, hot-swap, isolation, DI</td>
+          <td>Extensions (API), limited plugin</td>
+          <td>Plugins/extensions, hot-swap, isolation, DI</td>
+        </tr>
+        <tr>
+          <td><b>Customization</b></td>
+          <td>Custom agents, tools, workflows, UI</td>
+          <td>Custom agents, tools, workflows, UI</td>
+          <td>Custom agents, tools, workflows</td>
+          <td>Custom agents, tools, workflows, UI</td>
+        </tr>
+        <tr>
+          <td><b>External Integration</b></td>
+          <td>CRM, ERP, PM tools, comms (Slack, Teams), DB</td>
+          <td>CRM, ERP, PM tools, comms, DB</td>
+          <td>CRM, ERP, PM tools, comms, DB</td>
+          <td>CRM, ERP, PM tools, comms, DB</td>
+        </tr>
+      </table>
+      <h2>6. Observability &amp; Tracing</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Logging</b></td>
+          <td>Structured/unstructured, levels, aggregation, streaming</td>
+          <td>Structured/unstructured, levels, aggregation, streaming</td>
+          <td>Structured, levels, aggregation</td>
+          <td>Structured/unstructured, levels, aggregation, streaming</td>
+        </tr>
+        <tr>
+          <td><b>Tracing</b></td>
+          <td>Distributed tracing, visualization, spans, correlation IDs</td>
+          <td>Distributed tracing, visualization, spans, correlation IDs</td>
+          <td>Tracing (Bedrock), limited</td>
+          <td>Distributed tracing, visualization, spans, correlation IDs</td>
+        </tr>
+        <tr>
+          <td><b>Metrics &amp; Monitoring</b></td>
+          <td>Perf/resource/error metrics, alerting, Prometheus/Grafana</td>
+          <td>Perf/resource/error metrics, alerting, Prometheus/Grafana</td>
+          <td>Perf/resource/error metrics, alerting</td>
+          <td>Perf/resource/error metrics, alerting, Prometheus/Grafana</td>
+        </tr>
+      </table>
+      <h2>7. Deployment &amp; Scalability</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Deployment Models</b></td>
+          <td>On-prem, cloud, hybrid, edge (Cloudflare)</td>
+          <td>On-prem, cloud, hybrid</td>
+          <td>Cloud (Bedrock), hybrid (API)</td>
+          <td>On-prem, cloud (GCP), hybrid</td>
+        </tr>
+        <tr>
+          <td><b>Scalability</b></td>
+          <td>Horizontal/vertical/auto-scaling, load balancing</td>
+          <td>Horizontal/vertical/auto-scaling, load balancing</td>
+          <td>Horizontal/vertical/auto-scaling (Bedrock)</td>
+          <td>Horizontal/vertical/auto-scaling, load balancing</td>
+        </tr>
+        <tr>
+          <td><b>Resilience &amp; Fault Tolerance</b></td>
+          <td>Retry, circuit breaker, failover, DR</td>
+          <td>Retry, circuit breaker, failover, DR</td>
+          <td>Retry, failover, DR (Bedrock)</td>
+          <td>Retry, circuit breaker, failover, DR</td>
+        </tr>
+      </table>
+      <h2>8. Testing &amp; Validation</h2>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Testing Frameworks</b></td>
+          <td>Unit/integration (Vitest, wrangler dev)</td>
+          <td>Unit/integration (Python, examples)</td>
+          <td>Unit/integration (API, Bedrock)</td>
+          <td>Unit/integration (CLI, FastAPI, Comet Opik)</td>
+        </tr>
+      </table>
+    </div>
+    <!-- Tab 2: Frameworks Overview -->
+    <div id="venn" class="tab-content">
+      <div class="frameworks-flex">
+        <div class="framework-card">
+          <h3>Cloudflare Agents Framework</h3>
+          <ul>
+            <li>Edge-native, serverless agent orchestration on Cloudflare Workers</li>
+            <li>Durable Objects for stateful, distributed agent instances</li>
+            <li>Built-in support for WebSockets, HTTP, and SQL</li>
+            <li>Model Context Protocol (MCP) for tool/function integration</li>
+            <li>Real-time state sync, scheduling, and event-driven workflows</li>
+            <li>TypeScript SDK, React hooks, and seamless deployment</li>
+            <li>Human-in-the-loop, observability, and guardrails</li>
+          </ul>
+        </div>
+        <div class="framework-card openai">
+          <h3>OpenAI Agents SDK</h3>
+          <ul>
+            <li>Python SDK for building LLM-powered agents and workflows</li>
+            <li>Supports agent-as-tool, handoffs, and recursive/hierarchical agents</li>
+            <li>Function tools, pipelines, and flexible orchestration</li>
+            <li>Integrated tracing, guardrails, and observability</li>
+            <li>Model Context Protocol (MCP) and OpenAI hosted tools</li>
+            <li>Extensible, with support for custom models and tools</li>
+          </ul>
+        </div>
+        <div class="framework-card nova">
+          <h3>Amazon Nova</h3>
+          <ul>
+            <li>Foundation models (Pro, Lite, Micro, Canvas, Reel, Sonic) on Amazon Bedrock</li>
+            <li>Bedrock Agents for managed agent orchestration</li>
+            <li>API-based tool/function calling and knowledge base integration</li>
+            <li>Prompt engineering, code interpreter, and memory/context</li>
+            <li>Streaming, batch inference, and fine-tuning support</li>
+            <li>Security, compliance, and cross-region deployment</li>
+          </ul>
+        </div>
+        <div class="framework-card adk">
+          <h3>Google ADK</h3>
+          <ul>
+            <li>Multi-agent, hierarchical, and workflow agents (sequential/parallel/loop)</li>
+            <li>Agent-as-tool, LLM/rule/hybrid agents, and explicit invocation</li>
+            <li>Session/memory, artifact management, and extensibility</li>
+            <li>Integrated evaluation, streaming, and developer UI/CLI</li>
+            <li>Broad LLM support (Gemini, Vertex AI, open-source)</li>
+            <li>Native support for human-in-the-loop and advanced orchestration</li>
+          </ul>
+        </div>
+      </div>
+      <h2>Summary Table: Agentic Orchestration &amp; Workflow Automation</h2>
+      <table>
+        <tr>
+          <th>Capability</th>
+          <th>Cloudflare Agents Framework</th>
+          <th>OpenAI Agents SDK</th>
+          <th>Amazon Nova</th>
+          <th>Google ADK</th>
+        </tr>
+        <tr>
+          <td><b>Multi-agent orchestration</b></td>
+          <td>Yes (hierarchical, parallel, event-driven, MCP)</td>
+          <td>Yes (handoffs, agent-as-tool, MCP)</td>
+          <td>Yes (via Bedrock Agents, API)</td>
+          <td>Yes (hierarchical, workflow agents, agent-as-tool)</td>
+        </tr>
+        <tr>
+          <td><b>Sub-agents &amp; delegation</b></td>
+          <td>Yes (sub-agents, handoff, MCP)</td>
+          <td>Yes (handoffs, agent-as-tool)</td>
+          <td>Yes (Bedrock sub-agents, API)</td>
+          <td>Yes (sub-agents, LLM transfer, agent-as-tool)</td>
+        </tr>
+        <tr>
+          <td><b>Tool/function calling</b></td>
+          <td>Yes (MCP, custom, third-party)</td>
+          <td>Yes (function tools, MCP, custom)</td>
+          <td>Yes (API, custom)</td>
+          <td>Yes (function tools, agent-as-tool, custom)</td>
+        </tr>
+        <tr>
+          <td><b>Workflow automation</b></td>
+          <td>Yes (Workflows, scheduling, async, stateful)</td>
+          <td>Yes (pipelines, async, stateful)</td>
+          <td>Yes (Bedrock workflows, async)</td>
+          <td>Yes (workflow agents, sequential/parallel/loop, async)</td>
+        </tr>
+        <tr>
+          <td><b>Business/HR/PM/Eng/Research</b></td>
+          <td>Yes (customizable, extensible, stateful, scalable)</td>
+          <td>Yes (customizable, extensible, stateful, scalable)</td>
+          <td>Yes (customizable, extensible, scalable)</td>
+          <td>Yes (customizable, extensible, stateful, scalable)</td>
+        </tr>
+      </table>
+      <div class="limitation">
+        <b>Notable Limitations</b>
+        <ul>
+          <li><b>Amazon Nova:</b> Agentic features are primarily exposed via Amazon Bedrock Agents and APIs. Custom orchestration requires more manual implementation compared to the others.</li>
+          <li><b>OpenAI Agent SDK:</b> Some advanced orchestration patterns (e.g., recursive, complex multi-agent) may require additional code or are less opinionated than ADK/Cloudflare.</li>
+          <li><b>Cloudflare Agents Framework:</b> Deep integration with Cloudflare platform; best suited for edge/serverless and stateful microservices.</li>
+          <li><b>Google ADK:</b> Most comprehensive for multi-agent, workflow, and agent-as-tool patterns. Native support for hierarchical, parallel, loop, and human-in-the-loop workflows.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer">
+      &copy; 2025 | Agentic Frameworks Comparison | <a href="https://github.com/con-fucius/Cloudflare-vs-OpenAI-Agent-Frameworks" style="color:#0051c3;">GitHub</a>
+    </div>
+  </div>
+  <script>
+    // Tab functionality
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

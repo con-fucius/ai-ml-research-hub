@@ -5,6 +5,10 @@ export default defineConfig({
   site: 'https://con-fucius.github.io',
   base: '/ai-ml-research-hub',
   output: 'static',
+  trailingSlash: 'never',
+  build: {
+    format: 'file',
+  },
   vite: {
     plugins: [yaml()],
   },
