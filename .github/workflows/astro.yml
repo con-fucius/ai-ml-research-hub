@@ -27,18 +27,22 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "18"
           cache: 'npm'
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         working-directory: ${{ env.BUILD_PATH }}
+        env:
+          GITHUB_PAGES: true
       - name: Build with Astro
         run: |
-          npx --no-install astro build
+          npx astro build
         working-directory: ${{ env.BUILD_PATH }}
+        env:
+          GITHUB_PAGES: true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
