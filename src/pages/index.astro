@@ -19,13 +19,13 @@ const protocols = Object.values(protocolFiles).map(mod => mod.default);
   <ul class="item-list">
     {frameworks.map(item => (
       <li class="item-card">
-        <a href={`/frameworks/${item.id}/`}>
+        <a href={`${import.meta.env.BASE_URL}/frameworks/${item.id}`}>
           <span>{item.name}</span>
         </a>
       </li>
     ))}
       <li class="item-card">
-        <a href="/comparison/">
+        <a href={`${import.meta.env.BASE_URL}/comparison`}>
           <span>Comparison</span>
         </a>
       </li>
@@ -35,7 +35,7 @@ const protocols = Object.values(protocolFiles).map(mod => mod.default);
   <ul class="item-list">
     {vectorDBs.map(item => (
       <li class="item-card">
-        <a href={`/vector_databases/${item.id}/`}>
+        <a href={`${import.meta.env.BASE_URL}/vector_databases/${item.id}`}>
           <span>{item.name}</span>
         </a>
       </li>
@@ -46,7 +46,7 @@ const protocols = Object.values(protocolFiles).map(mod => mod.default);
   <ul class="item-list">
     {protocols.map(item => (
       <li class="item-card">
-        <a href={`/protocols/${item.id}/`}>
+        <a href={`${import.meta.env.BASE_URL}/protocols/${item.id}`}>
           <span>{item.name}</span>
         </a>
       </li>
