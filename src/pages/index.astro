@@ -1,0 +1,282 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// --- CORE DATA LOADING (Restored from v0) ---
+const frameworkFiles = await import.meta.glob('../../_data/frameworks/*.yml', { eager: true });
+const vectorDBFiles = await import.meta.glob('../../_data/vector_databases/*.yml', { eager: true });
+const protocolFiles = await import.meta.glob('../../_data/protocols/*.yml', { eager: true });
+const insightsData = await import.meta.glob('../../_data/insights.yml', { eager: true });
+
+const frameworks = Object.values(frameworkFiles).map(mod => mod.default);
+const vectorDBs = Object.values(vectorDBFiles).map(mod => mod.default).filter(item => !item.hidden);
+const protocols = Object.values(protocolFiles).map(mod => mod.default);
+const insights = Object.values(insightsData)[0].default;
+const providersData = await import.meta.glob('../../_data/providers.yml');
+const providerList = (await Object.values(providersData)[0]()).default;
+
+const baseUrl = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+
+const sortedProviders = providerList.slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+const sortedFrameworks = frameworks.slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+const sortedVectorDBs = vectorDBs.slice().sort((a, b) => {
+  const isSpecialA = a.id.toLowerCase().includes('graph') || a.id.toLowerCase().includes('traditional');
+  const isSpecialB = b.id.toLowerCase().includes('graph') || b.id.toLowerCase().includes('traditional');
+  if (isSpecialA && !isSpecialB) return 1;
+  if (!isSpecialA && isSpecialB) return -1;
+  return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+});
+
+const sortedProtocols = protocols.slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+const sortedInsights = insights.slice().sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+
+---
+
+<Layout title="Home" showTitle={false}>
+  
+  <!-- CORE SECTIONS (The Flesh) -->
+  <div class="core-layout">
+    <!-- MODEL EVOLUTION (New Section) -->
+    <section id="models" class="core-block">
+      <div class="section-header">
+        <h2>Model Evolution</h2>
+      </div>
+      <div class="core-grid">
+        {sortedProviders.map((provider, index) => (
+          <a href={`${baseUrl}/models/${provider.id}`} class="core-card" style={`animation-delay: ${index * 0.05}s`}>
+            <span class="card-title">{provider.name}</span>
+            <span class="card-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="frameworks" class="core-block">
+      <div class="section-header">
+        <h2>Frameworks</h2>
+      </div>
+      <div class="core-grid">
+        {sortedFrameworks.map((item, index) => (
+          <a href={`${baseUrl}/frameworks/${item.id}`} class="core-card" style={`animation-delay: ${index * 0.05}s`}>
+            <span class="card-title">{item.name}</span>
+            <span class="card-arrow">→</span>
+          </a>
+        ))}
+        <a href={`${baseUrl}/comparison`} class="core-card comparison-card" style={`animation-delay: ${sortedFrameworks.length * 0.05}s`}>
+          <span class="card-title">View Comparison Matrix</span>
+          <span class="card-arrow">→</span>
+        </a>
+      </div>
+    </section>
+    
+    <div class="spacer"></div>
+
+    <section id="vector_databases" class="core-block">
+      <div class="section-header">
+        <h2>Vector Databases</h2>
+      </div>
+      <div class="core-grid">
+        {sortedVectorDBs.map((item, index) => (
+          <a 
+            href={`${baseUrl}/vector_databases/${item.id}`} 
+            class={`core-card ${item.isCollection ? 'special-card' : ''}`} 
+            style={`animation-delay: ${index * 0.05}s`}
+          >
+             <span class="card-title">{item.name}</span>
+             <span class="card-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="protocols" class="core-block">
+      <div class="section-header">
+        <h2>Protocols</h2>
+      </div>
+      <div class="core-grid">
+        {sortedProtocols.map((item, index) => (
+          <a href={`${baseUrl}/protocols/${item.id}`} class="core-card" style={`animation-delay: ${index * 0.05}s`}>
+             <span class="card-title">{item.name}</span>
+             <span class="card-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="spacer" style="height: 2rem;"></div>
+
+    <section id="insights" class="core-block">
+      <div class="section-header">
+        <h2>Curated Insights</h2>
+      </div>
+      <div class="insights-grid">
+        {sortedInsights.map((item, index) => (
+          <a href={`${baseUrl}/insights/${item.id}`} class="insight-card" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="insight-content">
+              <div class="insight-count">{item.catalog ? item.catalog.length : 0} articles</div>
+              <h3 class="insight-title">{item.title}</h3>
+              <p class="insight-description">{item.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <div class="spacer"></div>
+</Layout>
+
+<style>
+  /* Spacer */
+  .spacer { height: 4rem; }
+
+  /* Core Sections */
+  .core-block { margin-bottom: 2.5rem; scroll-margin-top: 100px; animation: fadeIn 0.8s ease-out forwards; }
+
+  .section-header {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+    color: var(--accent-color);
+    font-weight: 700;
+  }
+
+  .core-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .core-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    background: var(--surface-color);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .core-card:hover {
+    background: var(--surface-flat);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-color);
+    outline: 1px solid var(--accent-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .comparison-card, .special-card {
+    background: var(--accent-subtle);
+    border: 1px dashed var(--accent-color);
+  }
+  
+  .card-title {
+    font-weight: 600;
+    color: var(--heading-color);
+    font-size: 0.95rem;
+  }
+
+  .card-arrow {
+    color: var(--muted-color);
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .core-card:hover .card-arrow {
+    color: var(--accent-color);
+    transform: translateX(3px);
+  }
+
+  /* Insights Section */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .insight-card {
+    background: var(--surface-color);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .insight-count {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-family: var(--font-main);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted-color);
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-subtle);
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+
+  .insight-card:hover .insight-count {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .insight-card:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    background: var(--surface-flat);
+    outline: 1px solid var(--accent-color);
+    backdrop-filter: blur(48px);
+    -webkit-backdrop-filter: blur(48px);
+  }
+
+  .insight-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--heading-color);
+    line-height: 1.2;
+  }
+
+  .insight-description {
+    font-size: 0.72rem;
+    color: var(--text-color);
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.9;
+  }
+  
+  .spacer {
+    height: 4rem;
+  }
+</style>

@@ -1,0 +1,282 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const insightsData = await import.meta.glob('../../../_data/insights.yml', { eager: true });
+  const insights = Object.values(insightsData)[0].default;
+
+  return insights.map(insight => ({
+    params: { id: insight.id },
+    props: { insight },
+  }));
+}
+
+const { insight } = Astro.props;
+
+const baseUrl = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+const homeUrl = baseUrl || '/';
+
+---
+
+<Layout title={`${insight.title} - Curated Insights`}>
+  <div class="insight-page">
+    <nav class="breadcrumb">
+      <a href={homeUrl}>Home</a>
+      <span class="sep">/</span>
+      <span class="curr">{insight.title}</span>
+    </nav>
+
+    <header class="insight-header">
+      <h1 class="insight-title">{insight.title}</h1>
+      <p class="insight-desc">{insight.description}</p>
+    </header>
+
+    <div class="toolbar">
+      <div class="search-group">
+        <input type="text" id="article-search" placeholder="Search articles..." />
+      </div>
+      <div class="controls">
+        <label for="group-by">Group By:</label>
+        <select id="group-by">
+          <option value="none">None</option>
+          <option value="author">Author</option>
+          <option value="date">Date</option>
+          <option value="tag">Tags</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="catalog-content" class="catalog-grid">
+      {/* Client-side rendering handles this based on grouping */}
+    </div>
+    
+    <div id="no-results" class="hidden">
+      <p class="muted-text">No articles found matching your criteria.</p>
+    </div>
+  </div>
+
+<script is:inline define:vars={{ initialCatalog: insight.catalog }}>
+  const catalog = initialCatalog || [];
+  const contentEl = document.getElementById('catalog-content');
+  const searchInput = document.getElementById('article-search');
+  const groupBySelect = document.getElementById('group-by');
+  const noResultsEl = document.getElementById('no-results');
+
+  function renderCatalog() {
+    const query = searchInput.value.toLowerCase();
+    const groupBy = groupBySelect.value;
+    
+    let filtered = catalog.filter(item => 
+      item.title.toLowerCase().includes(query) || 
+      item.author.toLowerCase().includes(query) ||
+      (item.tags && item.tags.some(tag => tag.toLowerCase().includes(query)))
+    );
+
+    if (filtered.length === 0) {
+      contentEl.innerHTML = '';
+      noResultsEl.classList.remove('hidden');
+      return;
+    }
+    noResultsEl.classList.add('hidden');
+
+    if (groupBy === 'none') {
+      contentEl.innerHTML = filtered.map(item => renderArticleCard(item)).join('');
+      contentEl.className = 'catalog-grid';
+    } else {
+      contentEl.className = 'catalog-sections';
+      const groups = groupArticles(filtered, groupBy);
+      contentEl.innerHTML = Object.entries(groups).map(([groupName, items]) => `
+        <section class="catalog-group">
+          <h2 class="group-heading">${groupName} <span class="count">${items.length}</span></h2>
+          <div class="catalog-grid">
+            ${items.map(item => renderArticleCard(item)).join('')}
+          </div>
+        </section>
+      `).join('');
+    }
+  }
+
+  function renderArticleCard(item) {
+    return `
+      <div class="article-card">
+        <div class="article-meta">
+          <span class="author">${item.author}</span>
+          <span class="sep">•</span>
+          <span class="date">${new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'})}</span>
+        </div>
+        <h3 class="article-title">
+          <a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+        </h3>
+        <div class="tags">
+          ${item.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function groupArticles(items, mode) {
+    const groups = {};
+    items.forEach(item => {
+      let key = 'Other';
+      if (mode === 'author') {
+        key = item.author;
+      } else if (mode === 'date') {
+        const d = new Date(item.date);
+        key = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      } else if (mode === 'tag') {
+        item.tags.forEach(tag => {
+          if (!groups[tag]) groups[tag] = [];
+          groups[tag].push(item);
+        });
+        return;
+      }
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(item);
+    });
+    return groups;
+  }
+
+  searchInput.addEventListener('input', renderCatalog);
+  groupBySelect.addEventListener('change', renderCatalog);
+  
+  // Initial render
+  renderCatalog();
+</script>
+
+<style>
+  .insight-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 5rem;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--muted-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; }
+  .breadcrumb a { color: var(--accent-color); text-decoration: none; }
+  .breadcrumb .sep { opacity: 0.3; }
+  .curr { color: var(--text-color); font-weight: 600; }
+
+  /* Header */
+  .insight-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+  .insight-title { margin: 0 0 0.25rem 0; }
+  .insight-desc { color: var(--muted-color); font-size: 0.95rem; margin: 0; max-width: 700px; }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  .search-group { flex: 0.4; min-width: 150px; max-width: 240px; position: relative; }
+  #article-search {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--heading-color);
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+  }
+
+  #article-search:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
+  }
+
+  .controls { display: flex; align-items: center; gap: 0.75rem; }
+  .controls label { 
+    font-size: 0.75rem; 
+    color: var(--muted-color); 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+  #group-by {
+    padding: 0.7rem 2.5rem 0.7rem 1rem;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--heading-color);
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%237a869a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    min-width: 140px;
+  }
+  #group-by:hover {
+    border-color: var(--accent-color);
+  }
+  #group-by:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
+  }
+
+  /* Catalog Grid */
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .article-card {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+  }
+  
+  .article-card:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .article-meta { font-size: 0.75rem; color: var(--muted-color); font-family: var(--font-code); display: flex; gap: 0.5rem; align-items: center; }
+  .article-meta .author { color: var(--accent-color); font-weight: 600; }
+  
+  .article-title { margin: 0; font-size: 1.15rem; line-height: 1.4; }
+  .article-title a { color: var(--heading-color); text-decoration: none; }
+  .article-title a:hover { color: var(--accent-color); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
+  .tag { font-size: 0.7rem; color: var(--muted-color); background: var(--bg-color); padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle); }
+
+  /* Groups */
+  .catalog-sections { display: flex; flex-direction: column; gap: 3.5rem; }
+  .group-heading { font-size: 1.15rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.4rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: baseline; }
+  .group-heading .count { font-size: 0.85rem; color: var(--muted-color); font-weight: 400; }
+
+  .hidden { display: none; }
+  .muted-text { color: var(--muted-color); text-align: center; margin-top: 3rem; font-size: 1.1rem; }
+</style>
+</Layout>

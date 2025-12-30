@@ -1,0 +1,144 @@
+<div id="delaunay-container">
+  <canvas id="delaunay-canvas"></canvas>
+</div>
+
+<style>
+  #delaunay-container {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0.4;
+    transition: opacity 1s ease;
+  }
+
+  canvas {
+    display: block;
+  }
+</style>
+
+<script>
+  class Particle {
+    constructor(x, y, vx, vy) {
+      this.x = x;
+      this.y = y;
+      this.vx = vx;
+      this.vy = vy;
+    }
+
+    update(width, height, mouse) {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      if (this.x < 0 || this.x > width) this.vx *= -1;
+      if (this.y < 0 || this.y > height) this.vy *= -1;
+
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxDist = 120;
+        if (dist < maxDist) {
+          const force = (maxDist - dist) / maxDist;
+          this.x -= dx * force * 0.03;
+          this.y -= dy * force * 0.03;
+        }
+      }
+    }
+  }
+
+  function init() {
+    const canvas = document.getElementById('delaunay-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let particles = [];
+    const particleCount = Math.min(Math.floor((width * height) / 18000), 80);
+    const mouse = { x: null, y: null };
+
+    canvas.width = width;
+    canvas.height = height;
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle(
+          Math.random() * width,
+          Math.random() * height,
+          (Math.random() - 0.5) * 0.4,
+          (Math.random() - 0.5) * 0.4
+        ));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      
+      const isLight = document.body.classList.contains('light-theme');
+      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+      
+      // Use cooler/muted grey for light theme connections
+      const lineColor = isLight ? 'rgba(0, 0, 0, 0.08)' : accentColor;
+      const particleColor = isLight ? 'rgba(0, 0, 0, 0.15)' : accentColor;
+      
+      ctx.beginPath();
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 0.5;
+      
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 150) {
+                const opacity = 1 - (dist / 150);
+                ctx.globalAlpha = isLight ? opacity * 0.4 : opacity * 0.2;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+            }
+        }
+      }
+      ctx.stroke();
+
+      // Draw particles
+      ctx.globalAlpha = 0.4;
+      ctx.fillStyle = particleColor;
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+        p.update(width, height, mouse);
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener('mouseout', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    draw();
+  }
+
+  // Handle Astro page transitions if any, or just run on load
+  document.addEventListener('DOMContentLoaded', init);
+  // Also run immediately in case DOM is already loaded
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    init();
+  }
+</script>

@@ -1,0 +1,132 @@
+# The unique identifier for the protocol
+id: x402
+
+# --- Basic Information ---
+name: "x402 Payment Protocol"
+officialUrl: "https://www.x402.org"
+specificationUrl: "https://github.com/coinbase/x402/tree/main/specs"
+githubUrl: "https://github.com/coinbase/x402"
+summary: "HTTP-native payment protocol using the 402 Payment Required status code for machine-to-machine payments. Designed to support multiple networks and assets via a facilitator-based flow and standardized payment headers."
+
+# --- Key Features ---
+features:
+  - title: "HTTP 402 Native"
+    description: "Leverages the long-dormant HTTP 402 status code for payment negotiation directly in the protocol layer."
+  - title: "Scheme + Network Extensibility"
+    description: "Extensible across (scheme, network) pairs (e.g., exact payments on different chains) with facilitator support for verification and settlement."
+  - title: "Agent-First Design"
+    description: "Built for autonomous AI agents to pay for services without human intervention or OAuth flows."
+  - title: "Facilitator Architecture"
+    description: "Resource servers can verify and/or settle payments via facilitator endpoints (e.g., /verify and /settle) instead of implementing chain logic directly."
+  - title: "Idempotent Payments"
+    description: "Payment proofs are idempotent - same proof can be retried without double-spending."
+  - title: "Modernized Payment Headers"
+    description: "Uses PAYMENT-REQUIRED, PAYMENT-SIGNATURE, and PAYMENT-RESPONSE headers (v2) to carry payment metadata while keeping response bodies usable."
+
+# --- Use Cases ---
+useCases:
+  - "AI agent API access - Agents pay per-call for external APIs without pre-negotiated contracts"
+  - "Compute marketplace - Pay-per-inference for GPU compute without subscription overhead"
+  - "Data marketplace - Micropayments for real-time data feeds and premium content"
+  - "Tool monetization - MCP server operators can charge per-tool-invocation"
+  - "Cross-agent payments - A2A protocol payments for delegated task completion"
+
+# --- Pros & Cons ---
+advantages:
+  - "Sub-cent transactions enable true micropayments (pay-per-token, pay-per-call)"
+  - "No OAuth, API keys, or billing accounts - just cryptographic payment proofs"
+  - "HTTP-native means any web server can become payment-enabled"
+  - "Base L2 settlement provides near-instant finality (~2 seconds)"
+  - "Open standard - not locked to any vendor or payment processor"
+
+disadvantages:
+  - "Multi-network support depends on SDK/facilitator support for specific (scheme, network) pairs"
+  - "Facilitator trust model adds centralization for low-latency use cases"
+  - "Regulatory uncertainty around autonomous agent payments"
+  - "Early stage - limited tooling and SDK support"
+  - "Wallet management complexity for agent deployments"
+
+# --- Architecture & Core Concepts ---
+architecture:
+  - title: "Payment Flow"
+    description: "Client requests resource → Server returns 402 with PAYMENT-REQUIRED → Client retries with PAYMENT-SIGNATURE → Server verifies (locally or via facilitator) → Server fulfills request and may return PAYMENT-RESPONSE"
+  - title: "Payment Proof"
+    description: "Signed transaction hash + block confirmation proving USDC transfer to specified address"
+  - title: "Facilitator Role"
+    description: "Optional intermediary that pre-verifies payments and issues bearer tokens for low-latency access"
+  - title: "Price Discovery"
+    description: "PAYMENT-REQUIRED header can advertise one or more accepted requirements for amount, asset, scheme, and network"
+  - title: "Retry Semantics"
+    description: "Payment proofs are idempotent - clients can safely retry failed requests with same proof"
+
+# --- Timeline Events ---
+timeline:
+  - date: "2025-05"
+    type: "Release"
+    title: "x402 Launch"
+    description: "Public launch of x402 with a simple 402-based HTTP payment flow and reference SDK."
+  - date: "2025-12-11"
+    type: "Update"
+    title: "x402 V2"
+    description: "V2 refactors the spec and SDK: header conventions (dropping X-*), extensions, and improved multi-network compatibility."
+  - date: "2026-03-01"
+    type: "Integration"
+    title: "MCP + x402 Bridge"
+    description: "Community bridge enables MCP tools to accept x402 payments"
+
+# --- Future Outlook ---
+roadmap:
+  - title: "Multi-Chain Support"
+    description: "Expand beyond Base to Ethereum mainnet, Arbitrum, and Optimism"
+    status: "Q1 2026"
+  - title: "SDK Ecosystem"
+    description: "Python, TypeScript, and Go SDKs for easy integration"
+    status: "In Development"
+  - title: "Agent Wallet Standards"
+    description: "Standardized wallet management for autonomous agents"
+    status: "Draft"
+  - title: "Streaming Payments"
+    description: "Pay-as-you-stream for long-running compute tasks"
+    status: "Research"
+
+# --- Code Examples ---
+codeSnippets:
+  - title: "402 Response Headers"
+    language: "http"
+    code: |
+      HTTP/1.1 402 Payment Required
+      PAYMENT-REQUIRED: <base64-encoded PaymentRequired>
+      Content-Type: application/json
+      
+      {"error": "Payment required", "price": "0.001 USDC"}
+  - title: "Payment Proof Request"
+    language: "http"
+    code: |
+      POST /api/inference HTTP/1.1
+      PAYMENT-SIGNATURE: <serialized PaymentPayload>
+      Content-Type: application/json
+      
+      {"prompt": "Analyze this data..."}
+  - title: "Python Client Example"
+    language: "python"
+    code: |
+      from x402 import PaymentClient
+      
+      client = PaymentClient(
+          wallet_key="0x...",
+          facilitator="https://facilitator.example.com"
+      )
+      
+      # Automatic payment handling
+      response = client.get("https://api.example.com/premium-endpoint")
+      # Client detects 402, pays, retries automatically
+  - title: "Server Middleware"
+    language: "python"
+    code: |
+      from x402.middleware import require_payment
+      
+      @app.route("/api/inference")
+      @require_payment(amount=0.001, currency="USDC")
+      def inference(request):
+          # Payment already verified by middleware
+          return run_inference(request.json)

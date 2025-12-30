@@ -1,0 +1,70 @@
+id: other-graph-dbs
+name: "Graph DBs"
+isCollection: true
+summary: "Graph databases and graph-first stores used for knowledge-grounded retrieval (GraphRAG) and relationship-aware agent memory."
+githubUrl: "https://github.com/topics/graph-database"
+
+matrixColumns:
+  - key: redis
+    label: "Redis"
+  - key: neo4j
+    label: "Neo4j"
+  - key: falkordb
+    label: "FalkorDB"
+
+comparisonMatrix:
+  - capability: "Graph Model + Traversals"
+    redis: "Limited (graph via modules; often used as cache/vector layer)"
+    neo4j: "Yes (property graph + Cypher traversals)"
+    falkordb: "Yes (graph-first, traversal optimized)"
+  - capability: "Vector Search"
+    redis: "Yes (vector similarity + hybrid retrieval patterns)"
+    neo4j: "Yes (vector indexes alongside graph queries)"
+    falkordb: "Yes (GraphRAG-oriented patterns + retrieval)"
+  - capability: "Hybrid Retrieval (Graph + Vector)"
+    redis: "Typically app-orchestrated (cache + vector + text fusion)"
+    neo4j: "Native composition (Cypher + vector similarity + graph constraints)"
+    falkordb: "Native graph workflows + retrieval patterns"
+  - capability: "Primary Use"
+    redis: "Low-latency cache / memory / retrieval layer"
+    neo4j: "Knowledge graphs + relationship-grounded retrieval"
+    falkordb: "GraphRAG workloads with fast traversals"
+  - capability: "Managed Cloud"
+    redis: "Yes (multiple vendors)"
+    neo4j: "Yes (Neo4j Aura + partners)"
+    falkordb: "Varies (often self-hosted / vendor offerings)"
+
+items:
+  - id: redis
+    name: "Redis"
+    summary: "In-memory datastore used for low-latency caching and vector search primitives in agentic stacks."
+    features:
+      - title: "Quantization & Dimensionality Reduction"
+        description: "Vector search speed/footprint optimizations (e.g., scalar quantization) for high-throughput similarity retrieval."
+      - title: "Hybrid Ranking"
+        description: "Supports server-side fusion of text + vector results (e.g., Reciprocal Rank Fusion) to reduce client merging work."
+    impact:
+      - "Useful as a fast retrieval/cache layer in RAG and agent memory systems."
+      - "Often paired with a primary database for durability."
+
+  - id: neo4j
+    name: "Neo4j"
+    summary: "Property graph database that combines graph traversal with vector indexing for knowledge-grounded retrieval."
+    features:
+      - title: "Vector Indexing"
+        description: "Vector similarity search alongside graph-native traversals to support GraphRAG patterns."
+      - title: "Cypher Queries"
+        description: "Declarative graph queries (paths, neighborhoods) combined with semantic retrieval filters."
+    impact:
+      - "Good fit for grounding LLMs in explicit entity relationships + similarity retrieval."
+
+  - id: falkordb
+    name: "FalkorDB"
+    summary: "Graph database optimized for high-performance graph queries and GraphRAG-style workloads."
+    features:
+      - title: "GraphRAG SDK"
+        description: "SDKs/patterns for combining graph relationships with retrieval for generative tasks."
+      - title: "Sparse Adjacency Representation"
+        description: "Graph storage layout optimized for fast traversals at runtime."
+    impact:
+      - "Useful when graph traversals are on the critical path for real-time agent responses."

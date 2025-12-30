@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+const baseUrl = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+const homeUrl = baseUrl || '/';
+---
+
+<Layout title="404 - Page Not Found">
+  <div class="error-container">
+    <div class="error-code">404</div>
+    <h1 class="error-title">Endpoint Not Found</h1>
+    <p class="error-message">
+      The requested research path does not exist in our archives. 
+      It may have been moved, deleted, or never existed in this dimension.
+    </p>
+    <a href={homeUrl} class="back-home">
+      <span class="arrow">←</span> Return to Sxm Research Hub
+    </a>
+  </div>
+</Layout>
+
+<style>
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .error-code {
+    font-size: 8rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    line-height: 1;
+    margin-bottom: 1rem;
+    font-family: var(--font-code);
+    opacity: 0.8;
+    letter-spacing: -0.05em;
+  }
+
+  .error-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--heading-color);
+  }
+
+  .error-message {
+    font-size: 1.1rem;
+    color: var(--muted-color);
+    max-width: 450px;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .back-home {
+    background: var(--accent-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .back-home:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .arrow {
+    font-size: 1.2rem;
+  }
+</style>

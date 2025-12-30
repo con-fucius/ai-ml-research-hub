@@ -1,0 +1,711 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const ymlFiles = await import.meta.glob('../../../_data/protocols/*.yml');
+
+  const items = await Promise.all(
+    Object.values(ymlFiles).map(async resolver => {
+      const { default: item } = await resolver();
+      return item;
+    })
+  );
+
+  return items.map(item => {
+    const related = items
+      .filter(i => i.id !== item.id)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3);
+
+    return {
+      params: { id: item.id },
+      props: { item, related },
+    };
+  });
+}
+
+const { item, related } = Astro.props;
+
+const baseUrl = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+const homeUrl = baseUrl || '/';
+
+const resourceLinks = [
+  { label: 'Official Website', url: item.officialUrl },
+  { label: 'Documentation', url: item.docsUrl },
+  { label: 'GitHub Repository', url: item.githubUrl },
+  { label: 'Specification', url: item.specificationUrl },
+  { label: 'BeeAI Documentation', url: item.beeaiDocsUrl },
+  { label: 'IBM Research', url: item.ibmResearchUrl },
+  { label: 'API Documentation', url: item.apiDocsUrl },
+  { label: 'MCP Bridge Guide', url: item.mcpBridgeUrl },
+  { label: 'Agent Card Schema', url: item.agentCardSchemaUrl },
+  { label: 'Task Management', url: item.taskManagementUrl },
+  { label: 'Security Overview', url: item.securityOverviewUrl },
+].filter((r) => Boolean(r.url));
+
+const headerLinks = new Set([item.officialUrl, item.docsUrl, item.githubUrl, item.specificationUrl].filter(Boolean));
+const extraResources = [];
+const seenUrls = new Set(headerLinks);
+for (const r of resourceLinks) {
+  if (r.url && !seenUrls.has(r.url)) {
+    extraResources.push(r);
+    seenUrls.add(r.url);
+  }
+}
+
+---
+<Layout title={item.name}>
+  <nav class="breadcrumb">
+    <a href={homeUrl}>Home</a>
+    <span class="breadcrumb-separator">›</span>
+    <a href={`${homeUrl}#protocols`}>Protocols</a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">{item.name}</span>
+  </nav>
+  
+  <div class="item-header">
+    <h1>{item.name}</h1>
+    <div class="links">
+      {item.officialUrl && <a href={item.officialUrl}>Official Site</a>}
+      {item.docsUrl && <><span class="separator">|</span><a href={item.docsUrl}>Documentation</a></>}
+      {item.githubUrl && <><span class="separator">|</span><a href={item.githubUrl}>GitHub</a></>}
+      {item.specificationUrl && <><span class="separator">|</span><a href={item.specificationUrl}>Specification</a></>}
+    </div>
+    <p class="summary"><em>{item.summary}</em></p>
+  </div>
+
+  <div class="item-grid">
+    <main class="main-content">
+      <section>
+        <h2>Key Features</h2>
+        <ul class="features-list">
+          {item.features && item.features.map(feature => (
+            <li><strong>{feature.title}:</strong> {feature.description}</li>
+          ))}
+        </ul>
+      </section>
+
+      {item.useCases && (
+        <section>
+          <h2>Use Cases</h2>
+          <ul class="use-cases-list">
+            {item.useCases.map(useCase => (
+              <li>{useCase}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(item.advantages || item.disadvantages) && (
+        <section>
+          <h2>Pros & Cons</h2>
+          <div class="pros-cons-grid">
+            {item.advantages && (
+              <div class="pros">
+                <details open>
+                  <summary><h3>Advantages</h3></summary>
+                  <ul>
+                    {item.advantages.map(pro => (
+                      <li>{pro}</li>
+                    ))}
+                  </ul>
+                </details>
+              </div>
+            )}
+            {item.disadvantages && (
+              <div class="cons">
+                <details open>
+                  <summary><h3>Disadvantages</h3></summary>
+                  <ul>
+                    {item.disadvantages.map(con => (
+                      <li>{con}</li>
+                    ))}
+                  </ul>
+                </details>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {item.architecture && (
+        <section>
+          <h2>Architecture & Core Concepts</h2>
+          <ul class="architecture-list">
+            {item.architecture.map(concept => (
+              <li><strong>{concept.title}:</strong> {concept.description}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {item.codeSnippets && (
+        <section>
+          <h2>Code Examples</h2>
+          {item.codeSnippets.map(snippet => (
+            <div class="code-example">
+              <h4>{snippet.title}</h4>
+              <div class="code-container">
+                <div class="code-header">
+                  <span class="language-label">{snippet.language}</span>
+                  <button class="copy-btn" onclick={`copyCode(this)`}>Copy</button>
+                </div>
+                <pre class="code-block"><code class={`language-${snippet.language}`}>{snippet.code}</code></pre>
+              </div>
+            </div>
+          ))}
+        </section>
+      )}
+    </main>
+    <aside class="sidebar">
+      {item.timeline && item.timeline.length > 0 && (
+        <section>
+          <h2>Timeline</h2>
+          <ul class="timeline">
+            {item.timeline.map(event => (
+              <li>
+                <div class="timeline-date">{event.date}</div>
+                <div class="timeline-content">
+                  <strong>{event.title}</strong>
+                  <span class="timeline-type">({event.type})</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {item.roadmap && item.roadmap.length > 0 && (
+        <section>
+          <h2>Future Roadmap</h2>
+          <ul class="roadmap-list">
+            {item.roadmap.map(item => (
+              <li>
+                <strong>{item.title}</strong>
+                <p>{item.description}</p>
+                <span class="status">{item.status}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(item.sdks || item.integrations) && (
+        <section>
+          <h2>SDKs & Integrations</h2>
+          {item.sdks && (
+            <div class="sdk-section">
+              <h4>SDKs</h4>
+              <ul class="sdk-list">
+                {item.sdks.map(sdk => (
+                  <li>
+                    <strong>{sdk.name}</strong>
+                    {sdk.version && <span class="version">v{sdk.version}</span>}
+                    <span class="status-badge">{sdk.status}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {item.integrations && (
+            <div class="integration-section">
+              <h4>Framework Integrations</h4>
+              <ul class="integration-list">
+                {item.integrations.map(integration => (
+                  <li>
+                    <strong>{integration.name}</strong>
+                    {integration.package && <code>{integration.package}</code>}
+                    {integration.version && <span class="version">{integration.version}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
+
+      {item.referenceServers && (
+        <section>
+          <h2>Reference Servers</h2>
+          <ul class="reference-servers">
+            {item.referenceServers.map(server => (
+              <li>{server}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {extraResources.length > 0 && (
+        <section>
+          <h2>Resources</h2>
+          <div class="resources-list-row">
+            {extraResources.map((r, idx) => (
+              <>
+                {idx > 0 && <span class="separator">|</span>}
+                <a href={r.url} target="_blank" rel="noopener" class="resource-link-inline">{r.label}</a>
+              </>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {related && related.length > 0 && (
+        <section style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <h2>Related Protocols</h2>
+          <ul class="related-list" style="list-style: none; padding: 0;">
+            {related.map(rel => (
+              <li style="margin-bottom: 0.5rem;">
+                <a href={`${baseUrl}/protocols/${rel.id}`} style="text-decoration: none; color: var(--accent-color); font-weight: 500;">
+                  {rel.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </aside>
+  </div>
+</Layout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--heading-color);
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 0.5rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb-current {
+    color: var(--heading-color);
+    font-weight: 500;
+  }
+
+  .item-header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+  
+  .item-header h1 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .links {
+    margin: 0.5rem 0 1rem 0;
+    font-size: 0.85rem;
+    font-family: var(--font-main);
+  }
+  
+  .links a {
+    margin-right: 1.25rem;
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .links a:hover {
+    text-decoration: underline;
+  }
+  
+  .summary {
+    max-width: 100%; /* Full width */
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    font-style: normal; /* No italics */
+  }
+  
+  .item-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .item-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .main-content section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .main-content h2 {
+    color: var(--heading-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .features-list,
+  .use-cases-list,
+  .architecture-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .features-list li,
+  .use-cases-list li,
+  .architecture-list li {
+    margin-bottom: 0.75rem;
+    padding: 0;
+    background-color: transparent; /* Removed background */
+    border-radius: 0;
+    border-left: none; /* Removed border */
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  /* Bullet point marker for lists */
+  .features-list li::before,
+  .use-cases-list li::before,
+  .architecture-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+  }
+  
+  .pros-cons-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .pros-cons-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .code-example {
+    margin-bottom: 2rem;
+  }
+  
+  .code-example h4 {
+    margin-bottom: 0.5rem;
+    color: var(--heading-color);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .code-example pre {
+    background-color: var(--code-bg, #1e1e1e);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .code-example code {
+    background: none;
+    padding: 0;
+    font-family: var(--font-code);
+  }
+  
+  .code-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .code-header {
+    background-color: var(--code-bg);
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+  }
+  
+  .language-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: lowercase;
+    font-weight: 500;
+    font-family: var(--font-code);
+  }
+  
+  .copy-btn {
+    background: none;
+    border: 1px solid #555;
+    color: #ccc;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-code);
+    text-transform: none;
+  }
+  
+  .copy-btn:hover {
+    background-color: #444;
+    border-color: #777;
+  }
+  
+  .code-block {
+    background-color: var(--code-bg);
+    border: none;
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.1em;
+    overflow-x: auto;
+    font-family: var(--font-code);
+    line-height: 1.5;
+  }
+  
+  .code-block code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #d4d4d4;
+    font-size: inherit;
+    font-family: var(--font-code);
+  }
+  
+  .sidebar {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: 6rem;
+    height: fit-content;
+  }
+  
+  .sidebar section {
+    margin-bottom: 2rem;
+  }
+  
+  .sidebar h2 {
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    font-size: 1.1em; /* Changed from 1.1rem */
+    border-bottom: 1px solid var(--border-color); /* Added */
+    padding-bottom: 0.5rem; /* Added */
+  }
+
+  .sidebar h4 {
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    font-size: 1.1em; /* Changed from 1.1rem */
+  }
+  
+  .timeline {
+    list-style: none;
+    padding: 0;
+    border-left: 2px solid var(--border-color);
+    padding-left: 1rem;
+  }
+  
+  .timeline li {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0.5rem;
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+  }
+  
+  .timeline-date {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin-bottom: 0.25rem;
+  }
+  
+  .timeline-content strong {
+    color: var(--heading-color);
+  }
+  
+  .timeline-type {
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    margin-left: 0.5rem;
+  }
+  
+  .timeline-content p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .timeline-content a {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .timeline-content a:hover {
+    text-decoration: underline;
+  }
+  
+  .roadmap-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .roadmap-list li {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--background-color);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .roadmap-list strong {
+    color: var(--heading-color);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .roadmap-list p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .sdk-section,
+  .integration-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .sdk-list,
+  .integration-list,
+  .reference-servers {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sdk-list li,
+  .integration-list li,
+  .reference-servers li {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--background-color);
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+  }
+  
+  .version {
+    color: var(--muted-color);
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.4rem;
+    background-color: var(--success-color, #28a745);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+  }
+  
+  .integration-list code {
+    background-color: var(--code-bg, #f8f9fa);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    font-family: var(--font-code);
+  }
+  
+  @media (max-width: 767px) {
+    .item-header {
+      margin-bottom: 2rem;
+    }
+    
+    .summary {
+      font-size: 1rem;
+    }
+    
+    .sidebar {
+      margin-top: 2rem;
+    }
+    
+    .pros-cons-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .resources-list-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .resource-link-inline {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .resource-link-inline:hover {
+    color: var(--heading-color);
+    text-decoration: underline;
+  }
+  .separator {
+    color: var(--border-color);
+    margin: 0 0.25rem;
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  function copyCode(button) {
+    const codeBlock = button.closest('.code-container').querySelector('code');
+    const text = codeBlock.textContent;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.style.background = '#4CAF50';
+      button.style.borderColor = '#4CAF50';
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.style.background = 'none';
+        button.style.borderColor = '#555';
+      }, 2000);
+    });
+  }
+</script>

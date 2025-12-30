@@ -1,0 +1,144 @@
+- id: security
+  title: Security
+  description: Threat modeling, governance, and audit frameworks for agents.
+  catalog:
+    - title: Strengthening safeguards through collaboration with US CAISI and UK AISI
+      url: https://www.anthropic.com/news/strengthening-our-safeguards-through-collaboration-with-us-caisi-and-uk-aisi
+      author: Anthropic
+      date: 2024-09-15
+      tags: ["Anthropic", "AISafety", "Governance", "International"]
+    - title: Google AI Releases VaultGemma - The Capable Open Model with Differential Privacy
+      url: https://www.marktechpost.com/2025/09/13/google-ai-releases-vaultgemma-the-largest-and-most-capable-open-model-1b-parameters-trained-from-scratch-with-differential-privacy/
+      author: Marktechpost
+      date: 2025-09-13
+      tags: ["Google", "VaultGemma", "Privacy", "OpenSource"]
+
+- id: agent-marketplaces
+  title: Agent Marketplaces
+  description: Discovery, monetization, and interoperability standards.
+  catalog:
+    - title: AI agents and services on the Vercel Marketplace
+      url: https://vercel.com/blog/ai-agents-and-services-on-the-vercel-marketplace
+      author: Vercel
+      date: 2025-10-21
+      tags: ["Vercel", "AIAgents", "Marketplace", "Deployment"]
+    - title: Coinbase Crypto Micropayments Ecosystem for AI Agents
+      url: https://www.coindesk.com/business/2025/09/09/coinbase-enlarges-its-ai-agent-focused-crypto-micropayments-ecosystem
+      author: CoinDesk
+      date: 2025-09-09
+      tags: ["Coinbase", "Crypto", "Micropayments", "AIAgents"]
+    - title: BioContextAI - Community hub for agentic biomedical systems
+      url: https://www.nature.com/articles/s41587-025-02900-9
+      author: Nature
+      date: 2025-11-05
+      tags: ["Healthcare", "BioContextAI", "Biomedical", "Research"]
+    - title: Introducing the MCP Registry - An Open Catalog for Agentic Tools
+      url: https://blog.modelcontextprotocol.io/posts/2025-09-08-mcp-registry-preview/
+      author: MCP Blog
+      date: 2025-09-08
+      tags: ["MCP", "AIAgents", "Registry", "Discovery"]
+    - title: Google and PayPal team up on agentic commerce
+      url: https://techcrunch.com/2025/09/18/google-and-paypal-team-up-on-agentic-commerce/
+      author: TechCrunch
+      date: 2025-09-18
+      tags: ["Google", "PayPal", "AgenticCommerce", "Partnership"]
+
+- id: memory-systems
+  title: Memory Systems
+  description: Long-term memory, RAG, and state management.
+  catalog:
+    - title: Powering Long-Term Memory for Agents With LangGraph and MongoDB
+      url: https://www.mongodb.com/company/blog/product-release-announcements/powering-long-term-memory-for-agents-langgraph
+      author: MongoDB
+      date: 2024-12-05
+      tags: ["LangGraph", "MongoDB", "Memory", "Persistence"]
+    - title: Build a Multiagent RAG Solution on OCI
+      url: https://www.oracle.com/artificial-intelligence/build-multiagent-rag-solutionon-oci/
+      author: Oracle
+      date: 2025-10-12
+      tags: ["Oracle", "RAG", "MultiAgent", "OCI"]
+
+- id: inference-performance
+  title: Inference & Performance
+  description: Low-latency inference, speculative decoding, and hardware acceleration.
+  catalog:
+    - title: An Introduction to Speculative Decoding for Reducing Latency
+      url: https://developer.nvidia.com/blog/an-introduction-to-speculative-decoding-for-reducing-latency-in-ai-inference/
+      author: NVIDIA
+      date: 2025-11-20
+      tags: ["NVIDIA", "Inference", "SpeculativeDecoding", "Latency"]
+
+- id: agentic-orchestration
+  title: Agentic AI & Orchestration
+  description: Multi-agent planning and task decomposition.
+  catalog:
+    - title: Multi-Agent collaboration patterns with Strands Agents and Amazon Nova
+      url: https://aws.amazon.com/blogs/machine-learning/multi-agent-collaboration-patterns-with-strands-agents-and-amazon-nova/
+      author: AWS
+      date: 2025-02-25
+      tags: ["MultiAgent", "AWS", "AgenticAI", "CollaborationPatterns"]
+    - title: Agentic app with LangGraph or Azure AI Foundry
+      url: https://learn.microsoft.com/en-us/azure/app-service/tutorial-ai-agent-web-app-langgraph-foundry-python?tabs=langgraph
+      author: Microsoft
+      date: 2025-02-15
+      tags: ["LangGraph", "Azure", "Python", "AgentDevelopment"]
+    - title: Introducing Nested Learning - A new ML paradigm for continual learning
+      url: https://research.google/blog/introducing-nested-learning-a-new-ml-paradigm-for-continual-learning/
+      author: Google Research
+      date: 2025-09-20
+      tags: ["Google", "NestedLearning", "ContinualLearning", "Research"]
+    - title: Training small models to tackle complex reasoning
+      url: https://arxiv.org/abs/2510.25992
+      author: Google DeepMind
+      date: 2025-10-25
+      tags: ["Google", "Reasoning", "ModelTraining", "SmallModels"]
+    - title: "Introducing Agent HQ: Mission Control for all Agents"
+      url: https://github.blog/news-insights/company-news/welcome-home-agents/
+      author: GitHub
+      date: 2025-10-29
+      tags: ["GitHub", "AgentHQ", "VSCode", "Orchestration"]
+    - title: "Comparing the Top 5 AI Agent Architectures: Hierarchical, Swarm, Meta-Learning, Modular, Evolutionary"
+      url: https://www.marktechpost.com/2025/11/15/comparing-the-top-5-ai-agent-architectures-in-2025-hierarchical-swarm-meta-learning-modular-evolutionary/
+      author: Marktechpost
+      date: 2025-11-15
+      tags: ["Architecture", "Swarm", "Hierarchical", "Modular"]
+    - title: "OpenAI Agents SDK vs LangGraph vs Autogen vs CrewAI: A Comparative Deep Dive"
+      url: https://composio.dev/blog/openai-agents-sdk-vs-langgraph-vs-autogen-vs-crewai/
+      author: Composio
+      date: 2025-12-01
+      tags: ["Frameworks", "OpenAI", "LangGraph", "CrewAI", "AutoGen"]
+
+- id: enterprise-ai
+  title: Enterprise AI
+  description: ROI, scalability, and production implementation.
+  catalog:
+    - title: ClickHouse joins LibreChat for the open-source Agentic Data Stack
+      url: https://clickhouse.com/blog/librechat-open-source-agentic-data-stack
+      author: ClickHouse
+      date: 2025-10-30
+      tags: ["ClickHouse", "LibreChat", "DataStack", "OpenSource"]
+    - title: Measuring Quality, Risk And Cost Through The Economics Of Agentic AI
+      url: https://www.forbes.com/councils/forbestechcouncil/2025/10/24/measuring-quality-risk-and-cost-of-action-through-the-economics-of-agentic-ai/
+      author: Forbes
+      date: 2025-10-24
+      tags: ["Economics", "AgenticAI", "RiskManagement", "CostAnalysis"]
+
+- id: ai-browsers
+  title: AI Browsers
+  description: Agentic web interfaces for autonomous navigation and information synthesis.
+  catalog:
+    - title: "Comparing the Top 4 Agentic AI Browsers: Atlas vs Copilot Mode vs Dia vs Comet"
+      url: https://www.marktechpost.com/2025/11/15/comparing-the-top-4-agentic-ai-browsers-in-2025-atlas-vs-copilot-mode-vs-dia-vs-comet/
+      author: Marktechpost
+      date: 2025-11-15
+      tags: ["Browsers", "Atlas", "Copilot", "Dia", "Comet"]
+    - title: "ChatGPT Atlas: Agentic Browsing for Everyone"
+      url: https://research.aimultiple.com/ai-web-browser/
+      author: AI Multiple
+      date: 2025-10-21
+      tags: ["OpenAI", "Atlas", "Automation"]
+    - title: "Dia: The Browser Company's Research-First Agent"
+      url: https://www.theverge.com/tech/837287/ai-browsers-comet-chatgpt-atlas-edge-copilot-chrome-gemini
+      author: The Verge
+      date: 2025-11-20
+      tags: ["Dia", "Arc", "Research"]

@@ -1,0 +1,128 @@
+id: others-traditional-dbs
+name: "Traditional DBs"
+isCollection: true
+summary: "Integrated AI capabilities within traditional RDBMS, analytical MPP, and lakehouse platforms."
+githubUrl: "https://github.com/topics/vector-database"
+
+matrixColumns:
+  - key: postgres
+    label: "PostgreSQL"
+  - key: mariadb
+    label: "MariaDB"
+  - key: oracle
+    label: "Oracle AI DB"
+  - key: doris
+    label: "Apache Doris"
+  - key: fabric
+    label: "Microsoft Fabric"
+
+comparisonMatrix:
+  - capability: "Vector Storage & Query"
+    postgres: "Yes (pgvector)"
+    mariadb: "Yes (native)"
+    oracle: "Yes (native)"
+    doris: "Yes (native)"
+    fabric: "Yes (vector indexing in OneLake)"
+  - capability: "RAG Pipeline Support"
+    postgres: "No native, via app orchestration"
+    mariadb: "Vector-native retrieval; embeddings typically produced externally"
+    oracle: "Yes with AI Vector + Model Context Protocol (MCP)"
+    doris: "Via SQL + external LLM"
+    fabric: "Yes (platform workflows + Copilot)"
+  - capability: "AI Agents / Copilots"
+    postgres: "External tooling only"
+    mariadb: "External tooling / app-level agents"
+    oracle: "Yes (platform tooling)"
+    doris: "External tooling"
+    fabric: "Yes (built-in Copilot experience)"
+  - capability: "In-DB Inference Calls"
+    postgres: "Possible via procedural languages calling external services"
+    mariadb: "No native; external services or UDF-style integrations"
+    oracle: "Yes (AI functions)"
+    doris: "Yes (SQL functions calling external models)"
+    fabric: "Via platform services"
+  - capability: "Managed Cloud / Multicloud"
+    postgres: "Yes via Azure/GCP/others"
+    mariadb: "Yes (MariaDB Cloud)"
+    oracle: "Yes OCI + @AWS/@Azure/@GCP"
+    doris: "Often self-hosted or cloud distros"
+    fabric: "Yes (Azure-native)"
+
+items:
+  - id: postgres
+    name: "PostgreSQL"
+    summary: "Open Source RDBMS with extensive AI extension ecosystem."
+    features:
+      - title: "pgvector"
+        description: "Adds a vector type for embeddings, distance operators (L2, inner product, cosine), and ANN indexing (HNSW / IVFFlat)."
+      - title: "pgai (Timescale)"
+        description: "Suite integrating RAG / semantic search patterns directly into SQL workflows."
+      - title: "Hybrid Search"
+        description: "Combine vector similarity with traditional structured SQL filters in a single query."
+    impact:
+      - "Embeddings and model calls are typically done in the application layer; Postgres remains the grounding store."
+      - "Excels as grounding store for embeddings when paired with an AI model provider."
+      - "Requires developer orchestration to manage ANN indexing and inference pipelines."
+    cloud: "Supported by AWS RDS, Google Cloud SQL, Azure Database for PostgreSQL."
+
+  - id: mariadb
+    name: "MariaDB"
+    summary: "RDBMS with integrated vector search (VECTOR type + vector indexes) tuned for similarity search workloads."
+    features:
+      - title: "Native Vector Search"
+        description: "VECTOR data type and VECTOR INDEX (modified HNSW) integrated into the server engine."
+      - title: "Distance Functions"
+        description: "VEC_DISTANCE_EUCLIDEAN / VEC_DISTANCE_COSINE / VEC_DISTANCE for similarity queries over embeddings."
+      - title: "SIMD Acceleration"
+        description: "Vector index operations can use SIMD instructions (x86_64 AVX2/AVX512, aarch64 neon, PowerPC AltiVec)."
+    impact:
+      - "High-throughput vector retrieval inside the database reduces data movement for RAG retrieval steps."
+      - "Embedding generation is typically external; DB stores and searches vectors efficiently."
+
+  - id: oracle
+    name: "Oracle Database (23ai / 26ai)"
+    summary: "Enterprise-grade AI-native database with deep agentic integration."
+    features:
+      - title: "AI Vector Search"
+        description: "Native support for vector data types and indexes stored inside transaction tables."
+      - title: "MCP / Agentic AI"
+        description: "Secure integration with MCP allowing agents to safely execute SQL."
+      - title: "NVIDIA NIM Acceleration"
+        description: "Integrated NVIDIA NIM containers for embedding generation and RAG pipelines."
+      - title: "DataFrame Integration"
+        description: "Tight Python (Pandas/NumPy) support for analytics-centric AI workflows."
+    impact:
+      - "Embedded AI tooling removes need for external vector databases."
+      - "Multicloud connectivity (@AWS, @Azure, @GCP) enables hybrid AI workloads."
+      - "Enterprise governance ensures safe AI usage against sensitive data."
+
+  - id: doris
+    name: "Apache Doris"
+    summary: "Open-source, MPP analytical database for real-time AI analytics."
+    features:
+      - title: "Analytical Vector Search"
+        description: "Built-in vector indexes supporting ANN queries for high-scale semantic similarity."
+      - title: "In-SQL Inference"
+        description: "Direct AI function calls (extraction, summarization) that interact with external LLMs."
+      - title: "MPP Performance"
+        description: "Designed for sub-100ms query latencies and 10k+ QPS on analytical workloads."
+      - title: "Lakehouse support"
+        description: "Native read/write for Iceberg/Paimon open formats for AI data workflows."
+    impact:
+      - "Simplifies pipeline for semantic search + BI dashboards + agentic analysis."
+      - "SQL-based AI workflows reduce engineering complexity."
+      - "Standardized MCP support for AI agent exploration."
+
+  - id: fabric
+    name: "Microsoft Fabric"
+    summary: "Unified AI-powered data estate for the enterprise."
+    features:
+      - title: "OneLake"
+        description: "Single source of truth for all data, from SQL to unstructured files."
+      - title: "Integrated Copilot"
+        description: "AI-powered assistants for data engineering, science, and BI."
+      - title: "Vector Lakehouse"
+        description: "Advanced RAG pipelines with integrated vector indexing in OneLake."
+    impact:
+      - "Unified data governance across multi-model processing."
+      - "Accelerated insights with native AI integration."

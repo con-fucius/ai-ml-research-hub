@@ -1,0 +1,596 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  // With the YAML plugin, Astro can import the data directly.
+  const ymlFiles = await import.meta.glob('../../../_data/frameworks/*.yml');
+
+  const frameworkValues = await Promise.all(
+    Object.values(ymlFiles).map(async resolver => {
+      const { default: framework } = await resolver();
+      return framework;
+    })
+  );
+
+  return frameworkValues.map(framework => {
+    const related = frameworkValues
+      .filter(f => f.id !== framework.id)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3);
+      
+    return {
+      params: { id: framework.id },
+      props: { framework, related },
+    };
+  });
+}
+
+const { framework, related } = Astro.props;
+
+const baseUrl = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+const homeUrl = baseUrl || '/';
+
+const resourceLinks = [
+  { label: 'Website', url: framework.websiteUrl },
+  { label: 'Main Repo', url: framework.githubUrl },
+  { label: 'Starter Kit', url: framework.starterRepoUrl },
+  { label: 'Python Docs', url: framework.pythonDocsUrl },
+  { label: 'API Reference', url: framework.apiReferenceUrl },
+  { label: 'JS SDK', url: framework.javascriptGithubUrl },
+  { label: 'AWS Ext', url: framework.awsExtensionsUrl },
+  { label: 'LangGraph', url: framework.langgraphUrl },
+  { label: 'LangGraph.js', url: framework.langgraphJsUrl },
+  { label: 'LangSmith', url: framework.langsmithUrl },
+  { label: 'LG Platform', url: framework.langgraphPlatformUrl },
+  { label: 'Postgres', url: framework.postgresBackendUrl },
+  { label: 'Chains', url: framework.chainsConceptUrl },
+  { label: 'Agents', url: framework.agentsConceptUrl },
+  { label: 'Vectors', url: framework.vectorStoresUrl },
+  { label: 'Docs API', url: framework.documentsApiUrl },
+  { label: 'Tools', url: framework.toolsIntegrationsUrl },
+  { label: 'LangServe', url: framework.langserveDocsUrl },
+  { label: 'Releases', url: framework.releasePolicyUrl },
+  { label: 'QuickStart', url: framework.quickStartTutorialUrl },
+  { label: 'Tools Ext', url: framework.toolsExtensionUrl },
+  { label: 'Workflows', url: framework.exampleWorkflowsUrl },
+  { label: 'Community GUI', url: framework.communityGuiUrl },
+  { label: 'Crews', url: framework.crewsConceptUrl },
+  { label: 'Flows', url: framework.flowsConceptUrl },
+  { label: 'Telemetry', url: framework.telemetryUrl },
+  { label: 'Install', url: framework.installationGuideUrl },
+  { label: 'Docs Repo', url: framework.docsRepositoryUrl },
+  { label: 'Py SDK', url: framework.pythonSdkUrl },
+  { label: 'Java SDK', url: framework.javaSdkUrl },
+  { label: 'Samples', url: framework.sampleAgentsUrl },
+  { label: 'Dev UI', url: framework.developerUiUrl },
+  { label: 'Blog', url: framework.launchBlogUrl },
+  { label: 'Vertex', url: framework.vertexIntegrationUrl },
+  { label: 'Tutorial', url: framework.githubTutorialUrl },
+  { label: 'MS Research', url: framework.microsoftResearchUrl },
+  { label: 'AG2 Fork', url: framework.ag2ForkUrl },
+  { label: 'Studio Paper', url: framework.studioPaperUrl },
+  { label: 'Research Paper', url: framework.researchPaperUrl },
+  { label: 'Docs v0.2', url: framework.docsV02Url },
+  { label: 'SK Blog', url: framework.semanticKernelBlogUrl },
+  { label: 'v0.4 Blog', url: framework.v04ReleaseBlogUrl },
+  { label: 'Roadmap', url: framework.roadmapUrl },
+  { label: 'Py Source', url: framework.pythonSourceUrl },
+  { label: 'JS Source', url: framework.jsSourceUrl },
+  { label: 'CS Demo', url: framework.customerServiceDemoUrl },
+  { label: 'Voice Sample', url: framework.voiceSampleUrl },
+  { label: 'Swarm Info', url: framework.swarmDeprecationUrl },
+  { label: 'PyPI', url: framework.pypiHistoryUrl },
+  { label: 'NPM', url: framework.npmUrl },
+  { label: 'DataCamp', url: framework.datacampCourseUrl },
+].filter((r) => Boolean(r.url));
+
+const headerLinks = new Set([framework.websiteUrl, framework.githubUrl, framework.starterRepoUrl].filter(Boolean));
+const extraResources = [];
+const seenUrls = new Set(headerLinks);
+for (const r of resourceLinks) {
+  if (r.url && !seenUrls.has(r.url)) {
+    extraResources.push(r);
+    seenUrls.add(r.url);
+  }
+}
+---
+<Layout title={framework.name}>
+  <nav class="breadcrumb">
+    <a href={homeUrl}>Home</a>
+    <span class="breadcrumb-separator">›</span>
+    <a href={`${homeUrl}#frameworks`}>Frameworks</a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">{framework.name}</span>
+  </nav>
+  
+  <div class="framework-header">
+    <h1>{framework.name}</h1>
+    <div class="links">
+      <a href={framework.websiteUrl}>Documentation</a>
+      {framework.githubUrl && <> | <a href={framework.githubUrl}>Main Repo</a></>}
+      {framework.starterRepoUrl && <> | <a href={framework.starterRepoUrl}>Starter Kit</a></>}
+    </div>
+    <p class="summary">{framework.summary}</p>
+    <div class="meta-info" style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted-color); font-family: var(--font-main);">
+      Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </div>
+  </div>
+
+  <div class="framework-grid">
+    <main class="main-content">
+      {extraResources.length > 0 && (
+        <section>
+          <h2>Official Resources</h2>
+          <div class="resources-list-row">
+            {extraResources.map((r, idx) => (
+              <>
+                {idx > 0 && <span class="separator">|</span>}
+                <a href={r.url} class="resource-link-inline">{r.label}</a>
+              </>
+            ))}
+          </div>
+        </section>
+      )}
+      
+      <section>
+        <h2>Key Features</h2>
+        <ul class="features-list">
+          {framework.features && framework.features.map(feature => (
+            <li><strong>{feature.title}:</strong> {feature.description}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Code Examples</h2>
+        {framework.codeSnippets && framework.codeSnippets.map(snippet => (
+          <div class="code-example">
+            <h3>{snippet.title}</h3>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="language-label">{snippet.language}</span>
+                <button class="copy-btn" onclick={`copyCode(this)`}>Copy</button>
+              </div>
+              <pre class="code-block"><code class={`language-${snippet.language}`}>{snippet.code}</code></pre>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {framework.useCases && (
+        <section>
+          <h2>Use Cases</h2>
+          <ul class="use-cases-list">
+            {framework.useCases.map(useCase => <li>{useCase}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {(framework.advantages || framework.disadvantages) && (
+        <section>
+          <h2>Pros & Cons</h2>
+          <div class="pros-cons-grid">
+            {framework.advantages && (
+              <div class="pros">
+                <details open>
+                  <summary><h3>Advantages</h3></summary>
+                  <ul>
+                    {framework.advantages.map(advantage => <li>{advantage}</li>)}
+                  </ul>
+                </details>
+              </div>
+            )}
+            {framework.disadvantages && (
+              <div class="cons">
+                <details open>
+                  <summary><h3>Disadvantages</h3></summary>
+                  <ul>
+                    {framework.disadvantages.map(disadvantage => <li>{disadvantage}</li>)}
+                  </ul>
+                </details>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {framework.roadmap && framework.roadmap.length > 0 && (
+        <section>
+          <h2>Future Outlook & Integrations</h2>
+          <ul class="roadmap-list">
+            {framework.roadmap.map(item => (
+              <li><strong>{item.title}</strong> [{item.status}]: {item.description}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </main>
+
+    <aside class="sidebar">
+      {framework.timeline && framework.timeline.length > 0 && (
+        <section>
+          <h2>Timeline</h2>
+          <div class="timeline-filters">
+            <button class="filter-btn active" onclick="filterTimeline('all')">All</button>
+            <button class="filter-btn" onclick="filterTimeline('release')">Releases</button>
+            <button class="filter-btn" onclick="filterTimeline('update')">Updates</button>
+            <button class="filter-btn" onclick="filterTimeline('tool')">Tools</button>
+          </div>
+          <div class="timeline" id="timeline-list">
+            {framework.timeline.map(event => (
+              <div class="timeline-item" data-type={event.type}>
+                <div class="timeline-date">{event.date}</div>
+                <div class="timeline-content">
+                  <div class="timeline-title">{event.description}</div>
+                  {event.url && <a href={event.url} class="timeline-link">Source</a>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      
+      {related && related.length > 0 && (
+        <div class="related-section" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <h2>Related Frameworks</h2>
+          <ul class="related-list" style="list-style: none; padding: 0;">
+            {related.map(item => (
+              <li style="margin-bottom: 0.5rem;">
+                <a href={`${baseUrl}/frameworks/${item.id}`} style="text-decoration: none; color: var(--accent-color); font-weight: 500;">
+                  {item.name}
+                </a>
+                <div style="font-size: 0.8rem; color: var(--muted-color);">{item.summary.substring(0, 60)}...</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  </div>
+
+<script is:inline>
+  function filterTimeline(type) {
+    const items = document.querySelectorAll('#timeline-list .timeline-item');
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active'); 
+    
+    items.forEach(item => {
+      const itemType = (item.getAttribute('data-type') || '').toLowerCase();
+      if (type === 'all' || itemType.includes(type)) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
+</Layout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--heading-color);
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 0.5rem;
+    color: var(--muted-color);
+  }
+  
+  .breadcrumb-current {
+    color: var(--heading-color);
+    font-weight: 500;
+  }
+
+  .framework-header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+  .framework-header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+  }
+  .links {
+    margin-bottom: 1rem;
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+  }
+  .links a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  .links a:hover {
+    text-decoration: underline;
+  }
+  .summary {
+    max-width: 100%;
+    margin: 0;
+    font-style: normal;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+  }
+  
+  .framework-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 768px) {
+    .framework-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  
+  .main-content section {
+    margin-bottom: 1.5rem;
+  }
+  .main-content h2 {
+    margin-bottom: 0.75rem;
+  }
+  .main-content h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  /* Timeline Filters */
+  .timeline-filters {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: var(--surface-flat);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: var(--font-main);
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+  }
+
+  summary { cursor: pointer; outline: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary h3 { display: inline-block; margin: 0; }
+  
+  @media print {
+    .sidebar, .links, .breadcrumb, .theme-toggle, .back-to-top, .timeline-filters { display: none !important; }
+    .main-content { grid-column: 1 / -1; }
+    .framework-grid { display: block; }
+    details { break-inside: avoid; }
+    details[open] summary { margin-bottom: 1rem; }
+  }
+  
+  .resources-list-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.95rem;
+  }
+  .resource-link-inline {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .resource-link-inline:hover {
+    text-decoration: underline;
+  }
+  .separator {
+    color: var(--muted-color);
+    margin: 0 0.1rem;
+    opacity: 0.5;
+  }
+  
+  .features-list, .use-cases-list {
+    padding-left: 1.5rem;
+  }
+  .features-list li {
+    margin-bottom: 0.2rem;
+    line-height: 1.5;
+  }
+  .use-cases-list li {
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+  
+  .sidebar {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: 6rem;
+    height: fit-content;
+  }
+  
+  .sidebar h2 {
+    margin-bottom: 1rem;
+    font-size: 1.1em;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+  }
+  .roadmap-list {
+    padding-left: 1.5rem;
+  }
+  .roadmap-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .code-example {
+    margin-bottom: 1.5rem;
+  }
+  .code-example h3 {
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+    font-size: 1.1rem;
+  }
+  
+  .code-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .code-header {
+    background-color: var(--code-bg); /* Match block background for flat look */
+    padding: 0.25rem 0.5rem; /* Tighter padding */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333; /* Keep subtle separator but consistent color */
+  }
+  
+  .language-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: lowercase;
+    font-weight: 500;
+    font-family: var(--font-code);
+  }
+  
+  .copy-btn {
+    background: none;
+    border: 1px solid #555;
+    color: #ccc;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-code);
+    text-transform: none;
+  }
+  
+  .copy-btn:hover {
+    background-color: #444;
+    border-color: #777;
+  }
+  
+  .code-block {
+    background-color: var(--code-bg);
+    border: none;
+    border-radius: 0;
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.1em; /* Increased size */
+    overflow-x: auto;
+    font-family: var(--font-code);
+    line-height: 1.5;
+  }
+  .code-block code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #d4d4d4;
+    font-size: inherit;
+  }
+  
+  .sidebar h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+  }
+  
+  .timeline-item {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    margin-left: 1rem;
+  }
+  
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.75rem;
+    top: 0.25rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 2px solid var(--bg-color);
+    z-index: 1;
+  }
+  
+  /* Different colors for different event types */
+  .timeline-item[data-type="Release"]::before {
+    background: #4CAF50;
+  }
+  
+  .timeline-item[data-type="Update"]::before {
+    background: #2196F3;
+  }
+  
+  .timeline-item[data-type="Tool"]::before {
+    background: #FF9800;
+  }
+  
+  .timeline-date {
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+  .timeline-content {
+    flex: 1;
+  }
+  .timeline-title {
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+  }
+  .timeline-link {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+</style>
+
+<script>
+  function copyCode(button) {
+    const codeBlock = button.closest('.code-container').querySelector('code');
+    const text = codeBlock.textContent;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.style.background = '#4CAF50';
+      button.style.borderColor = '#4CAF50';
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.style.background = 'none';
+        button.style.borderColor = '#555';
+      }, 2000);
+    });
+  }
+</script>

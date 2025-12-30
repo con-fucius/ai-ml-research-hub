@@ -1,0 +1,19 @@
+{
+  "name": "ai-ml-research-hub",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev", 
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.11.5",
+    "js-yaml": "^4.1.0",
+    "prismjs": "^1.30.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-yaml": "^4.1.2"
+  }
+}
